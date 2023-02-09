@@ -25,15 +25,40 @@ int init_env(t_mini *mini, char **env_array)
 	return (0);
 }
 
+// void	update_prompt(t_mini *mini)
+// {
+// 	char	*pwd;
+// 	char	*prompt;
+// 	char	*user;
+
+	
+// 	pwd = getcwd(NULL, 1024);
+// 	user = get_env(&mini->env, "USER");
+// 	prompt = ft_strdup(user);
+
+// }
+
 int main(int ac, char **av, char **env)
 {
 	t_mini	mini;
+	char *cwd;
+	char *buff;
 
-	(void)ac;
 	(void)av;
-
+	if (ac != 1)
+		return (ERROR);
 	init_env(&mini, env);
-	ft_enev(mini.env);
-	free(mini.env);
+	cwd = getcwd(NULL, 1024);
+	// ft_strlcat(cwd, "@minihell> ", 1024 + 12);
+	// while (1)
+	// {
+	// 	update_prompt(&mini);
+		buff = readline(cwd);
+	// }
+	// printf("%s\n", buff);
+	// ft_pwd();
+	// ft_env(mini.env);
+	// ft_export();
+	// free(mini.env);
 	return(0);
 }

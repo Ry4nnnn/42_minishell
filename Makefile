@@ -1,10 +1,11 @@
 NAME		= minishell
 LIB			= -Llibft -lft
-INCLUDE		= -Iincludes
+INCLUDE		= -Iincludes -Ilibft -I./readline-8.1/include
 FLAGS		= -Wall -Werror -Wextra
 CC			= gcc
 RM			= rm -rf
 OBJS_DIR	= ./obj
+READLINE	= -lreadline -L ./readline-8.1/lib
 
 SRCS		= ${wildcard src/*.c}
 
@@ -14,9 +15,9 @@ vpath %.c src
 
 all		: ${NAME}
 
-${NAME} : ${P_OBJS}
+${NAME} : ${P_OBJS} 
 	@make -C libft
-	@${CC} ${FLAGS} ${LIB} ${INCLUDE} $^ -o $@
+	@${CC} ${FLAGS} ${LIB} ${READLINE} ${INCLUDE} ${P_OBJS} -o $@
 
 obj/%.o : %.c
 	@mkdir -p obj
