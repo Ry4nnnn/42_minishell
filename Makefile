@@ -1,9 +1,9 @@
 NAME		= minishell
 LIB			= -Llibft -lft
 INCLUDE		= -Iincludes -Ilibft -I./readline-8.1/include
-FLAGS		= -Wall -Werror -Wextra
+CFLAGS		= -Wall -Werror -Wextra
 CC			= gcc
-RM			= rm -rf
+RM			= rm
 OBJS_DIR	= ./obj
 READLINE	= -lreadline -L ./readline-8.1/lib
 
@@ -17,20 +17,23 @@ all		: ${NAME}
 
 ${NAME} : ${P_OBJS} 
 	@make -C libft
-	@${CC} ${FLAGS} ${LIB} ${READLINE} ${INCLUDE} ${P_OBJS} -o $@
+	${CC} ${CFLAGS} ${LIB} ${READLINE} ${INCLUDE} ${P_OBJS} -o $@
 
 obj/%.o : %.c
 	@mkdir -p obj
-	@${CC} ${FLAGS} ${INCLUDE} -c $< -o $@
+	${CC} ${CFLAGS} ${INCLUDE} -c $< -o $@
 
 clean :
-	@rm -rf obj 
+	@rm -r obj 
 	@echo "Cleaning binary files 'minishell'..."
 
 fclean : clean
-	@rm -rf ${NAME} ${CHECKER}
+	@rm -r ${NAME} ${CHECKER}
 	@make fclean -C libft
 
 re : fclean all
+
+norm :
+	norminette libft/ includes/ src/
 
 .PHONY: all clean fclean re
