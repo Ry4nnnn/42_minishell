@@ -35,28 +35,26 @@ int init_env(t_mini *mini, char **env_array)
 // 	pwd = getcwd(NULL, 1024);
 // 	user = get_env(&mini->env, "USER");
 // 	prompt = ft_strdup(user);
-
 // }
 
 int	exec_builtin(t_mini *mini, char *input)
 {
 	if (!ft_strcmp(input, "env"))
 		ft_env(mini->env);
-	if (!ft_strcmp(input, "exit"))
-		return (1);
 	if (!ft_strcmp(input, "pwd"))
 		ft_pwd();
-	// if (!ft_strcmp(input, "export"))
-	// 	ft_pwd();
-	if (input[0] == 0)
-		printf ("\n");
+	if (!ft_strcmp(input, "export"))
+		ft_pwd();
+	if (!ft_strcmp(input, "echo"))
+		ft_echo(&input);
+	if (!ft_strcmp(input, "exit"))
+		exit(0);
 	return (0);
 }
 
 int main(int ac, char **av, char **env)
 {
 	t_mini	mini;
-	// char *cwd;
 	char *input;
 
 	(void)av;
@@ -66,10 +64,9 @@ int main(int ac, char **av, char **env)
 	while (1)
 	{
 		// update_prompt(&mini);
-		// ft_strlcat(cwd, "@minihell> ", 1024 + 12);
-		printf ("@minishell > ");
-		input = readline(0);
+		input = readline("@minishell > ");
 		exec_builtin(&mini, input);
+		add_history(input);
 	}
 	free(mini.env);
 	return(0);

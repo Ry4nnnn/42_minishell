@@ -40,11 +40,9 @@ bonus : ${OBJS_BONUS}
 		@printf "$(NEWLINE)Creating object file $@ from $<"
 
 clean :
-		@echo "Cleaning binary files 'libft'..."
 		@rm -f ${OBJS} ${OBJS_BONUS}
 
 fclean : clean
-		@echo "Cleaning library..."
 		@echo $(RED)"- Deleted -"$(NONE)
 		@rm -f libft.a
 
