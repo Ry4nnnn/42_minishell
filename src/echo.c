@@ -1,39 +1,39 @@
-#include "minishell.h"
+// #include "minishell.h"
 
-//get total len of args
-static	int	nb_args(char **args)
-{
-	int	size;
+// int				ft_echo(char *input)
+// {
+// 	int		i;
+// 	int		flag;
+// 	char	 **args;
+// 	int		j;
 
-	size = 0;
-	while (args[size])
-		size++;
-	return (size);
-}
+// 	i = 1;
+// 	j = 0;
+// 	flag = 0;
+// 	if 
 
-int	ft_echo(char **args)
-{
-	int	i;
-	int option;
-
-	i = 1;
-	option = 0;
-	if (nb_args(args) > 1)
-	{
-		while (args[i] && ft_strcmp(args[i], "-n") == 0)
-		{
-			option = 1;
-			i++;
-		}
-		while (args[i])
-		{
-			ft_putstr_fd(args[i], 1);
-			if (args[i + 1] && args[i][0] != '\0')
-				write(1, " ", 1);
-			i++;
-		}
-	}
-	if (option == 0)
-		write(1, "\n", 1);
-	return (0);
-}
+// 	if (nb_args(args) > 1)
+// 	{
+// 		while (args[i] && ft_strcmp(args[i], "-n") == 0)
+// 		{
+// 			n_option = 1;
+// 			i++;
+// 		}
+// 		while (args[i])
+// 		{
+// 			while (args[i][j] != 0)
+// 			{
+// 				while (args[i][j] == '"')
+// 					j++;
+// 				printf ("%c", args[i][j]);
+// 				j++;
+// 			}
+// 			if (args[i + 1] && args[i][0] != '\0')
+// 				printf (" ");
+// 			i++;
+// 		}
+// 	}
+// 	if (n_option == 0)
+// 		printf ("\n");
+// 	return (SUCCESS);
+// }

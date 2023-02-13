@@ -11,6 +11,8 @@
 # define SUCCESS 0
 # define ERROR 1
 
+int glob_errno;
+
 typedef struct s_arg
 {
 	int 	ac;
@@ -33,15 +35,20 @@ typedef struct s_mini
 {
 	t_env	*env;
 	int		exit;
-	int		fd;
-	char	*prompt;
-
+	char	**builtins;
+	t_list	*envp;
+	t_list	*tokens;
+	t_list	*cmd;
 }		t_mini;
 
+// typedef enum 
+// {
+//
+// }
 
 int 	ft_pwd(void);
 int		ft_env(t_env *env);
-int		ft_echo(char **args);
+int		ft_echo(char *input);
 int		ft_export(char **args, t_env *env, t_env *secret);
 
 #endif

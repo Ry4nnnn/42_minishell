@@ -25,46 +25,88 @@ int init_env(t_mini *mini, char **env_array)
 	return (0);
 }
 
-// void	update_prompt(t_mini *mini)
-// {
-// 	char	*pwd;
-// 	char	*prompt;
-// 	char	*user;
+void init_builtins(t_mini *mini)
+{
+	char	**builtins;
 
-	
-// 	pwd = getcwd(NULL, 1024);
-// 	user = get_env(&mini->env, "USER");
-// 	prompt = ft_strdup(user);
+	builtins = ft_calloc(7 + 1, sizeof(char *));
+	builtins[0] = "pwd";
+	builtins[1] = "env";
+	builtins[2] = "echo";
+	builtins[3] = "cd";
+	builtins[4] = "unset";
+	builtins[5] = "export";
+	builtins[6] = "exit";
+	mini->builtins = builtins;
+}
+
+// void	init_operators(t_mini *mini)
+// {
+// 	char	**operators;
+
+// 	operators = ft_calloc(7 + 1, sizeof(char *));
+// 	operators[0] = "|";
+// 	operators[1] = ">>";
+// 	operators[2] = "<<";
+// 	operators[3] = ">";
+// 	operators[4] = "<";
+// 	mini->operators = operators;
 // }
+
+void	init_minishell(t_mini *mini, char **ev)
+{
+	glob_errno = 0;
+	mini->envp = NULL;
+	mini->tokens = NULL;
+	mini->cmd = NULL;
+	init_env(mini, ev);
+	init_builtins(mini);
+}
+
+void	init_prompt(t_mini *mini)
+{
+	char 
+}
 
 int	exec_builtin(t_mini *mini, char *input)
 {
+	char *path[] = {"ls", NULL};
 	if (!ft_strcmp(input, "env"))
 		ft_env(mini->env);
 	if (!ft_strcmp(input, "pwd"))
 		ft_pwd();
-	if (!ft_strcmp(input, "export"))
-		ft_pwd();
-	if (!ft_strcmp(input, "echo"))
-		ft_echo(&input);
+	// if (ft_strcmp(input, "echo"))
+	// {
+	// 	ft_echo(input); 
+	// 	printf ("input:%s\n", input);
+	// }
+	// if (!ft_strcmp(input, "export"))
+	// 	ft_pwd();
+	if (!ft_strcmp(input, "ls"))
+	{
+		execve("/bin/ls", path, NULL);
+	}
 	if (!ft_strcmp(input, "exit"))
+	{
+		printf ("exit\n");
 		exit(0);
+	}
 	return (0);
 }
 
-int main(int ac, char **av, char **env)
+int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
 	char *input;
 
+	(void)ac;
 	(void)av;
-	if (ac != 1)
-		return (ERROR);
-	init_env(&mini, env);
-	while (1)
+	mini.exit = 0;
+	init_minishell(&mini, ev);
+	while (!mini.exit)
 	{
-		// update_prompt(&mini);
-		input = readline("@minishell > ");
+		init_prompt(&mini);
+		input = readline("@minishell> ");
 		exec_builtin(&mini, input);
 		add_history(input);
 	}
