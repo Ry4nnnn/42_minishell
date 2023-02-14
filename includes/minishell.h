@@ -13,17 +13,11 @@
 
 int glob_errno;
 
-typedef struct s_arg
+typedef struct s_env
 {
-	int 	ac;
-	char	**av;
-}		t_arg;
-
-typedef struct	s_env
-{
-	char			*value;
-	struct s_env	*next;
-}				t_env;
+	char	*key;
+	char	*value;
+}		t_env;
 
 // typedef struct	s_envp
 // {
@@ -33,9 +27,9 @@ typedef struct	s_env
 
 typedef struct s_mini
 {
-	t_env	*env;
 	int		exit;
 	char	**builtins;
+	char	**operators;
 	t_list	*envp;
 	t_list	*tokens;
 	t_list	*cmd;
