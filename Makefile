@@ -1,7 +1,7 @@
 NAME		= minishell
 LIB			= -Llibft -lft
 INCLUDE		= -Iincludes -Ilibft -I./readline-8.1/include
-# CFLAGS		= -Wall -Werror -Wextra
+CFLAGS		= -Wall -Werror -Wextra
 CC			= gcc
 RM			= rm
 OBJS_DIR	= ./obj
@@ -30,8 +30,8 @@ clean :
 	@rm -r obj
 
 fclean : clean
-	@rm -r ${NAME} ${CHECKER}
 	@make fclean -C libft
+	@rm -r ${NAME} ${CHECKER}
 
 re : fclean all
 

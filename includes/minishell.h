@@ -28,6 +28,7 @@ typedef struct s_env
 typedef struct s_mini
 {
 	int		exit;
+	char	*prompt;
 	char	**builtins;
 	char	**operators;
 	t_list	*envp;

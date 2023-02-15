@@ -6,13 +6,13 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 15:55:15 by welim             #+#    #+#             */
-/*   Updated: 2022/04/18 15:55:16 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/15 14:17:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*res;
 	size_t	len;

@@ -30,71 +30,83 @@ int init_env(t_mini *mini, char **ev)
 	return (0);
 }
 
-// void init_builtins(t_mini *mini)
-// {
-// 	char	**builtins;
-
-// 	builtins = ft_calloc(7 + 1, sizeof(char *));
-// 	builtins[0] = "pwd";
-// 	builtins[1] = "env";
-// 	builtins[2] = "echo";
-// 	builtins[3] = "cd";
-// 	builtins[4] = "unset";
-// 	builtins[5] = "export";
-// 	builtins[6] = "exit";
-// 	mini->builtins = builtins;
-// }
-
-// void	init_operators(t_mini *mini)
-// {
-// 	char	**operators;
-
-// 	operators = ft_calloc(7 + 1, sizeof(char *));
-// 	operators[0] = "|";
-// 	operators[1] = ">>";
-// 	operators[2] = "<<";
-// 	operators[3] = ">";
-// 	operators[4] = "<";
-// 	mini->operators = operators;
-// }
-
-void	init_minishell(t_mini *mini, char **ev)
+void init_builtins(t_mini *mini)
 {
-	glob_errno = 0;
-	mini->envp = NULL;
-	mini->tokens = NULL;
-	mini->cmd = NULL;
+	char	**builtins;
+
+	builtins = ft_calloc(7 + 1, sizeof(char *));
+	builtins[0] = "pwd";
+	builtins[1] = "env";
+	builtins[2] = "echo";
+	builtins[3] = "cd";
+	builtins[4] = "unset";
+	builtins[5] = "export";
+	builtins[6] = "exit";
+	mini->builtins = builtins;
 }
 
-// char	*get_env(t_mini *mini, char *key)
-// {
-// 	t_list	*envp;
-// 	t_env	*env_var;
+void	init_operators(t_mini *mini)
+{
+	char	**operators;
 
-// 	envp = mini->envp;
-// 	while (envp != NULL)
-// 	{
-// 		env_var = envp->content;
-// 		if (ft_strcmp(key, env_var->key) == 0)
-// 			return (env_var->value);
-// 		envp = envp->next;
-// 	}
-// 	return (NULL);
-// }
+	operators = ft_calloc(7 + 1, sizeof(char *));
+	operators[0] = "|";
+	operators[1] = ">>";
+	operators[2] = "<<";
+	operators[3] = ">";
+	operators[4] = "<";
+	mini->operators = operators;
+}
 
-// void	init_prompt(t_mini *mini)
-// {
-// 	char	*user;
-// 	char	*dir;
-// 	char	*home;
-// 	char	*prompt;
+//get env value by inputing key
+char	*get_env(t_mini *mini, char *key)
+{
+	t_list	*envp;
+	t_env	*env_var;
 
-// 	user = get_env(mini, "USER");
+	envp = mini->envp;
+	while (envp != NULL)
+	{
+		env_var = envp->content;
+		if (ft_strcmp(key, env_var->key) == 0)
+			return (env_var->value);
+		envp = envp->next;
+	}
+	return (NULL);
+}
 
-// }
+void	init_prompt(t_mini *mini)
+{
+	char	*user;
+	char	*dir;
+	char	*home;
+	char	*prompt;
+
+	user = get_env(mini, "USER");
+	if (user == NULL)
+		user = "user";
+	dir = get_env(mini, "PWD");
+	home = get_env(mini, "HOME");
+	if (home == NULL)
+		dir = "🤷";
+	else
+	{
+		if (dir != NULL && ft_strcmp(dir, home) == 0)
+			dir = "~";
+		else if (dir != NULL)
+			dir = ft_strrchr(dir, '/');
+		else
+			dir = "🤷";
+	}
+	prompt = ft_strjoin(user, " @ ");
+	prompt = ft_strjoin(prompt, dir);
+	prompt = ft_strjoin(prompt, " $ ");
+	mini->prompt = prompt;
+}
 
 // int	exec_builtin(t_mini *mini, char *input)
 // {
+// 	(void)mini;
 // 	if (!ft_strcmp(input, "env"))
 // 		ft_env(mini->envp);
 // 	if (!ft_strcmp(input, "pwd"))
@@ -114,18 +126,24 @@ int main(int ac, char **av, char **ev)
 
 	(void)ac;
 	(void)av;
+	glob_errno = 0;
 	mini.exit = 0;
-	init_minishell(&mini, ev);
+	mini.envp = NULL;
+	mini.tokens = NULL;
+	mini.cmd = NULL;
 	init_env(&mini, ev);
-	// init_builtins(&mini);
-	// init_operators(&mini);
-	// while (!mini.exit)
-	// {
-	// 	// init_prompt(&mini);
-	// 	input = readline("@minishell> ");
-	// 	exec_builtin(&mini, input);
-	// 	add_history(input);
-	// }
-	// free(mini.envp);
+	init_builtins(&mini);
+	init_operators(&mini);
+	while (!mini.exit)
+	{
+		init_prompt(&mini);
+		input = readline(mini.prompt);
+		// printf ("%s\n", input);
+		// if (!ft_strcmp(input, "cd"))
+		// 	ft_cd(mini);
+		// exec_builtin(&mini, input);
+		add_history(input);
+	}
+	free(mini.prompt);
 	return(0);
 }
