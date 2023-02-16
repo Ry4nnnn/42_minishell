@@ -32,7 +32,7 @@ int 	ft_pwd(void);
 int		ft_env(t_mini *mini);
 int		ft_exit(t_mini *mini);
 void	ft_unset(t_mini *mini, char **args);
+int		ft_export(t_mini *mini, char **key);
 // int		ft_echo(char *input);
-// int		ft_export(char **args, t_env *env, t_env *secret);
 
 #endif

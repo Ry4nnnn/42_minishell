@@ -139,6 +139,8 @@ int main(int ac, char **av, char **ev)
 			ft_pwd();
 		if (!ft_strcmp(args[0], "unset"))
 			ft_unset(&mini, args);
+		if (!ft_strcmp(args[0], "export"))
+			ft_export(&mini, args);
 		// exec_builtin(&mini, input);
 		add_history(input);
 	}

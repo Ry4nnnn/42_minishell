@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/16 19:22:04 by welim            ###   ########.fr        #
+#    Updated: 2023/02/16 23:18:45 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,13 +32,7 @@ NEWLINE 	= \e[1K\r
 
 #------------------------------------------------------#
 
-# SRCS		:=	main.c \
-# 				builtins/env.c \
-# 				builtins/exit.c \
-# 				builtins/pwd.c \
-# 				builtins/
-
-BUILTINS	= env exit pwd unset
+BUILTINS	= env exit pwd unset export
 
 SRCS		:= $(addsuffix .c, $(addprefix src/builtins/, $(BUILTINS))) src/main.c
 
