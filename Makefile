@@ -1,37 +1,68 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
+#    Updated: 2023/02/16 19:22:04 by welim            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME		= minishell
-LIB			= -Llibft -lft
-INCLUDE		= -Iincludes -Ilibft -I./readline-8.1/include
-CFLAGS		= -Wall -Werror -Wextra
-CC			= gcc
-RM			= rm
-OBJS_DIR	= ./obj
-READLINE	= -lreadline -L ./readline-8.1/lib
 
-NEWLINE = \e[1K\r
+LIB			:= -Llibft -lft
 
-SRCS		= ${wildcard src/*.c}
+INCLUDE		:= -I./includes -Ilibft -I./readline-8.1/include
 
-P_OBJS		= ${SRCS:src/%.c=${OBJS_DIR}/%.o}
+CFLAGS		:= #-fsanitize=address#-Wall -Werror -Wextra
 
-vpath %.c src
+CC			:= gcc -g3
+
+RM			:= rm -rf
+
+READLINE	:= -lreadline -L ./readline-8.1/lib
+
+SRCS_PATH	:= ./src
+
+OBJS_PATH	:= ./obj
+
+NEWLINE 	= \e[1K\r
+
+#------------------------------------------------------#
+
+# SRCS		:=	main.c \
+# 				builtins/env.c \
+# 				builtins/exit.c \
+# 				builtins/pwd.c \
+# 				builtins/
+
+BUILTINS	= env exit pwd unset
+
+SRCS		:= $(addsuffix .c, $(addprefix src/builtins/, $(BUILTINS))) src/main.c
+
+OBJS		:= $(SRCS:.c=.o)
+
+%.o: %.c
+	@mkdir -p obj
+	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
+	@printf "$(NEWLINE)Creating object file $@ from $<"
 
 all		: ${NAME}
 
-${NAME} : ${P_OBJS} 
+${NAME} : ${OBJS} 
 	@make -C libft
-	@${CC} ${CFLAGS} ${LIB} ${READLINE} ${INCLUDE} ${P_OBJS} -o $@
-
-obj/%.o : %.c
-	@mkdir -p obj
-	@${CC} ${CFLAGS} ${INCLUDE} -c $< -o $@
-	@printf "$(NEWLINE)Creating object file $@ from $<"
+	@${CC} ${CFLAGS} $^ ${READLINE} ${INCLUDE} ${LIB} -o $@
 
 clean :
-	@rm -r obj
+	@make clean -C libft
+	@${RM} ${OBJS}
+	@${RM} obj
 
 fclean : clean
 	@make fclean -C libft
-	@rm -r ${NAME} ${CHECKER}
+	@rm -r ${NAME}
 
 re : fclean all
 

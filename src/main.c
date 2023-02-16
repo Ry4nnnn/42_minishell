@@ -20,6 +20,7 @@ int init_env(t_mini *mini, char **ev)
 	while (*ev != NULL)
 	{
 		value = ft_strchr(*ev, '=');
+		// printf ("value b: %s\n", value);
 		key = ft_strndup(*ev, (value - *ev));
 		// printf ("key: %s\n", key);
 		value = ft_strdup(value + 1);
@@ -104,33 +105,22 @@ void	init_prompt(t_mini *mini)
 	mini->prompt = prompt;
 }
 
-// int	exec_builtin(t_mini *mini, char *input)
+// int	lexer(t_mini *mini, char *input)
 // {
-// 	(void)mini;
-// 	if (!ft_strcmp(input, "env"))
-// 		ft_env(mini->envp);
-// 	if (!ft_strcmp(input, "pwd"))
-// 		ft_pwd();
-// 	if (!ft_strcmp(input, "exit"))
-// 	{
-// 		printf ("exit\n");
-// 		exit(0);
-// 	}
-// 	return (0);
+// 	int i;
 // }
 
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
 	char *input;
+	char **args;
 
 	(void)ac;
 	(void)av;
 	glob_errno = 0;
 	mini.exit = 0;
 	mini.envp = NULL;
-	mini.tokens = NULL;
-	mini.cmd = NULL;
 	init_env(&mini, ev);
 	init_builtins(&mini);
 	init_operators(&mini);
@@ -139,11 +129,20 @@ int main(int ac, char **av, char **ev)
 		init_prompt(&mini);
 		input = readline(mini.prompt);
 		// printf ("%s\n", input);
-		// if (!ft_strcmp(input, "cd"))
-		// 	ft_cd(mini);
+		// lexer(&mini, input);
+		args = ft_split(input, ' ');
+		if (!ft_strcmp(input, "env"))
+			ft_env(&mini);
+		if (!ft_strcmp(input, "exit"))
+			ft_exit(&mini);
+		if (!ft_strcmp(input, "pwd"))
+			ft_pwd();
+		if (!ft_strcmp(args[0], "unset"))
+			ft_unset(&mini, args);
 		// exec_builtin(&mini, input);
 		add_history(input);
 	}
+	free(args);
 	free(mini.prompt);
 	return(0);
 }
