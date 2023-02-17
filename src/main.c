@@ -131,6 +131,8 @@ int main(int ac, char **av, char **ev)
 		// printf ("%s\n", input);
 		// lexer(&mini, input);
 		args = ft_split(input, ' ');
+		// if (input == NULL)
+		// 	return (0);
 		if (!ft_strcmp(input, "env"))
 			ft_env(&mini);
 		if (!ft_strcmp(input, "exit"))

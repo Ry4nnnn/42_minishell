@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_export(t_mini *mini, char **key)
+void	print_export_x(t_mini *mini)
 {
 	t_list	*env_list;
 	t_env	*env_node;
@@ -13,5 +13,34 @@ int	ft_export(t_mini *mini, char **key)
 		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
 		env_list = env_list->next;
 	}
-	return (0);
+}
+
+int	valid_key(char *key)
+{
+	if (ft_isalpha(*key) == 0 && *key != '_')
+		return (0);
+	while (*(++key) != '\0')
+	{
+		if (ft_isalnum(*key) == 0 && *key != '_')
+			return (0);
+	}
+	return (1);
+}
+
+void	ft_export(t_mini *mini, char **key)
+{
+	int	i;
+
+	i = 1;
+	if (key[i] == NULL)
+		return (print_export_x(mini));
+	while (key[i] != NULL)
+	{
+		if (valid_key(key[i]) == 0)
+		{
+			printf("export: `%s': not a valid identifier\n", *(key++));
+			// free()
+		}
+		i++;
+	}
 }
