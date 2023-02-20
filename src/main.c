@@ -31,33 +31,33 @@ int init_env(t_mini *mini, char **ev)
 	return (0);
 }
 
-void init_builtins(t_mini *mini)
-{
-	char	**builtins;
+// void init_builtins(t_mini *mini)
+// {
+// 	char	**builtins;
 
-	builtins = ft_calloc(7 + 1, sizeof(char *));
-	builtins[0] = "pwd";
-	builtins[1] = "env";
-	builtins[2] = "echo";
-	builtins[3] = "cd";
-	builtins[4] = "unset";
-	builtins[5] = "export";
-	builtins[6] = "exit";
-	mini->builtins = builtins;
-}
+// 	builtins = ft_calloc(7 + 1, sizeof(char *));
+// 	builtins[0] = "pwd";
+// 	builtins[1] = "env";
+// 	builtins[2] = "echo";
+// 	builtins[3] = "cd";
+// 	builtins[4] = "unset";
+// 	builtins[5] = "export";
+// 	builtins[6] = "exit";
+// 	mini->builtins = builtins;
+// }
 
-void	init_operators(t_mini *mini)
-{
-	char	**operators;
+// void	init_operators(t_mini *mini)
+// {
+// 	char	**operators;
 
-	operators = ft_calloc(7 + 1, sizeof(char *));
-	operators[0] = "|";
-	operators[1] = ">>";
-	operators[2] = "<<";
-	operators[3] = ">";
-	operators[4] = "<";
-	mini->operators = operators;
-}
+// 	operators = ft_calloc(7 + 1, sizeof(char *));
+// 	operators[0] = "|";
+// 	operators[1] = ">>";
+// 	operators[2] = "<<";
+// 	operators[3] = ">";
+// 	operators[4] = "<";
+// 	mini->operators = operators;
+// }
 
 //get env value by inputing key
 char	*get_env(t_mini *mini, char *key)
@@ -105,11 +105,6 @@ void	init_prompt(t_mini *mini)
 	mini->prompt = prompt;
 }
 
-// int	lexer(t_mini *mini, char *input)
-// {
-// 	int i;
-// }
-
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
@@ -122,29 +117,34 @@ int main(int ac, char **av, char **ev)
 	mini.exit = 0;
 	mini.envp = NULL;
 	init_env(&mini, ev);
-	init_builtins(&mini);
-	init_operators(&mini);
+	// init_builtins(&mini);
+	// init_operators(&mini);
 	while (!mini.exit)
 	{
 		init_prompt(&mini);
 		input = readline(mini.prompt);
 		// printf ("%s\n", input);
 		// lexer(&mini, input);
+		if (input == NULL)
+			return (0);
+		if (input[0] == '\0')
+			continue ;
 		args = ft_split(input, ' ');
-		// if (input == NULL)
-		// 	return (0);
-		if (!ft_strcmp(input, "env"))
+		if (!ft_strncmp(input, "exit", 5))
+			return (ft_exit(&mini));
+		else if (!ft_strncmp(input, "env", 4))
 			ft_env(&mini);
-		if (!ft_strcmp(input, "exit"))
-			ft_exit(&mini);
-		if (!ft_strcmp(input, "pwd"))
+		else if (!ft_strncmp(input, "pwd", 4))
 			ft_pwd();
-		if (!ft_strcmp(args[0], "unset"))
+		else if (!ft_strncmp(args[0], "unset", 6))
 			ft_unset(&mini, args);
-		if (!ft_strcmp(args[0], "export"))
+		else if (!ft_strncmp(args[0], "export", 7))
 			ft_export(&mini, args);
+		else
+			printf("welim: %s: command not found\n", args[0]);
 		// exec_builtin(&mini, input);
 		add_history(input);
+		free(args);
 	}
 	free(args);
 	free(mini.prompt);

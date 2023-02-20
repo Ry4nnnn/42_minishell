@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/16 23:18:45 by welim            ###   ########.fr        #
+#    Updated: 2023/02/20 21:58:20 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,47 +16,63 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft -I./readline-8.1/include
 
-CFLAGS		:= #-fsanitize=address#-Wall -Werror -Wextra
+CFLAGS		:= $(INCLUDE)#-fsanitize=address#-Wall -Werror -Wextra
 
 CC			:= gcc -g3
 
-RM			:= rm -rf
+NEWLINE 	= \e[1K\r
 
 READLINE	:= -lreadline -L ./readline-8.1/lib
 
-SRCS_PATH	:= ./src
+#-------------------------PATH-------------------------#
 
-OBJS_PATH	:= ./obj
+SRCS_PATH	:= src
 
-NEWLINE 	= \e[1K\r
+OBJS_PATH	:= obj
+
+BUILTINS_PATH	:= builtins
+
+PARSER_PATH	:= parser
+
+LIBFT_PATH	:= libft
 
 #------------------------------------------------------#
 
-BUILTINS	= env exit pwd unset export
+BUILTINS	= env exit unset export
+PARSER		= pwd
+MAIN		= main
 
-SRCS		:= $(addsuffix .c, $(addprefix src/builtins/, $(BUILTINS))) src/main.c
+SRCS		:= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(BUILTINS_PATH)/, $(BUILTINS)))
+SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(PARSER_PATH)/, $(PARSER)))
+SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/, $(MAIN)))
 
-OBJS		:= $(SRCS:.c=.o)
+OBJS		:= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(BUILTINS)))
+OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(PARSER)))
+OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(MAIN)))
 
-%.o: %.c
-	@mkdir -p obj
+#------------------------------------------------------#
+
+vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(PARSER_PATH)/ $(SRCS_PATH)/
+
+$(OBJS_PATH)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-	@printf "$(NEWLINE)Creating object file $@ from $<"
+	@printf "$(NEWLINE)Creating object file $@ from $< ${NEWLINE}"
 
-all		: ${NAME}
+all:
+		@mkdir -p $(OBJS_PATH)
+		@make ${NAME}
 
 ${NAME} : ${OBJS} 
-	@make -C libft
+	@make -C $(LIBFT_PATH)
 	@${CC} ${CFLAGS} $^ ${READLINE} ${INCLUDE} ${LIB} -o $@
 
 clean :
-	@make clean -C libft
-	@${RM} ${OBJS}
-	@${RM} obj
+	@make clean -C $(LIBFT_PATH)
+	@rm -rf $(OBJS_PATH)
 
 fclean : clean
-	@make fclean -C libft
-	@rm -r ${NAME}
+	@make fclean -C $(LIBFT_PATH)
+	@rm -rf ${NAME}
 
 re : fclean all
 

@@ -15,7 +15,7 @@ void	print_export_x(t_mini *mini)
 	}
 }
 
-int	valid_key(char *key)
+int	valid_input(char *key)
 {
 	if (ft_isalpha(*key) == 0 && *key != '_')
 		return (0);
@@ -27,20 +27,24 @@ int	valid_key(char *key)
 	return (1);
 }
 
-void	ft_export(t_mini *mini, char **key)
+void	ft_export(t_mini *mini, char **input)
 {
-	int	i;
+	// char	*key;
+	// char	*value;
 
-	i = 1;
-	if (key[i] == NULL)
+	input++;
+	if (*input == NULL)
 		return (print_export_x(mini));
-	while (key[i] != NULL)
+	while (*input != NULL)
 	{
-		if (valid_key(key[i]) == 0)
+		if (valid_input(input[0]) == 0)
 		{
-			printf("export: `%s': not a valid identifier\n", *(key++));
-			// free()
+			printf("export: `%s': not a valid identifier\n", *(input++));
+			// free(key);
+			// free(value);
+			continue ;
 		}
-		i++;
+		input++;
 	}
 }
+

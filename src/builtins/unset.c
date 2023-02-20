@@ -23,11 +23,6 @@ void	ft_unset(t_mini *mini, char **key)
 	if (ft_strcmp(key[1], env_content->key) == 0)
 	{
 		mini->envp = env_list->next;
-		// printf ("key=%s\n", env_content->key);
-		// free(env_content->key);
-		// printf ("value=%s\n", env_content->value);
-		// free(env_content->value);
-		// free(env_list);
 		ft_lstdelone(env_list, &ft_free_node);
 		return ;
 	}
@@ -36,14 +31,7 @@ void	ft_unset(t_mini *mini, char **key)
 		env_content = (t_env *)env_list->content;
 		if (ft_strcmp(key[1], env_content->key) == 0)
 		{
-			//if env->list == mini->envp this is first content
-			// mini->envp = env->list->next 
-			// free(env->content)
-			store_next = env_list->next;
-			// printf ("key=%s\n", env_content->key);
-			// free(env_content->key);
-			// printf ("value=%s\n", env_content->value);
-			// free(env_content->value);
+			store_next = env_list->next;;
 			ft_lstdelone(env_list, &ft_free_node);
 			store_prev->next = store_next;
 			return ;
