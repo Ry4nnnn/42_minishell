@@ -60,21 +60,24 @@ int	valid_input(char *key)
 
 void	ft_export(t_mini *mini, char **input)
 {
-	// char	*key;
-	// char	*value;
+	char	*key;
+	char	*value;
+	int	i;
 
-	if (input[1] == NULL)
+	i = 1;
+	if (input[i] == NULL)
 		return (print_export_x(mini));
-	// while (*input != NULL)
-	// {
-	// 	if (valid_input(input[0]) == 0)
-	// 	{
-	// 		printf("export: `%s': not a valid identifier\n", *(input++));
-	// 		// free(key);
-	// 		// free(value);
-	// 		continue ;
-	// 	}
-	// 	input++;
-	// }
+	else
+	{
+		while (input[i] != NULL)
+		{
+			if (valid_input(input[i]) == 0)
+			{
+				printf("export: `%s': not a valid identifier\n", input[i]);
+				return ;
+				// continue ;
+			}
+			i++;
+		}
+	}
 }
-
