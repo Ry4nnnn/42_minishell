@@ -26,6 +26,7 @@ typedef struct s_mini
 	char	**builtins;
 	char	**operators;
 	t_list	*envp;
+	t_list	*envx;
 }		t_mini;
 
 int 	ft_pwd(void);
