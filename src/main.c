@@ -112,10 +112,7 @@ void	init_prompt(t_mini *mini)
 int	handle_commands(t_mini *mini, char **cmds)
 {
 	if (!ft_strncmp(cmds[0], "exit", 5))
-	{
 		ft_exit(mini);
-		// exit(1);
-	}
 	else if (!ft_strncmp(cmds[0], "env", 4))
 		ft_env(mini);
 	else if (!ft_strncmp(cmds[0], "pwd", 4))
@@ -193,12 +190,11 @@ void	ft_free_cmds(t_mini *mini)
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
-	char *input;
-	char **cmds;
+	// char *input;
 
 	(void)ac;
 	(void)av;
-	glob_errno = 0;
+	// glob_errno = 0;
 	mini.exit = 0;
 	mini.envp = NULL;
 	init_env(&mini, ev);
@@ -207,16 +203,17 @@ int main(int ac, char **av, char **ev)
 	while (1)
 	{
 		init_prompt(&mini);
-		input = readline(mini.prompt);
-		if (input == NULL)
+		mini.input = readline(mini.prompt);
+		if (mini.input == NULL)
 			return (0);
-		if (input[0] == '\0')
+		if (mini.input[0] == '\0')
 			continue ;
-		mini.cmds = ft_split(input, ' ');
+		mini.cmds = ft_split(mini.input, ' ');
 		handle_commands(&mini, mini.cmds);
-		add_history(input);
-		ft_free_cmds(&mini);
+		add_history(mini.input);
+		free(mini.input);
 		free(mini.prompt);
+		ft_free_cmds(&mini);
 	}
 	return(0);
 }

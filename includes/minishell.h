@@ -27,6 +27,7 @@ typedef struct s_mini
 	char	**operators;
 	t_list	*envp;
 	t_list	*envx;
+	char *input;
 	char **cmds;
 }		t_mini;
 
