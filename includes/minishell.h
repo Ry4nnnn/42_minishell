@@ -27,13 +27,17 @@ typedef struct s_mini
 	char	**operators;
 	t_list	*envp;
 	t_list	*envx;
+	char **cmds;
 }		t_mini;
 
-int 	ft_pwd(void);
+void 	ft_pwd(void);
 int		ft_env(t_mini *mini);
 int		ft_exit(t_mini *mini);
 void	ft_unset(t_mini *mini, char **args);
 void		ft_export(t_mini *mini, char **key);
 // int		ft_echo(char *input);
+
+void	clear_env_var(void *content);
+void	ft_free_cmds(t_mini *mini);
 
 #endif

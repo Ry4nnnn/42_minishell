@@ -5,8 +5,8 @@ void	sort_env_x(t_mini *mini)
 {
 	t_list	*env_list;
 	t_list	*reset_head;
-	t_env	*env_node;
-	t_env	*env_next;
+	t_env	*cur_node;
+	t_env	*next_node;
 	void	*temp;
 
 	mini->envx = ft_lstdup(mini->envp);// duplicate envp to envx
@@ -14,9 +14,9 @@ void	sort_env_x(t_mini *mini)
 	env_list = mini->envx;
 	while (env_list->next != NULL)
 	{
-		env_node = (t_env *)env_list->content;
-		env_next = (t_env *)env_list->next->content;
-		if (ft_strcmp(env_node->key, env_next->key) > 0)
+		cur_node = (t_env *)env_list->content;
+		next_node = (t_env *)env_list->next->content;
+		if (ft_strcmp(cur_node->key, next_node->key) > 0)
 		{
 			temp = env_list->content;
 			env_list->content = env_list->next->content;

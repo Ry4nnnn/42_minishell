@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 15:38:54 by welim             #+#    #+#             */
-/*   Updated: 2022/04/18 15:58:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/22 14:44:42 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	size_t	i;
 
 	i = 0;
-	if (!n)
-		return (0);
+	if (!n || !s1 || !s2)
+		return (2);
 	while ((s1[i] || s2[i]) && i < n)
 	{
 		if (s1[i] != s2[i])

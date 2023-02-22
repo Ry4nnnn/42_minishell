@@ -81,7 +81,9 @@ void	init_prompt(t_mini *mini)
 	char	*user;
 	char	*dir;
 	char	*home;
-	char	*prompt;
+	char	*prompt1;
+	char	*prompt2;
+	char	*prompt3;
 
 	user = get_env(mini, "USER");
 	if (user == NULL)
@@ -99,17 +101,93 @@ void	init_prompt(t_mini *mini)
 		else
 			dir = "🤷";
 	}
-	prompt = ft_strjoin(user, " @ ");
-	prompt = ft_strjoin(prompt, dir);
-	prompt = ft_strjoin(prompt, " $ ");
-	mini->prompt = prompt;
+	prompt1 = ft_strjoin(user, " @ ");
+	prompt2 = ft_strjoin(prompt1, dir);
+	free(prompt1);
+	prompt3 = ft_strjoin(prompt2, " $ ");
+	free(prompt2);
+	mini->prompt = prompt3;
 }
 
+int	handle_commands(t_mini *mini, char **cmds)
+{
+	if (!ft_strncmp(cmds[0], "exit", 5))
+	{
+		ft_exit(mini);
+		exit(1);
+	}
+	else if (!ft_strncmp(cmds[0], "env", 4))
+		ft_env(mini);
+	else if (!ft_strncmp(cmds[0], "pwd", 4))
+		ft_pwd();
+	else if (!ft_strncmp(cmds[0], "unset", 6))
+		ft_unset(mini, cmds);
+	else if (!ft_strncmp(cmds[0], "export", 7))
+		ft_export(mini, cmds);
+	else if (cmds[0] != NULL)
+		printf("welim: %s: command not found\n", cmds[0]);
+	return(0);
+}
+
+
+void	free_Llist(t_mini *mini)
+{
+	t_list	*env_list;
+	t_env	*env_node;
+
+	env_list = mini->envx;
+	while (env_list != NULL)
+	{
+		env_node = (t_env *)env_list->content;
+		free (env_node->key);
+		free (env_node->value);
+		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
+		env_list = env_list->next;
+	}
+}
+
+void	free_Llist2(t_mini *mini)
+{
+	t_list	*env_list;
+	t_env	*env_node;
+
+	env_list = mini->envp;
+	while (env_list != NULL)
+	{
+		env_node = (t_env *)env_list->content;
+		free (env_node->key);
+		free (env_node->value);
+		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
+		env_list = env_list->next;
+	}
+}
+
+void	clear_env_var(void *content)
+{
+	t_env	*env;
+
+	env = content;
+	free(env->key);
+	free(env->value);
+	free(env);
+}
+
+// void	free_cmds(char **cmds)
+// {
+// 	while (!*cmds)
+// 	{
+// 		free (*cmds);
+// 		*cmds
+// 	}
+// }
+
+
+//lexer, signals, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
 	char *input;
-	char **args;
+	char **cmds;
 
 	(void)ac;
 	(void)av;
@@ -119,34 +197,24 @@ int main(int ac, char **av, char **ev)
 	init_env(&mini, ev);
 	// init_builtins(&mini);
 	// init_operators(&mini);
-	while (!mini.exit)
+	while (1)
 	{
+		int i = 0;
 		init_prompt(&mini);
 		input = readline(mini.prompt);
-		// printf ("%s\n", input);
 		// lexer(&mini, input);
 		if (input == NULL)
 			return (0);
 		if (input[0] == '\0')
 			continue ;
-		args = ft_split(input, ' ');
-		if (!ft_strncmp(input, "exit", 5))
-			return (ft_exit(&mini));
-		else if (!ft_strncmp(input, "env", 4))
-			ft_env(&mini);
-		else if (!ft_strncmp(input, "pwd", 4))
-			ft_pwd();
-		else if (!ft_strncmp(args[0], "unset", 6))
-			ft_unset(&mini, args);
-		else if (!ft_strncmp(args[0], "export", 7))
-			ft_export(&mini, args);
-		else
-			printf("welim: %s: command not found\n", args[0]);
-		// exec_builtin(&mini, input);
+		mini.cmds = ft_split(input, ' ');
+		// printf ("cmds: %s\n", cmds[0]);
+		handle_commands(&mini, mini.cmds);
+		// free(mini.cmds[i++]);
 		add_history(input);
-		free(args);
+		free(mini.prompt);
+		// ft_free_cmds(&mini);
 	}
-	free(args);
-	free(mini.prompt);
 	return(0);
 }
+
