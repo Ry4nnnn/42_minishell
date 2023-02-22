@@ -114,7 +114,7 @@ int	handle_commands(t_mini *mini, char **cmds)
 	if (!ft_strncmp(cmds[0], "exit", 5))
 	{
 		ft_exit(mini);
-		exit(1);
+		// exit(1);
 	}
 	else if (!ft_strncmp(cmds[0], "env", 4))
 		ft_env(mini);
@@ -124,6 +124,8 @@ int	handle_commands(t_mini *mini, char **cmds)
 		ft_unset(mini, cmds);
 	else if (!ft_strncmp(cmds[0], "export", 7))
 		ft_export(mini, cmds);
+	else if (!ft_strncmp(cmds[0], "cd", 7))
+		ft_cd(mini, cmds);
 	else if (cmds[0] != NULL)
 		printf("welim: %s: command not found\n", cmds[0]);
 	return(0);
@@ -172,15 +174,20 @@ void	clear_env_var(void *content)
 	free(env);
 }
 
-// void	free_cmds(char **cmds)
-// {
-// 	while (!*cmds)
-// 	{
-// 		free (*cmds);
-// 		*cmds
-// 	}
-// }
+void	ft_free_cmds(t_mini *mini)
+{
+	int	i;
+	char **temp;
 
+	i = 0;
+	temp = mini->cmds;
+	while (temp && *temp)
+	{
+		free(*temp);
+		temp++;
+	}
+	free (mini->cmds);
+}
 
 //lexer, signals, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
@@ -199,21 +206,17 @@ int main(int ac, char **av, char **ev)
 	// init_operators(&mini);
 	while (1)
 	{
-		int i = 0;
 		init_prompt(&mini);
 		input = readline(mini.prompt);
-		// lexer(&mini, input);
 		if (input == NULL)
 			return (0);
 		if (input[0] == '\0')
 			continue ;
 		mini.cmds = ft_split(input, ' ');
-		// printf ("cmds: %s\n", cmds[0]);
 		handle_commands(&mini, mini.cmds);
-		// free(mini.cmds[i++]);
 		add_history(input);
+		ft_free_cmds(&mini);
 		free(mini.prompt);
-		// ft_free_cmds(&mini);
 	}
 	return(0);
 }

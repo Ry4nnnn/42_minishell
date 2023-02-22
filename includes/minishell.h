@@ -32,12 +32,14 @@ typedef struct s_mini
 
 void 	ft_pwd(void);
 int		ft_env(t_mini *mini);
-int		ft_exit(t_mini *mini);
+void		ft_exit(t_mini *mini);
 void	ft_unset(t_mini *mini, char **args);
 void		ft_export(t_mini *mini, char **key);
+void	ft_cd(t_mini *mini, char **path);
 // int		ft_echo(char *input);
 
 void	clear_env_var(void *content);
 void	ft_free_cmds(t_mini *mini);
+char	*get_env(t_mini *mini, char *key);
 
 #endif

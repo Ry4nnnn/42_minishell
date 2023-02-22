@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/22 16:07:28 by welim            ###   ########.fr        #
+#    Updated: 2023/02/22 21:18:53 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ LIBFT_PATH	:= libft
 
 #------------------------------------------------------#
 
-BUILTINS	= env exit unset export
+BUILTINS	= env exit unset export cd
 PARSER		= pwd
 MAIN		= main
 
