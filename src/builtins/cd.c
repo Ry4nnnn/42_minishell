@@ -46,7 +46,7 @@ void	ft_cd(t_mini *mini)
 	oldpwd = get_env(mini, "OLDPWD");
 	home = get_env(mini, "HOME");
 	// printf("str:%s\n", oldpwd);
-	if (!mini->cmds[1])// if only cd
+	if (!mini->cmds[1] || (!ft_strcmp(mini->cmds[1], "~")))// if only cd or cd ~
 	{
 		if (!home)
 			printf ("cd: HOME not set\n");
@@ -71,11 +71,10 @@ void	ft_cd(t_mini *mini)
 		}
 		else
 		{
-			printf ("ok\n");
-			if (!chdir(mini->cmds[1]))
-				printf ("cd: %s: No such file or directory", mini->cmds[1]);
+			if (chdir(mini->cmds[1]))// if input is not valid
+				printf ("cd: %s: No such file or directory\n", mini->cmds[1]);
 			update_pwd(mini, "PWD");
-			// ch_env_var(mini, "PWD");
+			update_oldpwd(mini, oldpwd);
 		}
 	}
 }
