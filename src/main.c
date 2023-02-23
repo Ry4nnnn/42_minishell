@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+//adding variable to envp
 void	add_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*env_var;
@@ -10,6 +11,19 @@ void	add_env_var(t_mini *mini, char *key, char *value)
 	env_var->key = key;
 	env_var->value = value;
 	ft_lstadd_back(&mini->envp, ft_lstnew(env_var));
+}
+
+//adding variable to envx
+void	add_envx_var(t_mini *mini, char *key, char *value)
+{
+	t_env	*env_var;
+
+	env_var = malloc(sizeof(t_env));
+	if (env_var == NULL)
+		return ;
+	env_var->key = key;
+	env_var->value = value;
+	ft_lstadd_back(&mini->envx, ft_lstnew(env_var));
 }
 
 int init_env(t_mini *mini, char **ev)
@@ -191,7 +205,6 @@ void	ft_free_cmds(t_mini *mini)
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
-	// char *input;
 
 	(void)ac;
 	(void)av;

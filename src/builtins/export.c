@@ -58,6 +58,40 @@ int	valid_input(char *key)
 	return (1);
 }
 
+static void	get_key_value(char *arg, char **key, char **value)
+{
+	*value = ft_strchr(arg, '=');
+	if (*value == NULL)
+	{
+		*key = ft_strdup(arg);
+		return ;
+	}
+	*key = ft_strndup(arg, *value - arg);
+	*value = ft_strdup(*value + 1);
+}
+
+void	add_to_envx()
+{
+	printf ("check\n");
+}
+
+void	edit_env_var(t_mini *mini, char *key, char *value)
+{
+	if (!value)// if no '='
+	{
+		printf ("check\n");
+		add_envx_var(mini, key, value);//add to envx //NOT WORKING
+	}
+	else
+	{
+		add_env_var(mini, key, value);//add to envp //NOT WORKING
+		add_envx_var(mini, key, value);//add to envx
+	}
+
+}
+
+//if export with no '=' only add to export(envx)
+//if export with = add to both export(envx) and env(envp)
 void	ft_export(t_mini *mini, char **input)
 {
 	char	*key;
@@ -71,12 +105,16 @@ void	ft_export(t_mini *mini, char **input)
 	{
 		while (input[i] != NULL)
 		{
-			if (valid_input(input[i]) == 0)
+			get_key_value(input[i], &key, &value);// extracting key and value from input
+			if (valid_input(key) == 0)
 			{
 				printf("export: `%s': not a valid identifier\n", input[i]);
-				return ;
+				free (key);
+				free (value);
 				// continue ;
 			}
+			printf ("key: %s | value: %s\n", key, value);
+			edit_env_var(mini, key, value);// adding key and value to envp or envx
 			i++;
 		}
 	}
