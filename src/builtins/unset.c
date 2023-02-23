@@ -20,6 +20,8 @@ void	ft_unset(t_mini *mini, char **key)
 
 	env_list = mini->envp;
 	env_content = (t_env *)env_list->content;
+	if (!key[1])
+		return ;
 	if (ft_strcmp(key[1], env_content->key) == 0)
 	{
 		mini->envp = env_list->next;

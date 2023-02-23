@@ -2,11 +2,10 @@
 
 void	ft_exit(t_mini *mini)
 {
-	// free(mini->prompt);	
 	// ft_lstclear(&mini->envp, clear_env_var);
 	// ft_lstclear(&mini->envx, clear_env_var);
 	rl_clear_history();
-	system ("leaks minishell");
+	// system ("leaks minishell");
 	printf("exit 🤍\n");
 	exit(1);
 	// return (0);

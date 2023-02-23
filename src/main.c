@@ -60,6 +60,7 @@ int init_env(t_mini *mini, char **ev)
 // }
 
 //get env value by inputing key
+// returns NULL if could find any
 char	*get_env(t_mini *mini, char *key)
 {
 	t_list	*envp;
@@ -122,7 +123,7 @@ int	handle_commands(t_mini *mini, char **cmds)
 	else if (!ft_strncmp(cmds[0], "export", 7))
 		ft_export(mini, cmds);
 	else if (!ft_strncmp(cmds[0], "cd", 7))
-		ft_cd(mini, cmds);
+		ft_cd(mini);
 	else if (cmds[0] != NULL)
 		printf("welim: %s: command not found\n", cmds[0]);
 	return(0);
@@ -207,13 +208,17 @@ int main(int ac, char **av, char **ev)
 		if (mini.input == NULL)
 			return (0);
 		if (mini.input[0] == '\0')
+		{
+			free (mini.prompt);
+			free (mini.input);
 			continue ;
+		}
 		mini.cmds = ft_split(mini.input, ' ');
 		handle_commands(&mini, mini.cmds);
-		add_history(mini.input);
-		free(mini.input);
-		free(mini.prompt);
 		ft_free_cmds(&mini);
+		add_history(mini.input);
+		free(mini.prompt);
+		free(mini.input);
 	}
 	return(0);
 }
