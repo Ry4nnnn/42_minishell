@@ -11,6 +11,10 @@
 # define SUCCESS 0
 # define ERROR 1
 
+# define WHITE "\033[0;37m"
+# define GREEN "\033[0;32m"
+# define RED "\033[0;31m"
+
 int glob_errno;
 
 typedef struct s_env
@@ -47,6 +51,7 @@ void	add_env_var(t_mini *mini, char *key, char *value);
 void	add_envx_var(t_mini *mini, char *key, char *value);
 
 void	free_Llist(t_mini *mini, t_list *env_list);
-t_list	*ft_struct_dup(t_list *lst);
+t_list	*ft_lststruct_dup(t_list *lst);
+void	sort_env_x(t_mini *mini);
 
 #endif

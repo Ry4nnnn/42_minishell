@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/18 15:38:34 by welim             #+#    #+#             */
-/*   Updated: 2022/04/18 15:54:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/24 17:20:59 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*ft_strdup(const char *s)
 	size_t	slen;
 	char	*dst;
 
+	if (!*s)
+		return (NULL);
 	slen = ft_strlen(s);
 	dst = (char *)malloc(slen + 1);
 	if (!dst)

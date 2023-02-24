@@ -98,6 +98,7 @@ void	init_prompt(t_mini *mini)
 	char	*user;
 	char	*dir;
 	char	*home;
+	char	*prompt0;
 	char	*prompt1;
 	char	*prompt2;
 	char	*prompt3;
@@ -118,10 +119,12 @@ void	init_prompt(t_mini *mini)
 		else
 			dir = "🤷";
 	}
-	prompt1 = ft_strjoin(user, " @ ");
+	prompt0 = ft_strjoin(GREEN , user);
+	prompt1 = ft_strjoin(prompt0, " @ ");
+	free(prompt0);
 	prompt2 = ft_strjoin(prompt1, dir);
 	free(prompt1);
-	prompt3 = ft_strjoin(prompt2, " $ ");
+	prompt3 = ft_strjoin(prompt2, " $ \033[0;37m");
 	free(prompt2);
 	mini->prompt = prompt3;
 }
@@ -145,38 +148,6 @@ int	handle_commands(t_mini *mini, char **cmds)
 	return(0);
 }
 
-t_list	*ft_struct_dup(t_list *lst)
-{
-	t_list	*new_list = NULL;
-	t_list	*last_node = NULL;
-
-	while (lst)
-	{
-		t_list	*new_node;
-		t_env *content_dup = malloc(sizeof(t_env));
-		t_env *converted_env = (t_env *)lst->content;
-
-		content_dup->key = ft_strdup(converted_env->key);
-		content_dup->value = ft_strdup(converted_env->value);
-		new_node = ft_lstnew(content_dup);
-		if (!new_node)
-			return (NULL);
-		if (!new_list)
-		{
-			new_list = new_node;
-			last_node = new_node;
-		}
-		else
-		{
-			last_node->next = new_node;
-			last_node = new_node;
-		}
-		lst = lst->next;
-	}
-	return (new_list);
-}
-
-
 //lexer, signals, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
 {
@@ -188,12 +159,15 @@ int main(int ac, char **av, char **ev)
 	mini.exit = 0;
 	mini.envp = NULL;
 	init_env(&mini, ev);
+	// sort_env_x(&mini);// duplicate envp to envx and sort it by ascii
 	// init_builtins(&mini);
 	// init_operators(&mini);
 	while (1)
 	{
 		init_prompt(&mini);
+		printf ("");
 		mini.input = readline(mini.prompt);
+		// printf ("\033[0;37m");
 		if (mini.input == NULL)
 			return (0);
 		if (mini.input[0] == '\0')
