@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/21 22:33:41 by welim             #+#    #+#              #
-#    Updated: 2023/02/21 23:26:36 by welim            ###   ########.fr        #
+#    Updated: 2023/02/24 11:56:44 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS	= ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
 
 SRCS_BONUS =	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
 				ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
-				ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_lstdup.c
+				ft_lstclear.c ft_lstiter.c ft_lstmap.c
 
 OBJS = ${SRCS:.c=.o}
 

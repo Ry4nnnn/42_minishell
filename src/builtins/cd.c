@@ -35,7 +35,7 @@ void	update_oldpwd(t_mini *mini, char *old_path)
 	}
 }
 
-//work like normal cd
+// work like normal cd
 // (cd) will go to home path
 // (cd -) will switch between PWD and OLDPWD
 void	ft_cd(t_mini *mini)
@@ -68,6 +68,7 @@ void	ft_cd(t_mini *mini)
 				chdir(get_env(mini, "OLDPWD"));// change to oldpwd address
 				update_pwd(mini, "PWD");// pwd will be updated
 				update_oldpwd(mini, oldpwd);//oldpwd will be updated
+				printf ("%s\n", get_env(mini, "PWD"));
 		}
 		else
 		{

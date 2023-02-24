@@ -1,6 +1,7 @@
 #include "minishell.h"
 
 //to sort env (declare -x) to ascending order in ascii
+//duplicate envp to envx and sort it by ascii
 void	sort_env_x(t_mini *mini)
 {
 	t_list	*env_list;
@@ -9,7 +10,8 @@ void	sort_env_x(t_mini *mini)
 	t_env	*next_node;
 	void	*temp;
 
-	mini->envx = ft_lstdup(mini->envp);// duplicate envp to envx
+	mini->envx = ft_struct_dup(mini->envp);// duplicate envp to envx
+	// init_envx(mini);
 	reset_head = mini->envx;
 	env_list = mini->envx;
 	while (env_list->next != NULL)
@@ -34,8 +36,6 @@ void	print_export_x(t_mini *mini)
 	t_list	*env_list;
 	t_env	*env_node;
 
-	// init_envx(mini);
-	sort_env_x(mini);
 	env_list = mini->envx;
 	while (env_list != NULL)
 	{
@@ -70,24 +70,41 @@ static void	get_key_value(char *arg, char **key, char **value)
 	*value = ft_strdup(*value + 1);
 }
 
-void	add_to_envx()
+// loops through the linked list and check if theres (key)
+//if no then returns a NULL
+//if yes then returns the key itself
+t_env	*check_env_var(t_list *envx, char *key)
 {
-	printf ("check\n");
+	t_env	*env_list;
+
+	while (envx != NULL)
+	{
+		env_list = envx->content;
+		if (ft_strcmp(key, env_list->key) == 0)
+			return (env_list);
+		envx = envx->next;
+	}
+	return (NULL);
 }
 
-void	edit_env_var(t_mini *mini, char *key, char *value)
+void	edit_env_var(t_mini *ms, char *key, char *value)
 {
-	if (!value)// if no '='
+	t_env	*env;
+
+	env = check_env_var(ms->envx, key);
+	if (env == NULL)
+		add_env_var(ms, key, value);// adding new key to env
+	else if (value == NULL && env->value != NULL)
 	{
-		printf ("check\n");
-		add_envx_var(mini, key, value);//add to envx //NOT WORKING
+		free(value);
+		free(key);
 	}
 	else
 	{
-		add_env_var(mini, key, value);//add to envp //NOT WORKING
-		add_envx_var(mini, key, value);//add to envx
+		free(env->value);
+		env->value = value;
+		free(key);
 	}
-
 }
 
 //if export with no '=' only add to export(envx)
@@ -99,14 +116,18 @@ void	ft_export(t_mini *mini, char **input)
 	int	i;
 
 	i = 1;
-	if (input[i] == NULL)
-		return (print_export_x(mini));
+	sort_env_x(mini);// duplicate envp to envx and sort it by ascii
+	if (input[i] == NULL)//input only export with no paramters
+	{
+		print_export_x(mini);
+		ft_lstclear(&mini->envx, clear_env_var);// free duplicated llist (envx)
+	}
 	else
 	{
 		while (input[i] != NULL)
 		{
 			get_key_value(input[i], &key, &value);// extracting key and value from input
-			if (valid_input(key) == 0)
+			if (valid_input(key) == 0)// invalid input
 			{
 				printf("export: `%s': not a valid identifier\n", input[i]);
 				free (key);
@@ -117,5 +138,6 @@ void	ft_export(t_mini *mini, char **input)
 			edit_env_var(mini, key, value);// adding key and value to envp or envx
 			i++;
 		}
+		ft_lstclear(&mini->envx, clear_env_var);// free duplicated llist (envx)
 	}
 }

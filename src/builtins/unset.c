@@ -1,15 +1,5 @@
 #include "minishell.h"
 
-
-void	ft_free_node(void *s)
-{
-	t_env	*content;
-
-	content = (t_env *)s;
-	free(content->key);
-	free(content->value);
-}
-
 void	ft_unset(t_mini *mini, char **key)
 {
 	t_list	*env_list;
@@ -25,7 +15,7 @@ void	ft_unset(t_mini *mini, char **key)
 	if (ft_strcmp(key[1], env_content->key) == 0)
 	{
 		mini->envp = env_list->next;
-		ft_lstdelone(env_list, &ft_free_node);
+		ft_lstdelone(env_list, &clear_env_var);
 		return ;
 	}
 	while (env_list->next != NULL)
@@ -34,7 +24,7 @@ void	ft_unset(t_mini *mini, char **key)
 		if (ft_strcmp(key[1], env_content->key) == 0)
 		{
 			store_next = env_list->next;;
-			ft_lstdelone(env_list, &ft_free_node);
+			ft_lstdelone(env_list, &clear_env_var);
 			store_prev->next = store_next;
 			return ;
 		}

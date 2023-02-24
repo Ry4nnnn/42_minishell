@@ -46,4 +46,7 @@ char	*get_env(t_mini *mini, char *key);
 void	add_env_var(t_mini *mini, char *key, char *value);
 void	add_envx_var(t_mini *mini, char *key, char *value);
 
+void	free_Llist(t_mini *mini, t_list *env_list);
+t_list	*ft_struct_dup(t_list *lst);
+
 #endif

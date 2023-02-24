@@ -26,6 +26,8 @@ void	add_envx_var(t_mini *mini, char *key, char *value)
 	ft_lstadd_back(&mini->envx, ft_lstnew(env_var));
 }
 
+
+//take in ev from main func and initialize into a linked list
 int init_env(t_mini *mini, char **ev)
 {
 	char	*key;
@@ -73,7 +75,7 @@ int init_env(t_mini *mini, char **ev)
 // 	mini->operators = operators;
 // }
 
-//get env value by inputing key
+//get env value by inputing key from envp
 // returns NULL if could find any
 char	*get_env(t_mini *mini, char *key)
 {
@@ -143,63 +145,37 @@ int	handle_commands(t_mini *mini, char **cmds)
 	return(0);
 }
 
-
-void	free_Llist(t_mini *mini)
+t_list	*ft_struct_dup(t_list *lst)
 {
-	t_list	*env_list;
-	t_env	*env_node;
+	t_list	*new_list = NULL;
+	t_list	*last_node = NULL;
 
-	env_list = mini->envx;
-	while (env_list != NULL)
+	while (lst)
 	{
-		env_node = (t_env *)env_list->content;
-		free (env_node->key);
-		free (env_node->value);
-		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
-		env_list = env_list->next;
+		t_list	*new_node;
+		t_env *content_dup = malloc(sizeof(t_env));
+		t_env *converted_env = (t_env *)lst->content;
+
+		content_dup->key = ft_strdup(converted_env->key);
+		content_dup->value = ft_strdup(converted_env->value);
+		new_node = ft_lstnew(content_dup);
+		if (!new_node)
+			return (NULL);
+		if (!new_list)
+		{
+			new_list = new_node;
+			last_node = new_node;
+		}
+		else
+		{
+			last_node->next = new_node;
+			last_node = new_node;
+		}
+		lst = lst->next;
 	}
+	return (new_list);
 }
 
-void	free_Llist2(t_mini *mini)
-{
-	t_list	*env_list;
-	t_env	*env_node;
-
-	env_list = mini->envp;
-	while (env_list != NULL)
-	{
-		env_node = (t_env *)env_list->content;
-		free (env_node->key);
-		free (env_node->value);
-		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
-		env_list = env_list->next;
-	}
-}
-
-void	clear_env_var(void *content)
-{
-	t_env	*env;
-
-	env = content;
-	free(env->key);
-	free(env->value);
-	free(env);
-}
-
-void	ft_free_cmds(t_mini *mini)
-{
-	int	i;
-	char **temp;
-
-	i = 0;
-	temp = mini->cmds;
-	while (temp && *temp)
-	{
-		free(*temp);
-		temp++;
-	}
-	free (mini->cmds);
-}
 
 //lexer, signals, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
