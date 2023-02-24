@@ -165,7 +165,6 @@ int main(int ac, char **av, char **ev)
 	while (1)
 	{
 		init_prompt(&mini);
-		printf ("");
 		mini.input = readline(mini.prompt);
 		// printf ("\033[0;37m");
 		if (mini.input == NULL)

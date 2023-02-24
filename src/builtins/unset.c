@@ -7,7 +7,6 @@ void	ft_unset(t_mini *mini, char **key)
 	t_list	*store_next;
 	t_list	*store_prev;
 
-
 	env_list = mini->envp;
 	env_content = (t_env *)env_list->content;
 	if (!key[1])

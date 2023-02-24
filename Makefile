@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/24 17:06:38 by welim            ###   ########.fr        #
+#    Updated: 2023/02/24 19:38:50 by wxuerui          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,15 +14,30 @@ NAME		= minishell
 
 LIB			:= -Llibft -lft
 
-INCLUDE		:= -I./includes -Ilibft -I./readline-8.1/include
+INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) -fsanitize=address #-Wall -Werror -Wextra
+CFLAGS		:= $(INCLUDE) #-fsanitize=address #-Wall -Werror -Wextra
 
 CC			:= gcc -g3
 
 NEWLINE 	= \e[1K\r
 
 READLINE	:= -lreadline -L ./readline-8.1/lib -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include
+
+
+#------------------------COLORS---------------------------#
+
+DEF_COLOR = \033[0;39m
+GRAY = \033[0;90m
+RED = \033[0;91m
+GREEN = \033[0;92m
+YELLOW = \033[0;93m
+BLUE = \033[0;94m
+MAGENTA = \033[0;95m
+CYAN = \033[0;96m
+WHITE = \033[0;97m
+H_RED = \033[0;101m
+RESET = \033[0m
 
 #-------------------------PATH-------------------------#
 
@@ -58,23 +73,26 @@ vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(PARSER_PATH)/ $(SRCS_PATH
 
 $(OBJS_PATH)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
-	@printf "$(NEWLINE)Creating object file $@ from $< ${NEWLINE}"
+	@printf "$(NEWLINE)$(CYAN)Creating object file $@ from $<"
 
 all:
 		@mkdir -p $(OBJS_PATH)
 		@make ${NAME}
 
-${NAME} : ${OBJS} 
+${NAME} : ${OBJS}
+	@printf "$(NEWLINE)$(RESET)\n"
 	@make -C $(LIBFT_PATH)
 	@${CC} ${CFLAGS} $^ ${READLINE} ${INCLUDE} ${LIB} -o $@
+	@echo "$(GREEN)$(NAME) was created$(RESET)"
 
 clean :
-	@make clean -C $(LIBFT_PATH)
+	@make fclean -C $(LIBFT_PATH)
 	@rm -rf $(OBJS_PATH)
+	@echo "$(BLUE)$(NAME): $(CYAN)object files are cleaned$(RESET)"
 
 fclean : clean
-	@make fclean -C $(LIBFT_PATH)
 	@rm -rf ${NAME}
+	@echo "$(BLUE)$(NAME): $(H_RED)$(NAME) was deleted$(RESET)"
 
 re : fclean all
 
