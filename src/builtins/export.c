@@ -34,7 +34,6 @@ t_list	*ft_lststruct_dup(t_list *lst)
 }
 
 //to sort env (declare -x) to ascending order in ascii
-//duplicate envp to envx and sort it by ascii
 void	sort_env_x(t_mini *mini)
 {
 	t_list	*env_list;
@@ -43,7 +42,6 @@ void	sort_env_x(t_mini *mini)
 	t_env	*next_node;
 	void	*temp;
 
-	mini->envx = ft_lststruct_dup(mini->envp);// duplicate envp to envx
 	reset_head = mini->envx;
 	env_list = mini->envx;
 	while (env_list->next != NULL)
@@ -73,8 +71,12 @@ void	print_export_x(t_mini *mini)
 	while (env_list != NULL)
 	{
 		env_node = (t_env *)env_list->content;
-		printf ("declare -x ");
-		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
+		if (env_node->value == NULL)
+			ft_printf("declare -x %s\n", env_node->key);
+		else if (env_node->value[0] == '\0')
+			ft_printf("declare -x %s=\"\"\n", env_node->key);
+		else
+			ft_printf("declare -x %s=\"%s\"\n", env_node->key, env_node->value);
 		env_list = env_list->next;
 	}
 }
@@ -100,7 +102,7 @@ static void	get_key_value(char *arg, char **key, char **value)
 		*key = ft_strdup(arg);
 		return ;
 	}
-	*key = ft_strndup(arg, *value - arg);
+	*key = ft_strndup(arg, ft_strlen(arg) - ft_strlen(*value));
 	*value = ft_strdup(*value + 1);
 }
 
@@ -109,16 +111,16 @@ static void	get_key_value(char *arg, char **key, char **value)
 //loops through the linked list and check if theres (key)
 //if no then returns a NULL
 //if yes then returns the key itself
-t_env	*check_env_var(t_list *envx, char *key)
+t_env	*check_env_var(t_list *envp, char *key)
 {
 	t_env	*env_list;
 
-	while (envx != NULL)
+	while (envp != NULL)
 	{
-		env_list = envx->content;
+		env_list = envp->content;
 		if (ft_strcmp(key, env_list->key) == 0)
 			return (env_list);
-		envx = envx->next;
+		envp = envp->next;
 	}
 	return (NULL);
 }
@@ -127,15 +129,53 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*env;
 
-	env = check_env_var(mini->envx, key);
-	if (env == NULL)// if key doest not exist in env
-		add_envx_var(mini, key, value);// adding new key to env
-	if (value == NULL)// no value only key (no '=')
+	env = check_env_var(mini->envp, key);
+	if (env == NULL)// if key doesnt exist in env (adding new variable)
 	{
-		add_envx_var(mini, key, value);
-		printf ("check\n");
+		// printf ("CHECK\n");
+		if (value != NULL)
+		{
+			printf ("1\n");
+			add_env_var(mini, key, value);
+			add_envx_var(mini, key, value);
+		}
+		else// value is NULL
+		{
+			printf ("2\n");
+			add_envx_var(mini, key, value);
+		}
 	}
-	//NOT DONE
+	else // editing variable
+	{
+		if (value != NULL)
+		{
+			printf ("3\n");
+			free(env->value);
+			env->value = value;
+			free(key);
+			// add_env_var(mini, key, value);
+			// add_envx_var(mini, key, value);
+		}
+		else// value is NULL
+		{
+			printf ("4\n");
+			// free(value);
+			// free(key);
+			add_envx_var(mini, key, value);
+		}
+	}
+	// else if (value == NULL && env->value != NULL)
+	// {
+	// 	printf ("%s\n", env->value);
+	// 	free(value);
+	// 	free(key);
+	// }
+	// else
+	// {
+	// 	free(env->value);
+	// 	env->value = value;
+	// 	free(key);
+	// }
 }
 
 //if export with no '=' only add to export(envx)
@@ -160,7 +200,7 @@ void	ft_export(t_mini *mini, char **input)
 				printf("export: `%s': not a valid identifier\n", input[i]);
 				free (key);
 				free (value);
-				// continue ;
+				continue ;
 			}
 			// printf ("key: %s | value: %s\n", key, value);
 			edit_env_var(mini, key, value);// adding key and value to envp or envx

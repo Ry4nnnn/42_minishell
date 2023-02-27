@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
+#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/24 19:38:50 by wxuerui          ###   ########.fr        #
+#    Updated: 2023/02/27 22:58:21 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ WHITE = \033[0;97m
 H_RED = \033[0;101m
 RESET = \033[0m
 
-#-------------------------PATH-------------------------#
+#------------------------PATH--------------------------#
 
 SRCS_PATH	:= src
 
@@ -49,27 +49,32 @@ BUILTINS_PATH	:= builtins
 
 PARSER_PATH	:= parser
 
+LEXER_PATH	:= lexer
+
 LIBFT_PATH	:= libft
 
-#------------------------------------------------------#
+#------------------------FILES-------------------------#
 
-BUILTINS	= env exit unset export cd
+BUILTINS	= env exit unset export cd echo
 PARSER		= pwd
+LEXER		= lexer
 MAIN		= main free
 
 #------------------------------------------------------#
 
 SRCS		:= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(BUILTINS_PATH)/, $(BUILTINS)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(PARSER_PATH)/, $(PARSER)))
+SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(LEXER_PATH)/, $(LEXER)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/, $(MAIN)))
 
 OBJS		:= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(BUILTINS)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(PARSER)))
+OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(LEXER)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(MAIN)))
 
 #------------------------------------------------------#
 
-vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(PARSER_PATH)/ $(SRCS_PATH)/
+vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(PARSER_PATH)/ $(SRCS_PATH)/$(LEXER_PATH)/ $(SRCS_PATH)/
 
 $(OBJS_PATH)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
@@ -92,7 +97,7 @@ clean :
 
 fclean : clean
 	@rm -rf ${NAME}
-	@echo "$(BLUE)$(NAME): $(H_RED)$(NAME) was deleted$(RESET)"
+	@echo "$(BLUE)$(NAME): $(H_RED) $(NAME) was deleted $(RESET)"
 
 re : fclean all
 

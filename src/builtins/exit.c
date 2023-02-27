@@ -4,10 +4,11 @@ void	ft_exit(t_mini *mini)
 {
 	// ft_lstclear(&mini->envp, clear_env_var);
 	// ft_lstclear(&mini->envx, clear_env_var);
-	ft_lstclear(&mini->envx, clear_env_var);// free duplicated llist (envx)
+	ft_lstclear(&(mini->envx), clear_env_var);// free duplicated llist (envx)
+	// exit(1);
 
 	rl_clear_history();
-	// system ("leaks minishell");
+	system("leaks minishell");
 	printf("exit 🤍\n");
 	exit(1);
 	// return (0);
