@@ -140,10 +140,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 			add_envx_var(mini, key, value);
 		}
 		else// value is NULL
-		{
-			printf ("2\n");
 			add_envx_var(mini, key, value);
-		}
 	}
 	else // editing variable
 	{
@@ -164,18 +161,6 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 			add_envx_var(mini, key, value);
 		}
 	}
-	// else if (value == NULL && env->value != NULL)
-	// {
-	// 	printf ("%s\n", env->value);
-	// 	free(value);
-	// 	free(key);
-	// }
-	// else
-	// {
-	// 	free(env->value);
-	// 	env->value = value;
-	// 	free(key);
-	// }
 }
 
 //if export with no '=' only add to export(envx)
