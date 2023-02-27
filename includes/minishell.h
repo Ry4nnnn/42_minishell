@@ -36,6 +36,8 @@ typedef struct s_mini
 	char oldpwd[1024];
 }		t_mini;
 
+
+//BUILTINS//
 void 	ft_pwd(void);
 int		ft_env(t_mini *mini);
 void	ft_exit(t_mini *mini);

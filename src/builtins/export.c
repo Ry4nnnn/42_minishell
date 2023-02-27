@@ -110,29 +110,30 @@ static void	get_key_value(char *arg, char **key, char **value)
 //check env var (key) exist
 //loops through the linked list and check if theres (key)
 //if no then returns a NULL
-//if yes then returns the key itself
-t_env	*check_env_var(t_list *envp, char *key)
+//if yes then returns the key pointer form env list
+t_env	*check_env_var(t_list *env, char *key)
 {
 	t_env	*env_list;
 
-	while (envp != NULL)
+	while (env != NULL)
 	{
-		env_list = envp->content;
+		env_list = env->content;
 		if (ft_strcmp(key, env_list->key) == 0)
 			return (env_list);
-		envp = envp->next;
+		env = env->next;
 	}
 	return (NULL);
 }
 
 void	edit_env_var(t_mini *mini, char *key, char *value)
 {
-	t_env	*env;
+	t_env	*envp;
+	t_env	*envx;
 
-	env = check_env_var(mini->envp, key);
-	if (env == NULL)// if key doesnt exist in env (adding new variable)
+	envp = check_env_var(mini->envp, key);
+	envx = check_env_var(mini->envx, key);
+	if (envp == NULL)// if key doesnt exist in env (adding new variable)
 	{
-		// printf ("CHECK\n");
 		if (value != NULL)
 		{
 			printf ("1\n");
@@ -142,23 +143,22 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 		else// value is NULL
 			add_envx_var(mini, key, value);
 	}
-	else // editing variable
+	else// editing variable
 	{
 		if (value != NULL)
 		{
 			printf ("3\n");
-			free(env->value);
-			env->value = value;
+			free(envp->value);
+			envp->value = value;
+			envx->value = value;
 			free(key);
-			// add_env_var(mini, key, value);
-			// add_envx_var(mini, key, value);
 		}
 		else// value is NULL
 		{
 			printf ("4\n");
-			// free(value);
-			// free(key);
-			add_envx_var(mini, key, value);
+			if (envx == NULL)// if key alrdy exist in envx. just skip (dont add)
+				add_envx_var(mini, key, value);
+			free (key);
 		}
 	}
 }
