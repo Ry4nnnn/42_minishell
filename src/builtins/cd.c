@@ -12,6 +12,9 @@ void	update_pwd(t_mini *mini, char *key)
 		env_var = envp->content;
 		if (ft_strcmp(key, env_var->key) == 0)
 		{
+			printf ("1\n");
+			if (env_var->value)
+				free (env_var->value);
 			env_var->value = getcwd(NULL, PATH_MAX);
 		}
 		envp = envp->next;
@@ -29,6 +32,9 @@ void	update_oldpwd(t_mini *mini, char *old_path)
 		env_var = envp->content;
 		if (ft_strcmp("OLDPWD", env_var->key) == 0)
 		{
+			printf ("2\n");
+			// if (env_var->value)
+			// 	free (env_var->value);
 			env_var->value = old_path;
 		}
 		envp = envp->next;
@@ -66,8 +72,8 @@ void	ft_cd(t_mini *mini)
 			else
 				oldpwd = get_env(mini, "PWD");
 				chdir(get_env(mini, "OLDPWD"));// change to oldpwd address
-				update_pwd(mini, "PWD");// pwd will be updated
 				update_oldpwd(mini, oldpwd);//oldpwd will be updated
+				update_pwd(mini, "PWD");// pwd will be updated
 				printf ("%s\n", get_env(mini, "PWD"));
 		}
 		else

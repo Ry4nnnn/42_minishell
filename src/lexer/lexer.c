@@ -2,5 +2,8 @@
 
 void lexer(t_mini *mini)
 {
-	// printf ("check\n\n\n\n\n");
+	char *input;
+
+	input = mini->input;
+	
 }

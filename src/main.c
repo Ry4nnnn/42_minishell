@@ -134,7 +134,8 @@ void	ft_error(t_mini *mini, char **cmds)
 	user = get_env(mini, "USER");
 	if (user == NULL)
 		user = "user";
-	printf("%s: %s: command not found\n", user, cmds[0]);
+	printf("\033[95m%s:\033[0m ", user);
+	printf("%s: command not found\n", cmds[0]);
 }
 
 int	handle_commands(t_mini *mini, char **cmds)
@@ -158,6 +159,16 @@ int	handle_commands(t_mini *mini, char **cmds)
 	return(0);
 }
 
+void	signal_handler(int num)
+{
+	if (num == SIGINT)
+	{
+		write(0, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
 
 //expand then tokenize
 //lexer, signals, pipes, heredoc, redirection
@@ -175,6 +186,8 @@ int main(int ac, char **av, char **ev)
 	// init_operators(&mini);
 	while (1)
 	{
+		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, SIG_IGN);
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)
@@ -187,7 +200,7 @@ int main(int ac, char **av, char **ev)
 		}
 		mini.cmds = ft_split(mini.input, ' ');
 		add_history(mini.input);
-		lexer(&mini);
+		// lexer(&mini);
 		free(mini.input);
 		handle_commands(&mini, mini.cmds);
 		ft_free_cmds(&mini);

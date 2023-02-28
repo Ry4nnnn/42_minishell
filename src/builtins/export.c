@@ -132,16 +132,23 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 
 	envp = check_env_var(mini->envp, key);
 	envx = check_env_var(mini->envx, key);
-	if (envp == NULL)// if key doesnt exist in env (adding new variable)
+	if (envp == NULL)// if key doesnt exist in envp (adding new variable)
 	{
 		if (value != NULL)
 		{
 			printf ("1\n");
 			add_env_var(mini, key, value);
-			add_envx_var(mini, key, value);
+			if (envx != NULL)
+			{
+				free(envx->value);						
+				envx->value = value;
+			}
 		}
 		else// value is NULL
+		{
+			printf ("2\n");
 			add_envx_var(mini, key, value);
+		}
 	}
 	else// editing variable
 	{
@@ -149,16 +156,14 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 		{
 			printf ("3\n");
 			free(envp->value);
-			envp->value = value;
+			envp->value = value;							
 			envx->value = value;
-			free(key);
 		}
 		else// value is NULL
 		{
 			printf ("4\n");
 			if (envx == NULL)// if key alrdy exist in envx. just skip (dont add)
 				add_envx_var(mini, key, value);
-			free (key);
 		}
 	}
 }
@@ -185,6 +190,7 @@ void	ft_export(t_mini *mini, char **input)
 				printf("export: `%s': not a valid identifier\n", input[i]);
 				free (key);
 				free (value);
+				i++;
 				continue ;
 			}
 			// printf ("key: %s | value: %s\n", key, value);
