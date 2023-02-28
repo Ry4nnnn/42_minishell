@@ -91,7 +91,7 @@ void	ft_unset(t_mini *mini, char **key)
 		else // both env and envx has key
 		{
 			printf ("3\n");
-			del_env_var(mini, envp);// both freeing something similar
+			del_env_var(mini, envp);// both freeing something
 			del_envx_var(mini, envx);// causing double free
 		}
 		i++;

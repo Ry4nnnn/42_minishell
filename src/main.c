@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //adding variable to envp
-void	add_env_var(t_mini *mini, char *key, char *value)
+void	add_envp_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*env_var;
 
@@ -38,7 +38,7 @@ int init_env(t_mini *mini, char **ev)
 		value = ft_strchr(*ev, '=');
 		key = ft_strndup(*ev, (ft_strlen(*ev) - ft_strlen(value)));
 		value = ft_strdup(value + 1);
-		add_env_var(mini, key, value);
+		add_envp_var(mini, key, value);
 		ev++;
 	}
 	return (0);

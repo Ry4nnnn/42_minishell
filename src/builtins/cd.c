@@ -72,8 +72,8 @@ void	ft_cd(t_mini *mini)
 			else
 				oldpwd = get_env(mini, "PWD");
 				chdir(get_env(mini, "OLDPWD"));// change to oldpwd address
-				update_oldpwd(mini, oldpwd);//oldpwd will be updated
 				update_pwd(mini, "PWD");// pwd will be updated
+				update_oldpwd(mini, oldpwd);//oldpwd will be updated
 				printf ("%s\n", get_env(mini, "PWD"));
 		}
 		else

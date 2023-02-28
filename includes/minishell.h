@@ -57,7 +57,7 @@ int		ft_echo(char **input);
 void	clear_env_var(void *content);
 void	ft_free_cmds(t_mini *mini);
 char	*get_env(t_mini *mini, char *key);
-void	add_env_var(t_mini *mini, char *key, char *value);
+void	add_envp_var(t_mini *mini, char *key, char *value);
 void	add_envx_var(t_mini *mini, char *key, char *value);
 int		valid_input(char *key);
 t_env	*check_env_var(t_list *envp, char *key);

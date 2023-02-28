@@ -128,45 +128,47 @@ t_env	*check_env_var(t_list *env, char *key)
 void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*envp;
-	t_env	*envx;
 
 	envp = check_env_var(mini->envp, key);
-	envx = check_env_var(mini->envx, key);
 	if (envp == NULL)// if key doesnt exist in envp (adding new variable)
 	{
+		printf ("1\n");
 		if (value != NULL)
-		{
-			printf ("1\n");
-			add_env_var(mini, key, value);
-			if (envx != NULL)
-			{
-				free(envx->value);						
-				envx->value = value;
-			}
-		}
-		else// value is NULL
-		{
-			printf ("2\n");
-			add_envx_var(mini, key, value);
-		}
+			add_envp_var(mini, key, value);
+		else
+			free (key);
+	}
+	else// editing variable (envp != NULL)
+	{
+		printf ("2\n");
+		printf ("%p\n", envp->value);
+		free(envp->value);
+		printf ("value: %s\n", value);
+		envp->value = value;							
+		free (key);
+	}
+}
+
+void	edit_envx_var(t_mini *mini, char *keyx, char *valuex)
+{
+	t_env	*envx;
+
+	envx = check_env_var(mini->envx, keyx);
+	if (envx == NULL)// if key doesnt exist in envx (adding new variable)
+	{
+		printf ("3\n");
+		add_envx_var(mini, keyx, valuex);
 	}
 	else// editing variable
 	{
-		if (value != NULL)
-		{
-			printf ("3\n");
-			free(envp->value);
-			envp->value = value;							
-			envx->value = value;
-		}
-		else// value is NULL
-		{
-			printf ("4\n");
-			if (envx == NULL)// if key alrdy exist in envx. just skip (dont add)
-				add_envx_var(mini, key, value);
-		}
+		printf ("4\n");
+		printf ("%p\n", envx->value);
+		free(envx->value);				
+		envx->value = valuex;
+		free (keyx);
 	}
 }
+
 
 //if export with no '=' only add to export(envx)
 //if export with = add to both export(envx) and env(envp)
@@ -174,9 +176,12 @@ void	ft_export(t_mini *mini, char **input)
 {
 	char	*key;
 	char	*value;
+	char	*keyx;
+	char	*valuex;
 	int	i;
 
 	i = 1;
+	//dup
 	sort_env_x(mini);// duplicate envp to envx and sort it by ascii
 	if (input[i] == NULL)//input only export with no paramters
 		print_export_x(mini);
@@ -184,7 +189,8 @@ void	ft_export(t_mini *mini, char **input)
 	{
 		while (input[i] != NULL)
 		{
-			get_key_value(input[i], &key, &value);// extracting key and value from input
+			get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
+			get_key_value(input[i], &keyx, &valuex);// extracting key and value from input //malloc
 			if (valid_input(key) == 0)// invalid input
 			{
 				printf("export: `%s': not a valid identifier\n", input[i]);
@@ -195,6 +201,7 @@ void	ft_export(t_mini *mini, char **input)
 			}
 			// printf ("key: %s | value: %s\n", key, value);
 			edit_env_var(mini, key, value);// adding key and value to envp or envx
+			edit_envx_var(mini, keyx, valuex);
 			i++;
 		}
 	}
