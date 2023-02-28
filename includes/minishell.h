@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 22:32:57 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 23:19:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <limits.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+# include <termios.h>
 
 # define SUCCESS 0
 # define ERROR 1
@@ -113,5 +114,9 @@ void	sort_env_x(t_mini *mini);
 
 //lexer.c
 void	lexer(t_mini *mini);
+
+//signal.c
+void	signal_handler(int signo);
+void	ms_init_signal(void);
 
 #endif

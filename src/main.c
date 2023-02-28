@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 21:07:19 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 23:20:46 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,16 +147,7 @@ int	handle_commands(t_mini *mini, char **cmds)
 	return(0);
 }
 
-void	signal_handler(int num)
-{
-	if (num == SIGINT)
-	{
-		write(0, "\n", 1);
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
+
 
 //duplicates envp to envx
 t_list	*ft_lststruct_dup(t_list *lst)
@@ -203,13 +194,6 @@ int main(int ac, char **av, char **ev)
 	(void)av;
 	// glob_errno = 0;
 	mini.envp = NULL;
-	//test
-	// while (*ev != NULL)
-	// {
-	// 	printf("%s\n", *ev);
-	// 	ev++;
-	// }
-	// return (0);
 	init_env(&mini, ev);
 	// init_builtins(&mini);
 	// init_operators(&mini);
@@ -217,6 +201,7 @@ int main(int ac, char **av, char **ev)
 	{
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, SIG_IGN);
+		ms_init_signal();
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)

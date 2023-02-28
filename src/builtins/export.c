@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/02/28 22:32:53 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 22:40:46 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	print_export(t_mini *mini)
 			biggest_content = (t_env *)temp->content;
 		temp = temp->next;
 	} // find the first to print string in the envp list
-	printf("declare -x %s=\"%s\"\n", smallest_content->key, smallest_content->value);
+	printf("declare -x %s=\"%s\"\n", smallest_content->key, smallest_content->value);// printf smallest \ first one
 	i = ft_lstsize(mini->envp) - 1;
 	temp = mini->envp;
 	while (--i >= 0)
