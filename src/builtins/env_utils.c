@@ -1,6 +1,6 @@
-#include "minishell.h" 
+#include "minishell.h"
 
-void	test(void)
+int	haha(void)
 {
-	return ;
+	return 1;
 }
