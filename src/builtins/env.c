@@ -9,7 +9,8 @@ int		ft_env(t_mini *mini)
 	while (env_list != NULL)
 	{
 		env_node = (t_env *)env_list->content;
-		printf ("%s=%s\n", env_node->key, env_node->value);
+		if (env_node->value != NULL)
+			printf ("%s=%s\n", env_node->key, env_node->value);
 		env_list = env_list->next;
 	}
 	return (0);

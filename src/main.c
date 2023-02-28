@@ -13,20 +13,6 @@ void	add_envp_var(t_mini *mini, char *key, char *value)
 	ft_lstadd_back(&mini->envp, ft_lstnew(env_var));
 }
 
-//adding variable to envx
-void	add_envx_var(t_mini *mini, char *key, char *value)
-{
-	t_env	*env_var;
-
-	env_var = malloc(sizeof(t_env));
-	if (env_var == NULL)
-		return ;
-	env_var->key = key;
-	env_var->value = value;
-	ft_lstadd_back(&mini->envx, ft_lstnew(env_var));
-}
-
-
 //take in ev from main func and initialize into a linked list
 int init_env(t_mini *mini, char **ev)
 {
@@ -180,8 +166,14 @@ int main(int ac, char **av, char **ev)
 	(void)av;
 	// glob_errno = 0;
 	mini.envp = NULL;
+	//test
+	// while (*ev != NULL)
+	// {
+	// 	printf("%s\n", *ev);
+	// 	ev++;
+	// }
+	// return (0);
 	init_env(&mini, ev);
-	mini.envx = ft_lststruct_dup(mini.envp);// duplicate envp to envx
 	// init_builtins(&mini);
 	// init_operators(&mini);
 	while (1)

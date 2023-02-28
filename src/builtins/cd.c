@@ -10,12 +10,14 @@ void	update_pwd(t_mini *mini, char *key)
 	while (envp != NULL)
 	{
 		env_var = envp->content;
+		printf("%s\n", env_var->value);
 		if (ft_strcmp(key, env_var->key) == 0)
 		{
-			printf ("1\n");
+			// printf ("1\n");
 			if (env_var->value)
 				free (env_var->value);
 			env_var->value = getcwd(NULL, PATH_MAX);
+			return ;
 		}
 		envp = envp->next;
 	}
@@ -35,7 +37,9 @@ void	update_oldpwd(t_mini *mini, char *old_path)
 			printf ("2\n");
 			// if (env_var->value)
 			// 	free (env_var->value);
-			env_var->value = old_path;
+			if (env_var->value)
+				free(env_var->value);
+			env_var->value = ft_strdup(old_path);
 		}
 		envp = envp->next;
 	}
@@ -54,6 +58,7 @@ void	ft_cd(t_mini *mini)
 	// printf("str:%s\n", oldpwd);
 	if (!mini->cmds[1] || (!ft_strcmp(mini->cmds[1], "~")))// if only cd or cd ~
 	{
+		printf("here2");
 		if (!home)
 			printf ("cd: HOME not set\n");
 		else
@@ -70,11 +75,16 @@ void	ft_cd(t_mini *mini)
 			if (!oldpwd)// if oldpwd is empty
 				printf ("cd: OLDPWD not set\n");
 			else
+			{
 				oldpwd = get_env(mini, "PWD");
 				chdir(get_env(mini, "OLDPWD"));// change to oldpwd address
 				update_pwd(mini, "PWD");// pwd will be updated
+				printf("%s\n", oldpwd);
+				// free(oldpwd);
+				// return ;
 				update_oldpwd(mini, oldpwd);//oldpwd will be updated
 				printf ("%s\n", get_env(mini, "PWD"));
+			}
 		}
 		else
 		{

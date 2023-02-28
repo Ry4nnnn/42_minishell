@@ -1,83 +1,57 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
+/*   Updated: 2023/02/28 22:23:38 by wxuerui          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-//duplicates envp to envx
-t_list	*ft_lststruct_dup(t_list *lst)
-{
-	t_list	*new_list = NULL;
-	t_list	*last_node = NULL;
-	t_list	*new_node;
-	t_env *content_dup;
-	t_env *converted_env;
-
-	while (lst)
-	{
-		converted_env = (t_env *)lst->content;
-		content_dup = malloc(sizeof(t_env));
-		content_dup->key = ft_strdup(converted_env->key);
-		content_dup->value = ft_strdup(converted_env->value);
-		new_node = ft_lstnew(content_dup);
-		if (!new_node)
-			return (NULL);
-		if (!new_list)
-		{
-			new_list = new_node;
-			last_node = new_node;
-		}
-		else
-		{
-			last_node->next = new_node;
-			last_node = new_node;
-		}
-		lst = lst->next;
-	}
-	return (new_list);
-}
-
-//to sort env (declare -x) to ascending order in ascii
-void	sort_env_x(t_mini *mini)
-{
-	t_list	*env_list;
-	t_list	*reset_head;
-	t_env	*cur_node;
-	t_env	*next_node;
-	void	*temp;
-
-	reset_head = mini->envx;
-	env_list = mini->envx;
-	while (env_list->next != NULL)
-	{
-		cur_node = (t_env *)env_list->content;
-		next_node = (t_env *)env_list->next->content;
-		if (ft_strcmp(cur_node->key, next_node->key) > 0)
-		{
-			temp = env_list->content;
-			env_list->content = env_list->next->content;
-			env_list->next->content = temp;
-			env_list = reset_head;//reset and go back to the first node and compare again
-		}
-		else
-			env_list = env_list->next;// shift to next node
-	}
-	env_list = reset_head;
-}
-
 // this function is to print the already sorted linked list
-void	print_export_x(t_mini *mini)
+void	print_export(t_mini *mini)
 {
-	t_list	*env_list;
-	t_env	*env_node;
+	// TODO
+	t_list	*temp;
+	t_env	*smallest_content;
+	t_env	*biggest_content;
+	t_env	*temp_content;
+	int		i;
 
-	env_list = mini->envx;
-	while (env_list != NULL)
+	temp = mini->envp;
+	smallest_content = ((t_env *)temp->content);
+	while (temp != NULL)
 	{
-		env_node = (t_env *)env_list->content;
-		if (env_node->value == NULL)
-			ft_printf("declare -x %s\n", env_node->key);
-		else if (env_node->value[0] == '\0')
-			ft_printf("declare -x %s=\"\"\n", env_node->key);
+		if (ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) < 0) // if looping key is smaller than first_content key
+			smallest_content = (t_env *)temp->content;
+		if (ft_strcmp(((t_env *)temp->content)->key, biggest_content->key) > 0) // if looping key is greater than biggest_content key
+			biggest_content = (t_env *)temp->content;
+		temp = temp->next;
+	} // find the first to print string in the envp list
+	printf("declare -x %s=\"%s\"\n", smallest_content->key, smallest_content->value);
+	i = ft_lstsize(mini->envp) - 1;
+	temp = mini->envp;
+	while (--i >= 0)
+	{
+		temp_content = biggest_content;
+		temp = mini->envp;
+		while (temp != NULL)
+		{
+			if (ft_strcmp(((t_env *)temp->content)->key, temp_content->key) < 0
+				&& ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) > 0) // if looping key is smaller than temp_content key and temp_content key is greater than first_content key
+				temp_content = (t_env *)temp->content;
+			temp = temp->next;
+		}
+		printf("declare -x %s", temp_content->key);
+		if (temp_content->value == NULL)
+			printf("\n");
 		else
-			ft_printf("declare -x %s=\"%s\"\n", env_node->key, env_node->value);
-		env_list = env_list->next;
+			printf("=\"%s\"\n", temp_content->value);
+		smallest_content = temp_content;
 	}
 }
 
@@ -133,10 +107,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	if (envp == NULL)// if key doesnt exist in envp (adding new variable)
 	{
 		printf ("1\n");
-		if (value != NULL)
-			add_envp_var(mini, key, value);
-		else
-			free (key);
+		add_envp_var(mini, key, value);
 	}
 	else// editing variable (envp != NULL)
 	{
@@ -149,27 +120,6 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	}
 }
 
-void	edit_envx_var(t_mini *mini, char *keyx, char *valuex)
-{
-	t_env	*envx;
-
-	envx = check_env_var(mini->envx, keyx);
-	if (envx == NULL)// if key doesnt exist in envx (adding new variable)
-	{
-		printf ("3\n");
-		add_envx_var(mini, keyx, valuex);
-	}
-	else// editing variable
-	{
-		printf ("4\n");
-		printf ("%p\n", envx->value);
-		free(envx->value);				
-		envx->value = valuex;
-		free (keyx);
-	}
-}
-
-
 //if export with no '=' only add to export(envx)
 //if export with = add to both export(envx) and env(envp)
 void	ft_export(t_mini *mini, char **input)
@@ -181,28 +131,24 @@ void	ft_export(t_mini *mini, char **input)
 	int	i;
 
 	i = 1;
-	//dup
-	sort_env_x(mini);// duplicate envp to envx and sort it by ascii
-	if (input[i] == NULL)//input only export with no paramters
-		print_export_x(mini);
-	else
+	//input only export with no paramters
+	if (input[i] == NULL)
 	{
-		while (input[i] != NULL)
+		print_export(mini);
+		return ;
+	}
+	while (input[i] != NULL)
+	{
+		get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
+		if (valid_input(key) == 0)// invalid input
 		{
-			get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
-			get_key_value(input[i], &keyx, &valuex);// extracting key and value from input //malloc
-			if (valid_input(key) == 0)// invalid input
-			{
-				printf("export: `%s': not a valid identifier\n", input[i]);
-				free (key);
-				free (value);
-				i++;
-				continue ;
-			}
-			// printf ("key: %s | value: %s\n", key, value);
-			edit_env_var(mini, key, value);// adding key and value to envp or envx
-			edit_envx_var(mini, keyx, valuex);
+			printf("export: `%s': not a valid identifier\n", input[i]);
+			free (key);
+			free (value);
 			i++;
+			continue ;
 		}
+		edit_env_var(mini, key, value);// adding key and value to envp or envx
+		i++;
 	}
 }
