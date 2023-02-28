@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 21:08:37 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 22:00:32 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	ft_free_cmds(t_mini *mini);
 //main.c
 void	add_envp_var(t_mini *mini, char *key, char *value);
 void	add_envx_var(t_mini *mini, char *key, char *value);
-int		init_env(t_mini *mini, char **ev)
+int		init_env(t_mini *mini, char **ev);
 char	*get_env(t_mini *mini, char *key);
 void	init_prompt(t_mini *mini);
 int	handle_commands(t_mini *mini, char **cmds);
