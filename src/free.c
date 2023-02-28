@@ -2,13 +2,11 @@
 
 void	free_Llist(t_mini *mini, t_list *env_list)
 {
-	// t_list	*env_list;
 	t_env	*env_node;
 
 	while (env_list != NULL)
 	{
 		env_node = (t_env *)env_list->content;
-		// printf ("%s=\"%s\"\n", env_node->key, env_node->value);
 		free (env_node->key);
 		free (env_node->value);
 		free (env_node);
@@ -20,9 +18,13 @@ void	clear_env_var(void *content)
 {
 	t_env	*env;
 
-	env = content;
-	free(env->key);
-	free(env->value);
+	env = (t_env *)content;
+	if (env == NULL)
+		return ;
+	if (env->key != NULL)
+		free(env->key);
+	if (env->value != NULL)
+		free(env->value);
 	free(env);
 }
 

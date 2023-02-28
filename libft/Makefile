@@ -3,55 +3,76 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/02/21 22:33:41 by welim             #+#    #+#              #
-#    Updated: 2023/02/24 11:56:44 by welim            ###   ########.fr        #
+#    Created: 2022/09/11 20:15:17 by wxuerui           #+#    #+#              #
+#    Updated: 2023/02/24 19:30:13 by wxuerui          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	= ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
-		ft_memset.c ft_strlen.c ft_bzero.c ft_memcpy.c ft_memmove.c \
-		ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
-		ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c \
-		ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c \
-		ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c \
-		ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
-		ft_strcmp.c ft_putendl.c get_next_line.c ft_strndup.c 
 
-SRCS_BONUS =	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c \
-				ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
-				ft_lstclear.c ft_lstiter.c ft_lstmap.c
+#variables
 
-OBJS = ${SRCS:.c=.o}
+NAME	= libft.a
+CC	= gcc
+AR	= ar rcs
+HEADER	= -I libft.h
+CFLAGS	= -Wall -Werror -Wextra $(HEADER)
+SRCS_DIR	= srcs/
+OBJS_DIR	= objs/
 
-OBJS_BONUS = ${SRCS_BONUS:.c=.o}
+#Colors
 
-NAME = libft.a
+DEF_COLOR = \033[0;39m
+GRAY = \033[0;90m
+RED = \033[0;91m
+GREEN = \033[0;92m
+YELLOW = \033[0;93m
+BLUE = \033[0;94m
+MAGENTA = \033[0;95m
+CYAN = \033[0;96m
+WHITE = \033[0;97m
+RESET = \033[0m
 
-CC = gcc
+#sources
 
-CFLAGS	= -Wall -Werror -Wextra
-NEWLINE = \e[1K\r
-GREEN = '\033[32m'
-RED	= "\033[0;31m"
+SRC_FILES	= ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_isprint \
+				ft_strlen ft_strlcpy ft_strlcat ft_toupper ft_tolower ft_strchr ft_strrchr ft_strncmp \
+				ft_memset ft_bzero ft_memcpy ft_memmove ft_memchr ft_memcmp ft_strnstr \
+				ft_atoi ft_calloc ft_strdup ft_substr ft_strjoin ft_strtrim ft_split ft_itoa ft_strmapi ft_striteri \
+				ft_putchar_fd ft_putstr_fd ft_putendl_fd ft_putnbr_fd \
+				ft_lstnew ft_lstadd_front ft_lstsize ft_lstlast ft_lstadd_back ft_lstdelone ft_lstclear ft_lstiter ft_lstmap \
+				ft_printf ft_print_hex ft_putunsign ft_putvoidptr ft_putcharf ft_putnbrf ft_putstrf ft_get_flags ft_printf_utils ft_putnbrstrf \
+				ft_quick_sort ft_2darrlen ft_free2darr \
+				get_next_line_bonus get_next_line_utils_bonus \
+				ft_strndup ft_strcmp
 
-all : ${NAME}
+SRCS 		= 	$(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRC_FILES)))
+OBJS 		= 	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRC_FILES)))
 
-${NAME} : ${OBJS} ${OBJS_BONUS}
-		@printf "${NEWLINE}"
-		@echo $(GREEN)"- Compiled -"$(NONE)
-		@ar rcs ${NAME} ${OBJS} ${OBJS_BONUS}
+#######
 
-%.o : %.c
-		@${CC} ${CFLAGS} -c $<
-		@printf "$(NEWLINE)Creating object file $@ from $<"
+all:
+		@mkdir -p $(OBJS_DIR)
+		@make $(NAME)
 
-clean :
-		@rm -f ${OBJS} ${OBJS_BONUS}
+$(OBJS_DIR)%.o:		$(SRCS_DIR)%.c
+					@$(CC) $(CFLAGS) -c $< -o $@
+					@echo ".\c"
 
-fclean : clean
-		@echo $(RED)"- Deleted -"$(NONE)
-		@rm -f libft.a
+$(NAME):	$(OBJS)
+			@echo "\n"
+			@$(AR) $(NAME) $(OBJS)
+			@echo "$(GREEN)$(NAME) was created$(RESET)"
 
-re : fclean all
+clean:
+		@rm -rf $(OBJS_DIR)
+		@echo "$(BLUE)$(NAME): $(YELLOW)object files are cleaned$(RESET)"
+
+fclean:	clean
+		@rm -rf $(NAME)
+		@echo "$(BLUE)$(NAME): $(MAGENTA)$(NAME) was deleted$(RESET)"
+
+re:	fclean all
+
+.PHONY:	all clean fclean re

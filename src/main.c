@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //adding variable to envp
-void	add_env_var(t_mini *mini, char *key, char *value)
+void	add_envp_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*env_var;
 
@@ -36,12 +36,9 @@ int init_env(t_mini *mini, char **ev)
 	while (*ev != NULL)
 	{
 		value = ft_strchr(*ev, '=');
-		// printf ("value b: %s\n", value);
-		key = ft_strndup(*ev, (value - *ev));
-		// printf ("key: %s\n", key);
+		key = ft_strndup(*ev, (ft_strlen(*ev) - ft_strlen(value)));
 		value = ft_strdup(value + 1);
-		// printf ("value: %s\n", value);
-		add_env_var(mini, key, value);
+		add_envp_var(mini, key, value);
 		ev++;
 	}
 	return (0);
@@ -129,6 +126,18 @@ void	init_prompt(t_mini *mini)
 	mini->prompt = prompt3;
 }
 
+//print error for invalid input || non valid commands
+void	ft_error(t_mini *mini, char **cmds)
+{
+	char *user;
+
+	user = get_env(mini, "USER");
+	if (user == NULL)
+		user = "user";
+	printf("\033[95m%s:\033[0m ", user);
+	printf("%s: command not found\n", cmds[0]);
+}
+
 int	handle_commands(t_mini *mini, char **cmds)
 {
 	if (!ft_strncmp(cmds[0], "exit", 5))
@@ -141,13 +150,27 @@ int	handle_commands(t_mini *mini, char **cmds)
 		ft_unset(mini, cmds);
 	else if (!ft_strncmp(cmds[0], "export", 7))
 		ft_export(mini, cmds);
-	else if (!ft_strncmp(cmds[0], "cd", 7))
+	else if (!ft_strncmp(cmds[0], "cd", 9))
 		ft_cd(mini);
+	else if (!ft_strncmp(cmds[0], "echo", 5))
+		ft_echo(cmds);
 	else if (cmds[0] != NULL)
-		printf("welim: %s: command not found\n", cmds[0]);
+		ft_error(mini, cmds);
 	return(0);
 }
 
+void	signal_handler(int num)
+{
+	if (num == SIGINT)
+	{
+		write(0, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+}
+
+//expand then tokenize
 //lexer, signals, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
 {
@@ -156,18 +179,17 @@ int main(int ac, char **av, char **ev)
 	(void)ac;
 	(void)av;
 	// glob_errno = 0;
-	mini.exit = 0;
 	mini.envp = NULL;
 	init_env(&mini, ev);
-	// sort_env_x(&mini);// duplicate envp to envx and sort it by ascii
+	mini.envx = ft_lststruct_dup(mini.envp);// duplicate envp to envx
 	// init_builtins(&mini);
 	// init_operators(&mini);
 	while (1)
 	{
+		signal(SIGINT, signal_handler);
+		signal(SIGQUIT, SIG_IGN);
 		init_prompt(&mini);
-		printf ("");
 		mini.input = readline(mini.prompt);
-		// printf ("\033[0;37m");
 		if (mini.input == NULL)
 			return (0);
 		if (mini.input[0] == '\0')
@@ -177,11 +199,12 @@ int main(int ac, char **av, char **ev)
 			continue ;
 		}
 		mini.cmds = ft_split(mini.input, ' ');
+		add_history(mini.input);
+		// lexer(&mini);
+		free(mini.input);
 		handle_commands(&mini, mini.cmds);
 		ft_free_cmds(&mini);
-		add_history(mini.input);
 		free(mini.prompt);
-		free(mini.input);
 	}
 	return(0);
 }

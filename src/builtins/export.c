@@ -34,7 +34,6 @@ t_list	*ft_lststruct_dup(t_list *lst)
 }
 
 //to sort env (declare -x) to ascending order in ascii
-//duplicate envp to envx and sort it by ascii
 void	sort_env_x(t_mini *mini)
 {
 	t_list	*env_list;
@@ -43,7 +42,6 @@ void	sort_env_x(t_mini *mini)
 	t_env	*next_node;
 	void	*temp;
 
-	mini->envx = ft_lststruct_dup(mini->envp);// duplicate envp to envx
 	reset_head = mini->envx;
 	env_list = mini->envx;
 	while (env_list->next != NULL)
@@ -73,8 +71,12 @@ void	print_export_x(t_mini *mini)
 	while (env_list != NULL)
 	{
 		env_node = (t_env *)env_list->content;
-		printf ("declare -x ");
-		printf ("%s=\"%s\"\n", env_node->key, env_node->value);
+		if (env_node->value == NULL)
+			ft_printf("declare -x %s\n", env_node->key);
+		else if (env_node->value[0] == '\0')
+			ft_printf("declare -x %s=\"\"\n", env_node->key);
+		else
+			ft_printf("declare -x %s=\"%s\"\n", env_node->key, env_node->value);
 		env_list = env_list->next;
 	}
 }
@@ -100,7 +102,7 @@ static void	get_key_value(char *arg, char **key, char **value)
 		*key = ft_strdup(arg);
 		return ;
 	}
-	*key = ft_strndup(arg, *value - arg);
+	*key = ft_strndup(arg, ft_strlen(arg) - ft_strlen(*value));
 	*value = ft_strdup(*value + 1);
 }
 
@@ -108,35 +110,65 @@ static void	get_key_value(char *arg, char **key, char **value)
 //check env var (key) exist
 //loops through the linked list and check if theres (key)
 //if no then returns a NULL
-//if yes then returns the key itself
-t_env	*check_env_var(t_list *envx, char *key)
+//if yes then returns the key pointer form env list
+t_env	*check_env_var(t_list *env, char *key)
 {
 	t_env	*env_list;
 
-	while (envx != NULL)
+	while (env != NULL)
 	{
-		env_list = envx->content;
+		env_list = env->content;
 		if (ft_strcmp(key, env_list->key) == 0)
 			return (env_list);
-		envx = envx->next;
+		env = env->next;
 	}
 	return (NULL);
 }
 
 void	edit_env_var(t_mini *mini, char *key, char *value)
 {
-	t_env	*env;
+	t_env	*envp;
 
-	env = check_env_var(mini->envx, key);
-	if (env == NULL)// if key doest not exist in env
-		add_envx_var(mini, key, value);// adding new key to env
-	if (value == NULL)// no value only key (no '=')
+	envp = check_env_var(mini->envp, key);
+	if (envp == NULL)// if key doesnt exist in envp (adding new variable)
 	{
-		add_envx_var(mini, key, value);
-		printf ("check\n");
+		printf ("1\n");
+		if (value != NULL)
+			add_envp_var(mini, key, value);
+		else
+			free (key);
 	}
-	//NOT DONE
+	else// editing variable (envp != NULL)
+	{
+		printf ("2\n");
+		printf ("%p\n", envp->value);
+		free(envp->value);
+		printf ("value: %s\n", value);
+		envp->value = value;							
+		free (key);
+	}
 }
+
+void	edit_envx_var(t_mini *mini, char *keyx, char *valuex)
+{
+	t_env	*envx;
+
+	envx = check_env_var(mini->envx, keyx);
+	if (envx == NULL)// if key doesnt exist in envx (adding new variable)
+	{
+		printf ("3\n");
+		add_envx_var(mini, keyx, valuex);
+	}
+	else// editing variable
+	{
+		printf ("4\n");
+		printf ("%p\n", envx->value);
+		free(envx->value);				
+		envx->value = valuex;
+		free (keyx);
+	}
+}
+
 
 //if export with no '=' only add to export(envx)
 //if export with = add to both export(envx) and env(envp)
@@ -144,9 +176,12 @@ void	ft_export(t_mini *mini, char **input)
 {
 	char	*key;
 	char	*value;
+	char	*keyx;
+	char	*valuex;
 	int	i;
 
 	i = 1;
+	//dup
 	sort_env_x(mini);// duplicate envp to envx and sort it by ascii
 	if (input[i] == NULL)//input only export with no paramters
 		print_export_x(mini);
@@ -154,16 +189,19 @@ void	ft_export(t_mini *mini, char **input)
 	{
 		while (input[i] != NULL)
 		{
-			get_key_value(input[i], &key, &value);// extracting key and value from input
+			get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
+			get_key_value(input[i], &keyx, &valuex);// extracting key and value from input //malloc
 			if (valid_input(key) == 0)// invalid input
 			{
 				printf("export: `%s': not a valid identifier\n", input[i]);
 				free (key);
 				free (value);
-				// continue ;
+				i++;
+				continue ;
 			}
 			// printf ("key: %s | value: %s\n", key, value);
 			edit_env_var(mini, key, value);// adding key and value to envp or envx
+			edit_envx_var(mini, keyx, valuex);
 			i++;
 		}
 	}
