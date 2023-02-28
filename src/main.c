@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 19:18:46 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 21:07:19 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	add_envx_var(t_mini *mini, char *key, char *value)
 
 
 //take in ev from main func and initialize into a linked list
-int init_env(t_mini *mini, char **ev)
+int		init_env(t_mini *mini, char **ev)
 {
 	char	*key;
 	char	*value;

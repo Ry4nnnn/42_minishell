@@ -6,16 +6,16 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/02/28 17:23:02 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 21:00:27 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-int	is_option(char *input)
+int		is_option(char *input)
 {
-	int	i;
+	int		i;
 
 	i = 1;
 	if (input[0] != '-')
@@ -27,10 +27,10 @@ int	is_option(char *input)
 	return (0);
 }
 
-int	ft_echo(char **input)
+int		ft_echo(char **input)
 {
-	int	i;
-	int option;
+	int		i;
+	int		option;
 
 	i = 1;
 	option = 0;

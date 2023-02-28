@@ -6,13 +6,13 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 17:23:13 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 21:03:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	del_env_var(t_mini *ms, t_env *env)
+void	del_env_var(t_mini *ms, t_env *env)
 {
 	t_list	*curr;
 	t_list	*tmp;
@@ -39,7 +39,7 @@ static void	del_env_var(t_mini *ms, t_env *env)
 	}
 }
 
-static void	del_envx_var(t_mini *ms, t_env *env)
+void	del_envx_var(t_mini *ms, t_env *env)
 {
 	t_list	*curr;
 	t_list	*tmp;
