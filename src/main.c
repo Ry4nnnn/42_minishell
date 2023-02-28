@@ -150,7 +150,7 @@ int	handle_commands(t_mini *mini, char **cmds)
 		ft_unset(mini, cmds);
 	else if (!ft_strncmp(cmds[0], "export", 7))
 		ft_export(mini, cmds);
-	else if (!ft_strncmp(cmds[0], "cd", 3))
+	else if (!ft_strncmp(cmds[0], "cd", 9))
 		ft_cd(mini);
 	else if (!ft_strncmp(cmds[0], "echo", 5))
 		ft_echo(cmds);
