@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 17:23:20 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:18:46 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,17 +138,7 @@ void	init_prompt(t_mini *mini)
 	mini->prompt = prompt3;
 }
 
-//print error for invalid input || non valid commands
-void	ft_error(t_mini *mini, char **cmds)
-{
-	char *user;
 
-	user = get_env(mini, "USER");
-	if (user == NULL)
-		user = "user";
-	printf("\033[95m%s:\033[0m ", user);
-	printf("%s: command not found\n", cmds[0]);
-}
 
 int	handle_commands(t_mini *mini, char **cmds)
 {
@@ -180,6 +170,41 @@ void	signal_handler(int num)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+}
+
+//duplicates envp to envx
+t_list	*ft_lststruct_dup(t_list *lst)
+{
+	t_list		*new_list;
+	t_list		*last_node;
+	t_list		*new_node;
+	t_env		*content_dup;
+	t_env		*converted_env;
+
+	new_list = NULL;
+	last_node = NULL;
+	while (lst)
+	{
+		converted_env = (t_env *)lst->content;
+		content_dup = malloc(sizeof(t_env));
+		content_dup->key = ft_strdup(converted_env->key);
+		content_dup->value = ft_strdup(converted_env->value);
+		new_node = ft_lstnew(content_dup);
+		if (!new_node)
+			return (NULL);
+		if (!new_list)
+		{
+			new_list = new_node;
+			last_node = new_node;
+		}
+		else
+		{
+			last_node->next = new_node;
+			last_node = new_node;
+		}
+		lst = lst->next;
+	}
+	return (new_list);
 }
 
 //expand then tokenize

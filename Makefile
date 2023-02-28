@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/28 05:29:37 by welim            ###   ########.fr        #
+#    Updated: 2023/02/28 19:32:15 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ LIBFT_PATH		:= libft
 BUILTINS	= env exit unset export cd echo
 PARSER		= pwd
 LEXER		= lexer
-MAIN		= main free
+MAIN		= main free error utils
 
 #------------------------------------------------------#
 

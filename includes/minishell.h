@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 17:22:43 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:28:15 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ t_env	*check_env_var(t_list *envp, char *key);
 void	free_Llist(t_mini *mini, t_list *env_list);
 t_list	*ft_lststruct_dup(t_list *lst);
 void	sort_env_x(t_mini *mini);
-
+void	ft_error(t_mini *mini, char **cmds);
+void	get_key_value(char *arg, char **key, char **value);
 void	lexer(t_mini *mini);
 
 #endif
