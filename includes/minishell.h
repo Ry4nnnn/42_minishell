@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 22:00:32 by welim            ###   ########.fr       */
+/*   Updated: 2023/02/28 22:32:57 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_mini
 	char	**builtins;
 	char	**operators;
 	t_list	*envp;// call env
-	t_list	*envx;// call export
+	// t_list	*envx;// call export
 	char *input;
 	char **cmds;
 	char oldpwd[1024];

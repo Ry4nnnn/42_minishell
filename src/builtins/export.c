@@ -5,31 +5,53 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/28 17:23:10 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 19:44:17 by welim            ###   ########.fr       */
+/*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
+/*   Updated: 2023/02/28 22:32:53 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// this function is to sort and print linked list
-void	print_export_x(t_mini *mini)
+// this function is to print the already sorted linked list
+void	print_export(t_mini *mini)
 {
-	t_list	*env_list;
-	t_env	*env_node;
+	// TODO
+	t_list	*temp;
+	t_env	*smallest_content;
+	t_env	*biggest_content;
+	t_env	*temp_content;
+	int		i;
 
-	sort_env_x(mini);
-	env_list = mini->envx;
-	while (env_list != NULL)
+	temp = mini->envp;
+	smallest_content = ((t_env *)temp->content);
+	while (temp != NULL)
 	{
-		env_node = (t_env *)env_list->content;
-		if (env_node->value == NULL)
-			ft_printf("declare -x %s\n", env_node->key);
-		else if (env_node->value[0] == '\0')
-			ft_printf("declare -x %s=\"\"\n", env_node->key);
+		if (ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) < 0) // if looping key is smaller than first_content key
+			smallest_content = (t_env *)temp->content;
+		if (ft_strcmp(((t_env *)temp->content)->key, biggest_content->key) > 0) // if looping key is greater than biggest_content key
+			biggest_content = (t_env *)temp->content;
+		temp = temp->next;
+	} // find the first to print string in the envp list
+	printf("declare -x %s=\"%s\"\n", smallest_content->key, smallest_content->value);
+	i = ft_lstsize(mini->envp) - 1;
+	temp = mini->envp;
+	while (--i >= 0)
+	{
+		temp_content = biggest_content;
+		temp = mini->envp;
+		while (temp != NULL)
+		{
+			if (ft_strcmp(((t_env *)temp->content)->key, temp_content->key) < 0
+				&& ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) > 0) // if looping key is smaller than temp_content key and temp_content key is greater than first_content key
+				temp_content = (t_env *)temp->content;
+			temp = temp->next;
+		}
+		printf("declare -x %s", temp_content->key);
+		if (temp_content->value == NULL)
+			printf("\n");
 		else
-			ft_printf("declare -x %s=\"%s\"\n", env_node->key, env_node->value);
-		env_list = env_list->next;
+			printf("=\"%s\"\n", temp_content->value);
+		smallest_content = temp_content;
 	}
 }
 
@@ -59,32 +81,14 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	envp = check_env_var(mini->envp, key);
 	if (envp == NULL) // if key doesnt exist in envp (adding new variable)
 	{
-		if (value != NULL)
-			add_envp_var(mini, key, value);
-		else
-			free (key);
+		printf ("1\n");
+		add_envp_var(mini, key, value);
 	}
 	else // editing variable (envp != NULL)
 	{
 		free(envp->value);
 		envp->value = value;
 		free (key);
-	}
-}
-
-// (adding \ changing) key and value to envx
-void	edit_envx_var(t_mini *mini, char *keyx, char *valuex)
-{
-	t_env	*envx;
-
-	envx = check_env_var(mini->envx, keyx);
-	if (envx == NULL) // if key doesnt exist in envx (adding new variable)
-		add_envx_var(mini, keyx, valuex);
-	else // editing variable
-	{
-		free(envx->value);
-		envx->value = valuex;
-		free(keyx);
 	}
 }
 
@@ -99,25 +103,24 @@ void	ft_export(t_mini *mini, char **input)
 	int		i;
 
 	i = 1;
-	if (input[i] == NULL) //input only export with no paramters
-		print_export_x(mini);
-	else
+	//input only export with no paramters
+	if (input[i] == NULL)
 	{
-		while (input[i] != NULL)
+		print_export(mini);
+		return ;
+	}
+	while (input[i] != NULL)
+	{
+		get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
+		if (valid_input(key) == 0)// invalid input
 		{
-			get_key_value(input[i], &key, &value);
-			get_key_value(input[i], &keyx, &valuex);
-			if (valid_input(key) == 0) // invalid input
-			{
-				printf("export: `%s': not a valid identifier\n", input[i]);
-				free (key);
-				free (value);
-				i++;
-				continue ;
-			}
-			edit_env_var(mini, key, value);
-			edit_envx_var(mini, keyx, valuex);
+			printf("export: `%s': not a valid identifier\n", input[i]);
+			free (key);
+			free (value);
 			i++;
+			continue ;
 		}
+		edit_env_var(mini, key, value);// adding key and value to envp or envx
+		i++;
 	}
 }
