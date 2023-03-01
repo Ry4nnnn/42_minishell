@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/02/28 23:20:03 by welim            ###   ########.fr        #
+#    Updated: 2023/03/01 21:23:49 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) #-fsanitize=address #-Wall -Werror -Wextra
+CFLAGS		:= $(INCLUDE) -Wall -Werror -Wextra #-fsanitize=address 
 
 CC			:= gcc -g3
 

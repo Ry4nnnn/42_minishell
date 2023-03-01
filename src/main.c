@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 17:38:21 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 21:22:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ t_list	*ft_lststruct_dup(t_list *lst)
 }
 
 //expand then tokenize
-//lexer, signals, pipes, heredoc, redirection
+//lexer, signals, pipes, heredoc, redirection, execve
 int main(int ac, char **av, char **ev)
 {
 	t_mini	mini;
@@ -199,8 +199,6 @@ int main(int ac, char **av, char **ev)
 	// init_operators(&mini);
 	while (1)
 	{
-		signal(SIGINT, signal_handler);
-		signal(SIGQUIT, SIG_IGN);
 		init_signal();
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
@@ -213,12 +211,12 @@ int main(int ac, char **av, char **ev)
 			continue ;
 		}
 		mini.cmds = ft_split(mini.input, ' ');
-		add_history(mini.input);
 		// lexer(&mini);
-		free(mini.input);
 		handle_commands(&mini, mini.cmds);
+		add_history(mini.input);
 		ft_free_cmds(&mini);
 		free(mini.prompt);
+		free(mini.input);
 	}
 	return(0);
 }

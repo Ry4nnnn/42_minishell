@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 18:08:25 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 21:24:02 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,10 @@ void	del_env_var(t_mini *ms, t_env *env)
 	}
 }
 
-// freeing shit that is not malloced
+// delete var from linked list
 void	ft_unset(t_mini *mini, char **key)
 {
 	t_env	*envp;
-	t_env	*envx;
 	int	i;
 
 	i = 1;
@@ -59,7 +58,7 @@ void	ft_unset(t_mini *mini, char **key)
 			i++;
 			continue;
 		}
-		else // env has key
+		else // deleting node
 			del_env_var(mini, envp);
 		i++;
 	}

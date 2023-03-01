@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:18 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 19:35:12 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 21:24:56 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	free_Llist(t_mini *mini, t_list *env_list)
 {
 	t_env	*env_node;
 
+	(void) mini;
 	while (env_list != NULL)
 	{
 		env_node = (t_env *)env_list->content;

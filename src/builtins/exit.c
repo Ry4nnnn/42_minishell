@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:08 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 18:05:05 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 21:23:34 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ft_exit(t_mini *mini)
 {
+	(void)mini;
 	rl_clear_history();
 	system("leaks minishell");
 	printf("exit 🤍\n");

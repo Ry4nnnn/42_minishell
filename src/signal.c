@@ -3,8 +3,8 @@
 void	signal_handler(int signo)
 {
 	if (signo != SIGINT)
-	return ;
-	write(0, "\n", 1);
+		return ;
+	printf ("\n");
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
