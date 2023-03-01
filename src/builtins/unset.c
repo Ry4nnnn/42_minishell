@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 22:33:12 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 18:08:25 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,15 @@ void	ft_unset(t_mini *mini, char **key)
 	while (key[i] != NULL)
 	{
 		if (valid_input(key[i]) == 0)
-		{
 			printf("unset: `%s': not a valid identifier\n", key[i]);
-		}
 		envp = check_env_var(mini->envp, key[i]);
 		if (!envp)//if key does not exits in both
 		{
-			printf ("0\n");
 			i++;
 			continue;
 		}
 		else // env has key
-		{
-			printf ("3\n");
-			del_env_var(mini, envp);// freeing something
-		}
+			del_env_var(mini, envp);
 		i++;
 	}
 }

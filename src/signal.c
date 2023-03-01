@@ -10,7 +10,7 @@ void	signal_handler(int signo)
 	rl_redisplay();
 }
 
-void	ms_init_signal(void)
+void	init_signal(void)
 {
 	struct termios	termios_current;
 

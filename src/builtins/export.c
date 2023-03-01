@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/02/28 22:40:46 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 18:07:57 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 // this function is to print the already sorted linked list
 void	print_export(t_mini *mini)
-{
-	// TODO
+{ 
 	t_list	*temp;
 	t_env	*smallest_content;
 	t_env	*biggest_content;
@@ -81,7 +80,6 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	envp = check_env_var(mini->envp, key);
 	if (envp == NULL) // if key doesnt exist in envp (adding new variable)
 	{
-		printf ("1\n");
 		add_envp_var(mini, key, value);
 	}
 	else // editing variable (envp != NULL)

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 23:20:46 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 17:38:21 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,11 +201,11 @@ int main(int ac, char **av, char **ev)
 	{
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, SIG_IGN);
-		ms_init_signal();
+		init_signal();
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)
-			return (0);
+			ft_exit(&mini);
 		if (mini.input[0] == '\0')
 		{
 			free (mini.prompt);

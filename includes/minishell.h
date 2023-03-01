@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 23:19:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/01 17:38:27 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,6 @@ void	lexer(t_mini *mini);
 
 //signal.c
 void	signal_handler(int signo);
-void	ms_init_signal(void);
+void	init_signal(void);
 
 #endif
