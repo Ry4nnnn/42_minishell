@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:09:18 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/02/24 19:23:15 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/01 21:34:54 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strndup(char *str, int n)
 		return (NULL);
 	res = malloc(sizeof(char) * (n + 1));
 	i = -1;
-	while (++i < n)
+	while (++i < n && str[i] != '\0')
 		res[i] = str[i];
 	res[i] = '\0';
 	return (res);
