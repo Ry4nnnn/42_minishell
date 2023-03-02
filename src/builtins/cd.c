@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/02/28 17:22:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/02 15:16:25 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	ft_cd(t_mini *mini)
 		}
 		else
 		{
-			if (chdir(mini->cmds[1]))// if input is not valid
+			if (chdir(mini->cmds[1]) != 0)// if input is not valid
 				printf ("cd: %s: No such file or directory\n", mini->cmds[1]);
 			update_pwd(mini, "PWD");
 			update_oldpwd(mini, oldpwd);
