@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:18 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 21:24:56 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/02 06:17:23 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,8 @@ void	clear_env_var(void *content)
 
 void	ft_free_cmds(t_mini *mini)
 {
-	int	i;
 	char **temp;
 
-	i = 0;
 	temp = mini->cmds;
 	while (temp && *temp)
 	{

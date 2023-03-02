@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 17:38:27 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/02 06:15:11 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 # include <termios.h>
+# include <signal.h>
+# include <stddef.h>
+# include <stdint.h>
 
 # define SUCCESS 0
 # define ERROR 1
