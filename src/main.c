@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/03 11:31:12 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/03 15:26:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,32 +175,33 @@ int		exec_builtins(t_mini *mini, char **cmds)
 
 void	test_execve(t_mini *mini, char **cmds)
 {
-	char	*argv[] = {"/bin/ls", "-l", NULL};
-	pid_t	pid;
+	char	*argv[3] = {"/bin/ls", "-l", NULL};
+	// pid_t	pid;
 
-	pid = fork();
-	if (pid == 0)
-	{
-		int i = execve("/bin/", argv, NULL);
-		if (i == -1)
-			perror ("ERROR\n");
-	}
-	else
-	{
-		wait (NULL);
-		printf ("executed\n");
-	}
+	// pid = fork();
+	// if (pid == 0)
+	// {
+		printf ("WILLIAM\n");
+		execve(argv[0], argv, NULL);
+	// 	if (i == -1)
+	// 		perror ("ERROR\n");
+	// }
+	// else
+	// {
+		// waitpid(-1, NULL, 0);
+		// printf ("executed\n");
+	// }
 }
 
 int		handle_commands(t_mini *mini, char **cmds)
 {
-	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
-	{
-		exec_builtins(mini, cmds);
-	}
-	else 
-		ft_error(mini, cmds);
-	// test_execve(mini, cmds);
+	// if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
+	// {
+	// 	exec_builtins(mini, cmds);
+	// }
+	// else 
+	test_execve(mini, cmds);
+		// ft_error(mini, cmds);
 	return (0);
 }
 
