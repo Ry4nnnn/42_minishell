@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/03 15:26:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:10:45 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	mini->prompt = prompt3;
 }
 
-//this function is so fucking useless that i have to use one more function to pass norm
-//just to displays a prompt that shows the current dir location
+//this function is so fucking useless that i have to use one more function
+//just to pass norm and displays a prompt that shows the current dir location
 //and also to make my minishell looks cooler
 void	init_prompt(t_mini *mini)
 {
@@ -173,35 +173,66 @@ int		exec_builtins(t_mini *mini, char **cmds)
 	return(0);
 }
 
-void	test_execve(t_mini *mini, char **cmds)
-{
-	char	*argv[3] = {"/bin/ls", "-l", NULL};
-	// pid_t	pid;
+// void	check_non_builtins_exist()
+// {
+// }
 
-	// pid = fork();
-	// if (pid == 0)
-	// {
-		printf ("WILLIAM\n");
-		execve(argv[0], argv, NULL);
-	// 	if (i == -1)
-	// 		perror ("ERROR\n");
-	// }
-	// else
-	// {
-		// waitpid(-1, NULL, 0);
-		// printf ("executed\n");
-	// }
+// linked list to ascii
+// void ltoa ()
+// {
+	
+// }
+
+void	exec_non_builtins(t_mini *mini, char **cmds) //after lexer
+{
+	char 	*plist;
+	char	**path;
+	int		j = 0;
+	char	*temp;
+	char	*temp2;
+	pid_t	pid;
+
+	pid = fork();
+	plist = get_env(mini, "PATH");
+	path = ft_split(plist, ':');
+	while (path[j] != NULL)
+	{
+		temp = ft_strjoin(path[j], "/");
+		temp2 = ft_strjoin(temp, cmds[0]);
+		free (temp);
+		if (access (temp2, X_OK) == 0)// if input is found in the List Of Path (break out of the loop)
+			break ;
+		// free (temp2);
+		j++;
+	}
+	if (pid == 0) //this code will only run on child process
+	{
+		printf ("exec: %s\n", temp2);
+		if (execve(temp2, cmds, NULL) == -1) // if execve fail means (its a invalid command)
+		{
+			ft_error(mini, cmds); //prints error msg for invalid command
+		}
+	}
+	else
+	{
+		// wait (NULL);
+		waitpid(-1, NULL, 0);
+	}
+	// free (path);
+	free (temp2);
+	return ;
 }
 
 int		handle_commands(t_mini *mini, char **cmds)
 {
-	// if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
-	// {
-	// 	exec_builtins(mini, cmds);
-	// }
-	// else 
-	test_execve(mini, cmds);
-		// ft_error(mini, cmds);
+	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
+	{
+		exec_builtins(mini, cmds);
+	}
+	else // non builtins
+	{
+		exec_non_builtins(mini, cmds);
+	}
 	return (0);
 }
 
