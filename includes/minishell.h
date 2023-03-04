@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/02 06:15:11 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/04 20:55:23 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_mini
 	char	**builtins;
 	char	**operators;
 	t_list	*envp;// call env
-	// t_list	*envx;// call export
 	char *input;
 	char **cmds;
 	char oldpwd[1024];
@@ -82,12 +81,10 @@ void	ft_export(t_mini *mini, char **key);
 void	print_export_x(t_mini *mini);
 t_env	*check_env_var(t_list *env, char *key);
 void	edit_env_var(t_mini *mini, char *key, char *value);
-void	edit_envx_var(t_mini *mini, char *keyx, char *valuex);
 
 //unset.c
 void	ft_unset(t_mini *mini, char **args);
-void	del_env_var(t_mini *ms, t_env *env);
-void	del_envx_var(t_mini *ms, t_env *env);
+void	rm_env_var(t_mini *ms, t_env *env);
 
 //pwd.c
 void 	ft_pwd(void);
@@ -102,18 +99,14 @@ void	ft_free_cmds(t_mini *mini);
 
 //main.c
 void	add_envp_var(t_mini *mini, char *key, char *value);
-void	add_envx_var(t_mini *mini, char *key, char *value);
 int		init_env(t_mini *mini, char **ev);
 char	*get_env(t_mini *mini, char *key);
 void	init_prompt(t_mini *mini);
-int	handle_commands(t_mini *mini, char **cmds);
-void	signal_handler(int num);
-t_list	*ft_lststruct_dup(t_list *lst);
+int		handle_commands(t_mini *mini, char **cmds);
 
 //utils.c
 int		valid_input(char *key);
 void	get_key_value(char *arg, char **key, char **value);
-void	sort_env_x(t_mini *mini);
 
 //lexer.c
 void	lexer(t_mini *mini);

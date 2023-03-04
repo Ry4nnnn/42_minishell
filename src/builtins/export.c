@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/01 22:06:10 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/03 11:07:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	show_export(t_env *smallest, t_env *biggest, t_list *envp)
 
 // this function is to print the already sorted linked list
 void	print_export(t_mini *mini)
-{ 
+{
 	t_list	*temp;
 	t_env	*smallest_content;
 	t_env	*biggest_content;
@@ -57,27 +57,25 @@ void	print_export(t_mini *mini)
 		if (ft_strcmp(((t_env *)temp->content)->key, biggest_content->key) > 0) // if looping key is greater than biggest_content key
 			biggest_content = (t_env *)temp->content;
 		temp = temp->next;
-	} // find the first to print string in the envp list
+	}
 	show_export(smallest_content, biggest_content, mini->envp);
 }
 
-//check env var (key) exist
-//loops through the linked list and check if theres (key)
-//if no then returns a NULL
-//if yes then returns the key pointer form env list
-t_env	*check_env_var(t_list *env, char *key)
-{
-	t_env	*env_list;
 
-	while (env != NULL)
+
+// extracting key and value from input
+void	get_key_value(char *arg, char **key, char **value)
+{
+	*value = ft_strchr(arg, '=');
+	if (*value == NULL)
 	{
-		env_list = env->content;
-		if (ft_strcmp(key, env_list->key) == 0)
-			return (env_list);
-		env = env->next;
+		*key = ft_strdup(arg);
+		return ;
 	}
-	return (NULL);
+	*key = ft_strndup(arg, ft_strlen(arg) - ft_strlen(*value));
+	*value = ft_strdup(*value + 1);
 }
+
 
 // (adding \ changing) key and value to envp
 void	edit_env_var(t_mini *mini, char *key, char *value)
@@ -89,7 +87,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	{
 		add_envp_var(mini, key, value);
 	}
-	else if (value != NULL)// editing variable (envp != NULL)
+	else if (value != NULL) // editing variable (envp != NULL)
 	{
 		free(envp->value);
 		envp->value = value;
@@ -108,16 +106,15 @@ void	ft_export(t_mini *mini, char **input)
 	int		i;
 
 	i = 1;
-	//input only export with no paramters
-	if (input[i] == NULL)
+	if (input[i] == NULL) //when input is only export with no paramters
 	{
 		print_export(mini);
 		return ;
 	}
 	while (input[i] != NULL)
 	{
-		get_key_value(input[i], &key, &value);// extracting key and value from input //malloc
-		if (valid_input(key) == 0)// invalid input
+		get_key_value(input[i], &key, &value); // extracting key and value from input //malloc
+		if (valid_input(key) == 0) // invalid input
 		{
 			printf("export: `%s': not a valid identifier\n", input[i]);
 			free (key);
@@ -125,7 +122,7 @@ void	ft_export(t_mini *mini, char **input)
 			i++;
 			continue ;
 		}
-		edit_env_var(mini, key, value);// adding key and value to envp or envx
+		edit_env_var(mini, key, value); // adding key and value to envp or envx
 		i++;
 	}
 }

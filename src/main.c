@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/01 21:22:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/03 15:26:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,21 @@ int		init_env(t_mini *mini, char **ev)
 	return (0);
 }
 
-// void init_builtins(t_mini *mini)
-// {
-// 	char	**builtins;
+void init_builtins(t_mini *mini)
+{
+	char	**builtins;
 
-// 	builtins = ft_calloc(7 + 1, sizeof(char *));
-// 	builtins[0] = "pwd";
-// 	builtins[1] = "env";
-// 	builtins[2] = "echo";
-// 	builtins[3] = "cd";
-// 	builtins[4] = "unset";
-// 	builtins[5] = "export";
-// 	builtins[6] = "exit";
-// 	mini->builtins = builtins;
-// }
+	builtins = ft_calloc(7 + 1, sizeof(char *));
+	builtins[0] = "pwd";
+	builtins[1] = "env";
+	builtins[2] = "echo";
+	builtins[3] = "cd";
+	builtins[4] = "unset";
+	builtins[5] = "export";
+	builtins[6] = "exit";
+	mini->builtins = builtins;
+}
+
 
 // void	init_operators(t_mini *mini)
 // {
@@ -88,15 +89,31 @@ char	*get_env(t_mini *mini, char *key)
 	return (NULL);
 }
 
+static void	combine_prompt(t_mini *mini, char *user, char *dir)
+{
+	char	*prompt0;
+	char	*prompt1;
+	char	*prompt2;
+	char	*prompt3;
+
+	prompt0 = ft_strjoin(GREEN , user);
+	prompt1 = ft_strjoin(prompt0, " @ ");
+	free(prompt0);
+	prompt2 = ft_strjoin(prompt1, dir);
+	free(prompt1);
+	prompt3 = ft_strjoin(prompt2, " $ \033[0;37m");
+	free(prompt2);
+	mini->prompt = prompt3;
+}
+
+//this function is so fucking useless that i have to use one more function to pass norm
+//just to displays a prompt that shows the current dir location
+//and also to make my minishell looks cooler
 void	init_prompt(t_mini *mini)
 {
 	char	*user;
 	char	*dir;
 	char	*home;
-	char	*prompt0;
-	char	*prompt1;
-	char	*prompt2;
-	char	*prompt3;
 
 	user = get_env(mini, "USER");
 	if (user == NULL)
@@ -114,19 +131,30 @@ void	init_prompt(t_mini *mini)
 		else
 			dir = "🤷";
 	}
-	prompt0 = ft_strjoin(GREEN , user);
-	prompt1 = ft_strjoin(prompt0, " @ ");
-	free(prompt0);
-	prompt2 = ft_strjoin(prompt1, dir);
-	free(prompt1);
-	prompt3 = ft_strjoin(prompt2, " $ \033[0;37m");
-	free(prompt2);
-	mini->prompt = prompt3;
+	combine_prompt(mini, user, dir);
 }
 
+// check if cmds is a builtin
+// returns 1 means its a builtin
+//returns 0 means its not a builtin
+int	check_builtins(t_mini *mini, char *cmds)
+{
+	char **builtins;
 
+	builtins = mini->builtins;
+	if (cmds == NULL)
+		return (0);
+	while (*builtins != NULL)
+	{
+		if (ft_strcmp(*builtins, cmds) == 0)
+			return (1);
+		builtins++;
+	}
+	return (0);
+}
 
-int	handle_commands(t_mini *mini, char **cmds)
+//this function is to execute the builtins
+int		exec_builtins(t_mini *mini, char **cmds)
 {
 	if (!ft_strncmp(cmds[0], "exit", 5))
 		ft_exit(mini);
@@ -142,46 +170,39 @@ int	handle_commands(t_mini *mini, char **cmds)
 		ft_cd(mini);
 	else if (!ft_strncmp(cmds[0], "echo", 5))
 		ft_echo(cmds);
-	else if (cmds[0] != NULL)
-		ft_error(mini, cmds);
 	return(0);
 }
 
-
-
-//duplicates envp to envx
-t_list	*ft_lststruct_dup(t_list *lst)
+void	test_execve(t_mini *mini, char **cmds)
 {
-	t_list		*new_list;
-	t_list		*last_node;
-	t_list		*new_node;
-	t_env		*content_dup;
-	t_env		*converted_env;
+	char	*argv[3] = {"/bin/ls", "-l", NULL};
+	// pid_t	pid;
 
-	new_list = NULL;
-	last_node = NULL;
-	while (lst)
-	{
-		converted_env = (t_env *)lst->content;
-		content_dup = malloc(sizeof(t_env));
-		content_dup->key = ft_strdup(converted_env->key);
-		content_dup->value = ft_strdup(converted_env->value);
-		new_node = ft_lstnew(content_dup);
-		if (!new_node)
-			return (NULL);
-		if (!new_list)
-		{
-			new_list = new_node;
-			last_node = new_node;
-		}
-		else
-		{
-			last_node->next = new_node;
-			last_node = new_node;
-		}
-		lst = lst->next;
-	}
-	return (new_list);
+	// pid = fork();
+	// if (pid == 0)
+	// {
+		printf ("WILLIAM\n");
+		execve(argv[0], argv, NULL);
+	// 	if (i == -1)
+	// 		perror ("ERROR\n");
+	// }
+	// else
+	// {
+		// waitpid(-1, NULL, 0);
+		// printf ("executed\n");
+	// }
+}
+
+int		handle_commands(t_mini *mini, char **cmds)
+{
+	// if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
+	// {
+	// 	exec_builtins(mini, cmds);
+	// }
+	// else 
+	test_execve(mini, cmds);
+		// ft_error(mini, cmds);
+	return (0);
 }
 
 //expand then tokenize
@@ -192,11 +213,11 @@ int main(int ac, char **av, char **ev)
 
 	(void)ac;
 	(void)av;
-	// glob_errno = 0;
+	// glob_errno = 0; (not used yet)
 	mini.envp = NULL;
 	init_env(&mini, ev);
-	// init_builtins(&mini);
-	// init_operators(&mini);
+	init_builtins(&mini);
+	// init_operators(&mini); (not used yet)
 	while (1)
 	{
 		init_signal();
@@ -210,9 +231,9 @@ int main(int ac, char **av, char **ev)
 			free (mini.input);
 			continue ;
 		}
-		mini.cmds = ft_split(mini.input, ' ');
+		mini.cmds = ft_split(mini.input, ' '); // the budget lexer
 		// lexer(&mini);
-		handle_commands(&mini, mini.cmds);
+		handle_commands(&mini, mini.cmds); // this handles all the inputs after getting filtered by lexer
 		add_history(mini.input);
 		ft_free_cmds(&mini);
 		free(mini.prompt);
