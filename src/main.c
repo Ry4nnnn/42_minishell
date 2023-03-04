@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/04 21:10:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/04 22:13:33 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,31 @@ int		exec_builtins(t_mini *mini, char **cmds)
 	
 // }
 
+char	**ft_llto2darr(t_list *list)
+{
+	int	len;
+	int	i;
+	char	**arr;
+	char	*temp1;
+	char	*temp2;
+
+	len = ft_lstsize(list);
+	i = -1;
+	arr = malloc((len + 1) * sizeof(char *));
+	while (++i < len)
+	{
+		temp1 = ft_strdup(((t_env *)list->content)->key);
+		temp2 = ft_strjoin(temp1, "=");
+		free(temp1);
+		temp1 = ft_strjoin(temp2, ((t_env *)list->content)->value);
+		free(temp2);
+		arr[i] = temp1;
+		list = list->next;
+	}
+	arr[i] = NULL;
+	return (arr);
+}
+
 void	exec_non_builtins(t_mini *mini, char **cmds) //after lexer
 {
 	char 	*plist;
@@ -190,9 +215,9 @@ void	exec_non_builtins(t_mini *mini, char **cmds) //after lexer
 	int		j = 0;
 	char	*temp;
 	char	*temp2;
+	char	**envp;
 	pid_t	pid;
 
-	pid = fork();
 	plist = get_env(mini, "PATH");
 	path = ft_split(plist, ':');
 	while (path[j] != NULL)
@@ -202,25 +227,50 @@ void	exec_non_builtins(t_mini *mini, char **cmds) //after lexer
 		free (temp);
 		if (access (temp2, X_OK) == 0)// if input is found in the List Of Path (break out of the loop)
 			break ;
-		// free (temp2);
+		free(temp2);
 		j++;
 	}
+	ft_free2darr((void *)path);
+	if (path[j] == NULL)
+	{
+		ft_error(mini, cmds, CMD_NF);
+		return ;
+	}
+	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
+		envp = ft_llto2darr(mini->envp);
 		printf ("exec: %s\n", temp2);
-		if (execve(temp2, cmds, NULL) == -1) // if execve fail means (its a invalid command)
+		if (execve(temp2, cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
-			ft_error(mini, cmds); //prints error msg for invalid command
+			ft_error(mini, cmds, CMD_NF); //prints error msg for invalid command
+			exit(127);
 		}
 	}
 	else
-	{
-		// wait (NULL);
 		waitpid(-1, NULL, 0);
-	}
-	// free (path);
 	free (temp2);
 	return ;
+}
+
+void	exec_program(t_mini *mini, char **cmds)
+{
+	pid_t	pid;
+	char	**envp;
+
+	pid = fork();
+	if (pid == 0) //this code will only run on child process
+	{
+		envp = ft_llto2darr(mini->envp);
+		printf ("exec: %s\n", cmds[0]);
+		if (execve(cmds[0], cmds, envp) == -1) // if execve fail means (its a invalid command)
+		{
+			ft_error(mini, cmds, NSFD); //prints error msg for invalid command
+			exit(127);
+		}
+	}
+	else
+		waitpid(-1, NULL, 0);
 }
 
 int		handle_commands(t_mini *mini, char **cmds)
@@ -228,6 +278,14 @@ int		handle_commands(t_mini *mini, char **cmds)
 	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
 	{
 		exec_builtins(mini, cmds);
+	}
+	else if (get_env(mini, "PATH") == NULL)
+	{
+		ft_error(mini, cmds, NSFD);
+	}
+	else if (ft_strchr(cmds[0], '/') != NULL)
+	{
+		exec_program(mini, cmds);
 	}
 	else // non builtins
 	{

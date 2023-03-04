@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/04 20:55:23 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/04 21:52:54 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@
 # define OKCYAN = "\033[96m"
 # define WARNING = "\033[93m"
 # define BOLD = "\033[1m"
+
+// Error Messages
+# define CMD_NF "command not found\n"
+# define NSFD "No such file or directory\n"
 
 // int glob_errno;//not used
 
@@ -90,7 +94,7 @@ void	rm_env_var(t_mini *ms, t_env *env);
 void 	ft_pwd(void);
 
 //error.c
-void	ft_error(t_mini *mini, char **cmds);
+void	ft_error(t_mini *mini, char **cmds, char *msg);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);
