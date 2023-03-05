@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 13:50:58 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/05 14:39:26 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <stdbool.h>
 # include <linux/limits.h> // (for wsl)
 
 # define SUCCESS 0
@@ -54,6 +55,13 @@ typedef struct s_env
 	char	*value;
 }		t_env;
 
+typedef struct s_cmd
+{
+	char	**argv;
+	bool	should_exe;
+	int		exit_status;
+}	t_cmd;
+
 typedef struct s_mini
 {
 	t_list	*envp;// call env
@@ -62,7 +70,7 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	char	**cmds;
-	t_list	*tokens;
+	t_list	*list_cmds;
 }		t_mini;
 
 
