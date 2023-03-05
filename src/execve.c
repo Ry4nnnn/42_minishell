@@ -3,39 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 14:44:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/05 13:56:43 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//linked list to 2d array
-char	**ft_llto2darr(t_list *list)
+char	*env_to_str(void *arg)
 {
-	int	len;
-	int	i;
-	char	**arr;
-	char	*temp1;
-	char	*temp2;
+	t_env	*env_t;
+	char	*temp;
+	char	*output;
 
-	len = ft_lstsize(list);
-	i = -1;
-	arr = malloc((len + 1) * sizeof(char *));
-	while (++i < len)
-	{
-		temp1 = ft_strdup(((t_env *)list->content)->key);
-		temp2 = ft_strjoin(temp1, "=");
-		free(temp1);
-		temp1 = ft_strjoin(temp2, ((t_env *)list->content)->value);
-		free(temp2);
-		arr[i] = temp1;
-		list = list->next;
-	}
-	arr[i] = NULL;
-	return (arr);
+	env_t = (t_env *)arg;
+	temp = ft_strjoin(env_t->key, "=");
+	output = ft_strjoin(temp, env_t->value);
+	free(temp);
+	return (output);
 }
 
 // gets a list executable paths from envp and split it into a 2d array
@@ -63,12 +50,13 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 		free(temp2);
 		j++;
 	}
-	ft_free2darr((void *)path); // free 2d array
 	if (path[j] == NULL)
 	{
 		ft_error(mini, cmds, CMD_NF);
+		ft_free2darr((void *)path); // free 2d array
 		return (NULL);
 	}
+	ft_free2darr((void *)path); // free 2d array
 	// printf ("%s\n", temp2);
 	return (temp2);
 }
@@ -86,7 +74,7 @@ void	exec_non_builtins(t_mini *mini, char **cmds)
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
-		envp = ft_llto2darr(mini->envp);// translate updated linked list env to a 2d array
+		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
 		if (execve(exec_path, cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmds, CMD_NF); //prints error msg for invalid command
@@ -108,7 +96,7 @@ void	exec_program(t_mini *mini, char **cmds)
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
-		envp = ft_llto2darr(mini->envp);
+		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (execve(cmds[0], cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmds, NSFD); //prints error msg for invalid command

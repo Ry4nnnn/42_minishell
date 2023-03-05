@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 17:27:30 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/05 13:50:58 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	char	**cmds;
+	t_list	*tokens;
 }		t_mini;
 
 
@@ -134,7 +135,6 @@ void	init_signal(void);
 void	init_prompt(t_mini *mini);
 
 //execve.c
-char	**ft_llto2darr(t_list *list);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	exec_non_builtins(t_mini *mini, char **cmds);
 void	exec_program(t_mini *mini, char **cmds);
