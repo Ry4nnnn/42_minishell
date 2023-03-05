@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/05 14:43:22 by welim            ###   ########.fr        #
+#    Updated: 2023/03/05 14:04:01 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,11 @@ INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
 CFLAGS		:= $(INCLUDE) -Wall -Werror -Wextra #-fsanitize=address
 
-CC			:= gcc -g3
+ifeq ($(DB), 1)
+	CFLAGS	+= -fsanitize=address -g3
+endif
+
+CC			:= gcc
 
 NEWLINE 	= \e[1K\r
 
