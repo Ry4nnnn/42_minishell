@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/03 11:07:48 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/05 14:37:11 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 	envp = check_env_var(mini->envp, key);
 	if (envp == NULL) // if key doesnt exist in envp (adding new variable)
 	{
-		add_envp_var(mini, key, value);
+		add_env_var(mini, key, value);
 	}
 	else if (value != NULL) // editing variable (envp != NULL)
 	{

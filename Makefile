@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/04 20:02:56 by welim            ###   ########.fr        #
+#    Updated: 2023/03/05 14:43:22 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) #-fsanitize=address #-Wall -Werror -Wextra 
+CFLAGS		:= $(INCLUDE) -Wall -Werror -Wextra #-fsanitize=address
 
 CC			:= gcc -g3
 
@@ -55,10 +55,10 @@ LIBFT_PATH		:= libft
 
 #------------------------FILES-------------------------#
 
-BUILTINS	= env exit unset export cd echo builtin_utils
+BUILTINS	= env exit unset export cd echo builtins builtin_utils
 PARSER		= pwd
 LEXER		= lexer
-MAIN		= main free error signal
+MAIN		= main free error signal execve prompt utils
 
 #------------------------------------------------------#
 
