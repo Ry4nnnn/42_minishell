@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 11:41:09 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/05 13:48:52 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/06 13:42:13 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,6 @@ char		*get_next_line(int fd);
 char		*ft_strndup(char *str, int n);
 int			ft_strcmp(const char *s1, const char *s2);
 char		**ft_llto2darr(t_list *list, char *(*f)(void *));
+char		*ft_strninsert(char *s, char *insert, int start, int n);
 
 #endif
