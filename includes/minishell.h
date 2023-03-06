@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 15:37:20 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:02:10 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,9 @@ t_env	*check_env_var(t_list *env, char *key);
 
 t_list	*split_cmdblocks(char *input);
 int	ft_incharset(char *charset, char c);
+int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
+int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
+char	*ft_strexpand(char *s, char *insert, int start, int n);
 
 //----------MAIN_DIR----------//
 
