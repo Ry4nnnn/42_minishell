@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 11:59:20 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:20:29 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,71 @@ int		handle_commands(t_mini *mini, char **cmds)
 	return (0);
 }
 
+void	free_cmdblock(void *arg)
+{
+	t_cmdblock	*cmdblock;
+
+	if (arg == NULL)
+		return ;
+	cmdblock = (t_cmdblock *)arg;
+	free(cmdblock->input);
+	free(cmdblock);
+}
+
+int	get_exit_status(t_list *cmdblock_list)
+{
+	t_cmdblock	*cmdblock;
+	int		exit_status;
+
+	exit_status = 0;
+	while (cmdblock_list != NULL)
+	{
+		cmdblock = (t_cmdblock *)cmdblock_list->content;
+		if (cmdblock->spliter_type == OR && cmdblock->executed && cmdblock->exit_status == 0) // if executed and successed and is in OR logic
+				return (0);
+		else if (cmdblock->spliter_type == AND && cmdblock->executed) // if executed and in AND logic
+		{
+			if ((cmdblock->exit_status == 0 && exit_status == 0) || (cmdblock->exit_status != 0)) // if (success and previous are all success) or (not success)
+				exit_status = cmdblock->exit_status;
+		}
+		cmdblock_list = cmdblock_list->next;
+	}
+	return (exit_status);
+}
+
+int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock)
+{
+	// expand_input(cmdblock->input);
+	(void)mini;
+	(void)prev_cmdblock;
+	printf("%s\n", cmdblock->input);
+	return (0);
+}
+
+int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
+{
+	t_list	*temp;
+	t_cmdblock	*prev_cmdblock;
+	t_cmdblock	*cmdblock;
+	int		exit_status;
+
+	temp = cmdblocks_list;
+	prev_cmdblock = NULL;
+	while (temp != NULL)
+	{
+		cmdblock = (t_cmdblock *)temp->content;
+		if (cmdblock->in_bracket)
+			cmdblock->exit_status = handle_cmdblocks(mini, split_cmdblocks(cmdblock->input));
+		else
+			cmdblock->exit_status = handle_cmdblock(mini, prev_cmdblock, cmdblock);
+		prev_cmdblock = cmdblock;
+		temp = temp->next;	
+	}
+	exit_status = get_exit_status(cmdblocks_list);
+	ft_lstclear(&cmdblocks_list, free_cmdblock);
+	return (exit_status);
+}
+
 //expand then tokenize
 //lexer, pipes, heredoc, redirection
 int main(int ac, char **av, char **ev)
@@ -90,6 +155,7 @@ int main(int ac, char **av, char **ev)
 	(void)av;
 	// glob_errno = 0; (not used yet)
 	mini.envp = NULL;
+	mini.exit_status = 0;
 	init_env(&mini, ev);
 	init_builtins(&mini);
 	// init_operators(&mini); (not used yet)
@@ -107,11 +173,11 @@ int main(int ac, char **av, char **ev)
 			continue ;
 		}
 		// mini.cmds = ft_split(mini.input, ' '); // the budget lexer
-		lexer(&mini);
-		return (0);
-		handle_commands(&mini, mini.cmds); // this handles all the inputs after getting filtered by lexer
+		mini.cmdblock_list = split_cmdblocks(mini.input);
+		mini.exit_status = handle_cmdblocks(&mini, mini.cmdblock_list);
+		// handle_commands(&mini, mini.cmds); // this handles all the inputs after getting filtered by lexer
 		add_history(mini.input);
-		ft_free_cmds(&mini);
+		// ft_free_cmds(&mini);
 		free(mini.prompt);
 		free(mini.input);
 	}

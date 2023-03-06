@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 13:20:27 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:12:45 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@
 # define NSFD "No such file or directory\n"
 
 // Special characters
-# define HARD_SPLITERS "(&|><"
+# define HARD_SPLITERS "(&|"
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
@@ -56,7 +56,6 @@
 
 enum e_spliters {
 	BEGINNING,
-	PIPE,
 	OPEN_BRACKET,
 	CLOSE_BRACKET,
 	AND,
@@ -69,23 +68,19 @@ enum e_quotes {
 	DOUBLE
 };
 
-typedef struct s_token {
+typedef struct s_cmdblock {
 	char	*input;
 	int		spliter_type;
-}	t_token;
+	int		exit_status;
+	int		executed;
+	int		in_bracket;
+}	t_cmdblock;
 
 typedef struct s_env
 {
 	char	*key;
 	char	*value;
 }		t_env;
-
-typedef struct s_cmd
-{
-	char	**argv;
-	bool	should_exe;
-	int		exit_status;
-}	t_cmd;
 
 typedef struct s_mini
 {
@@ -95,7 +90,8 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	char	**cmds;
-	t_list	*list_tokens;
+	t_list	*cmdblock_list;
+	int		exit_status;
 }		t_mini;
 
 
@@ -117,7 +113,6 @@ void	ft_exit(t_mini *mini);
 
 //export.c
 void	ft_export(t_mini *mini, char **key);
-void	print_export_x(t_mini *mini);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
@@ -137,7 +132,8 @@ t_env	*check_env_var(t_list *env, char *key);
 
 //----------LEXER----------//
 
-void	lexer(t_mini *mini);
+t_list	*split_cmdblocks(char *input);
+int	ft_incharset(char *charset, char c);
 
 //----------MAIN_DIR----------//
 
@@ -171,8 +167,5 @@ void	init_prompt(t_mini *mini);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	exec_non_builtins(t_mini *mini, char **cmds);
 void	exec_program(t_mini *mini, char **cmds);
-
-//lexer
-int	ft_incharset(char *charset, char c);
 
 #endif
