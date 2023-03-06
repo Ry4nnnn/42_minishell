@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 14:39:26 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/06 12:19:33 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdbool.h>
-# include <linux/limits.h> // (for wsl)
+// # include <linux/limits.h> // (for wsl)
 
 # define SUCCESS 0
 # define ERROR 1
@@ -47,7 +47,36 @@
 # define CMD_NF "command not found\n"
 # define NSFD "No such file or directory\n"
 
+// Special characters
+# define HARD_SPLITERS "(&|><"
+# define SOFT_SPLITERS " $'\""
+# define IGNORE_CHARS "\\;"
+
 // int glob_errno;//not used
+
+enum e_spliters {
+	BEGINNING,
+	PIPE,
+	REDIR_IN,
+	REDIR_OUT,
+	OPEN_BRACKET,
+	CLOSE_BRACKET,
+	REDIR_IN_A,
+	REDIR_OUT_A,
+	AND,
+	OR,
+	INVALID
+};
+
+enum e_quotes {
+	SINGLE,
+	DOUBLE
+};
+
+typedef struct s_token {
+	char	*input;
+	int		spliter_type;
+}	t_token;
 
 typedef struct s_env
 {
@@ -70,7 +99,7 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	char	**cmds;
-	t_list	*list_cmds;
+	t_list	*list_tokens;
 }		t_mini;
 
 
@@ -146,5 +175,8 @@ void	init_prompt(t_mini *mini);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	exec_non_builtins(t_mini *mini, char **cmds);
 void	exec_program(t_mini *mini, char **cmds);
+
+//lexer
+int	ft_incharset(char *charset, char c);
 
 #endif
