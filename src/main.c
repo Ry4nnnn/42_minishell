@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 15:38:13 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 14:01:34 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,20 @@ int	get_exit_status(t_list *cmdblock_list)
 	return (exit_status);
 }
 
-int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock)
+int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock)
 {
-	// expand_input(cmdblock->input);
-	(void)mini;
 	(void)prev_cmdblock;
+	if (next_cmdblock->spliter_type == PIPE) // if the next cmdblock is piping, prepare the pipe here
+	{
+		// prep_pipe();
+	}
+	if (cmdblock->spliter_type == PIPE) // if the current cmdblock is piping, do the piping
+	{
+		// do_pipe();
+	}
+	if (cmdblock->in_bracket)
+		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input)));
+	// expand_input(mini, cmdblock->input);
 	printf("%s\n", cmdblock->input);
 	return (0);
 }
@@ -126,6 +135,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 	t_list	*temp;
 	t_cmdblock	*prev_cmdblock;
 	t_cmdblock	*cmdblock;
+	t_cmdblock	*next_cmdblock;
 	int		exit_status;
 
 	temp = cmdblocks_list;
@@ -133,10 +143,11 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 	while (temp != NULL)
 	{
 		cmdblock = (t_cmdblock *)temp->content;
-		if (cmdblock->in_bracket)
-			cmdblock->exit_status = handle_cmdblocks(mini, split_cmdblocks(cmdblock->input));
+		if (temp->next == NULL)
+			next_cmdblock = NULL;
 		else
-			cmdblock->exit_status = handle_cmdblock(mini, prev_cmdblock, cmdblock);
+			next_cmdblock = (t_cmdblock *)temp->next->content;
+		cmdblock->exit_status = handle_cmdblock(mini, prev_cmdblock, cmdblock, next_cmdblock);
 		prev_cmdblock = cmdblock;
 		temp = temp->next;	
 	}

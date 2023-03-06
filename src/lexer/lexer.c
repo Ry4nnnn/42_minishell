@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 15:41:32 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 12:53:27 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	print_list(t_list *list)
-{
-	while (list != NULL)
-	{
-		printf("[%s]\n", ((t_cmdblock *)list->content)->input);
-		printf("spliter: %i\n", ((t_cmdblock *)list->content)->spliter_type);
-		list = list->next;
-	}
-}
+// void	print_list(t_list *list)
+// {
+// 	while (list != NULL)
+// 	{
+// 		printf("[%s]\n", ((t_cmdblock *)list->content)->input);
+// 		printf("spliter: %i\n", ((t_cmdblock *)list->content)->spliter_type);
+// 		list = list->next;
+// 	}
+// }
 
 // ()&|
 int	get_spliter_type(char *input)
@@ -72,10 +72,7 @@ t_list	*get_bracket_cmdblock(char *input, int spliter_type)
 	}
 	new_cmdblock = malloc(sizeof(t_cmdblock));
 	new_cmdblock->input = ft_strndup(input, len);
-	if (spliter_type != BEGINNING)
-		new_cmdblock->spliter_type = spliter_type;
-	else
-		new_cmdblock->spliter_type = OPEN_BRACKET;
+	new_cmdblock->spliter_type = spliter_type;
 	new_cmdblock->in_bracket = 1;
 	new_node = ft_lstnew((void *)new_cmdblock);
 	return (new_node);	

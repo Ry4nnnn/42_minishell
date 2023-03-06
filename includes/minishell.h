@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 14:02:10 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/06 14:16:44 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,6 @@ enum e_spliters {
 	AND,
 	OR,
 	INVALID
-};
-
-enum e_quotes {
-	SINGLE,
-	DOUBLE
 };
 
 typedef struct s_cmdblock {
