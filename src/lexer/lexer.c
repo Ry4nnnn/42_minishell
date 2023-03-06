@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 15:21:14 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:41:32 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ int	get_spliter_type(char *input)
 		return (AND);
 	else if (ft_strncmp(input, "||", 2) == 0)
 		return (OR);
+	else if (ft_strncmp(input, "|", 1) == 0)
+		return (PIPE);
 	return (INVALID);
 }
 
@@ -40,6 +42,8 @@ char	*skip_spliter(char *input, int spliter_type)
 {
 	if (spliter_type == 0)
 		return (input);
+	else if (spliter_type == PIPE)
+		return (input + 1);
 	else if (spliter_type >= AND && spliter_type <= OR)
 		return (input + 2);
 	return (input);
@@ -68,7 +72,10 @@ t_list	*get_bracket_cmdblock(char *input, int spliter_type)
 	}
 	new_cmdblock = malloc(sizeof(t_cmdblock));
 	new_cmdblock->input = ft_strndup(input, len);
-	new_cmdblock->spliter_type = spliter_type;
+	if (spliter_type != BEGINNING)
+		new_cmdblock->spliter_type = spliter_type;
+	else
+		new_cmdblock->spliter_type = OPEN_BRACKET;
 	new_cmdblock->in_bracket = 1;
 	new_node = ft_lstnew((void *)new_cmdblock);
 	return (new_node);	

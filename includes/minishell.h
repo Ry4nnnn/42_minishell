@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 15:12:45 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/06 15:37:20 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@
 
 enum e_spliters {
 	BEGINNING,
+	PIPE,
 	OPEN_BRACKET,
 	CLOSE_BRACKET,
 	AND,
