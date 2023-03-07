@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 14:28:09 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 15:23:37 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	expand_var(t_mini *mini, char **input_addr, int quote, int *i)
 
 	n = 0;
 	env_var = NULL;
-	while ((*input_addr + *i)[++n] != quote && (*input_addr + *i)[n] != '$' && (*input_addr + *i)[n] != ' ') // when the current char is not quote, '$' or space, continue finding the key
+	while ((ft_isalnum((*input_addr + *i)[++n]) || (*input_addr + *i)[n] == '_') && (*input_addr + *i)[n] != quote) // when the current char is not quote, '$' or space, continue finding the key
 		;
 	temp_key = ft_strndup((*input_addr + *i + 1), n - 1);
 	env_var = get_env(mini, temp_key);

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 14:50:56 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 15:13:49 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 
 	(void)mini;
 	size = get_tokens_size(input);
+	printf("size: %i\n", size);
 	i = -1;
 	j = -1;
 	result = malloc((size + 1) * sizeof(char *));
