@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 13:56:43 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/07 16:31:46 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,14 @@ void	exec_non_builtins(t_mini *mini, char **cmds)
 	pid_t	pid;
 	char	*exec_path;
 	char	**envp;
+	int		estatus;
 
 	exec_path = get_exec_path(mini, cmds);
 	if (!exec_path)
+	{
+		g_errno = 127;
 		return ;
+	}
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
@@ -82,7 +86,8 @@ void	exec_non_builtins(t_mini *mini, char **cmds)
 		}
 	}
 	else
-		waitpid(-1, NULL, 0);
+		waitpid(-1, &estatus, 0);
+	g_errno = WEXITSTATUS(estatus);
 	free (exec_path);
 	return ;
 }

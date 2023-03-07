@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/07 16:02:30 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 16:36:05 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,8 @@ int	get_exit_status(t_list *cmdblock_list)
 			if ((cmdblock->exit_status == 0 && exit_status == 0) || (cmdblock->exit_status != 0)) // if (success and previous are all success) or (not success)
 				exit_status = cmdblock->exit_status;
 		}
+		else
+			exit_status = cmdblock->exit_status;
 		cmdblock_list = cmdblock_list->next;
 	}
 	return (exit_status);
@@ -130,7 +132,8 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	handle_commands(mini, cmdblock->cmd_argv);
 	ft_free2darr((void *)cmdblock->cmd_argv);
-	return (0);
+	cmdblock->exit_status = g_errno;
+	return (g_errno);
 }
 
 int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
@@ -155,6 +158,8 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		temp = temp->next;	
 	}
 	exit_status = get_exit_status(cmdblocks_list);
+	printf("exit_status: %i\n", exit_status);
+	printf("g_errno: %i\n", g_errno);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
 	return (exit_status);
 }
@@ -172,10 +177,10 @@ int main(int ac, char **av, char **ev)
 	mini.exit_status = 0;
 	init_env(&mini, ev);
 	init_builtins(&mini);
-	g_errno = 0;
 	// init_operators(&mini); (not used yet)
 	while (1)
 	{
+		g_errno = 0;
 		init_signal();
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
