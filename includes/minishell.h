@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 14:16:44 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/07 13:24:05 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_cmdblock {
 	int		exit_status;
 	int		executed;
 	int		in_bracket;
+	char	**cmd_argv;
 }	t_cmdblock;
 
 typedef struct s_env
@@ -132,7 +133,10 @@ t_list	*split_cmdblocks(char *input);
 int	ft_incharset(char *charset, char c);
 int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
 int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
-char	*ft_strexpand(char *s, char *insert, int start, int n);
+void	ft_strexpand(char **s, char *insert, int start, int n);
+void	expand_input(t_mini *mini, char **input_addr);
+void	ft_strremove(char **s, int start, int n);
+char	**tokenize_cmd(t_mini *mini, char *input);
 
 //----------MAIN_DIR----------//
 

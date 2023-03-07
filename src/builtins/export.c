@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/05 14:37:11 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/07 14:55:49 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,10 @@ void	get_key_value(char *arg, char **key, char **value)
 		return ;
 	}
 	*key = ft_strndup(arg, ft_strlen(arg) - ft_strlen(*value));
-	*value = ft_strdup(*value + 1);
+	if ((*value + 1)[0] == '"' || (*value + 1)[0] == '\'')
+		*value = ft_strndup(*value + 2, ft_strlen(*value + 2) - 1);
+	else
+		*value = ft_strdup(*value + 1);
 }
 
 

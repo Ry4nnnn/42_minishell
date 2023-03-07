@@ -6,7 +6,7 @@
 #    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/06 11:45:21 by wxuerui          ###   ########.fr        #
+#    Updated: 2023/03/07 13:16:31 by wxuerui          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ LIBFT_PATH		:= libft
 
 BUILTINS	= env exit unset export cd echo builtins builtin_utils
 PARSER		= pwd
-LEXER		= lexer lexer_utils
+LEXER		= lexer lexer_utils expand tokenize
 MAIN		= main free error signal execve prompt utils
 
 #------------------------------------------------------#
