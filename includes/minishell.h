@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 17:27:30 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/05 18:17:03 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ typedef struct s_mini
 	char	**cmds;
 }		t_mini;
 
-
 //----------BUILTINS----------//
 //cd.c
 void	ft_cd(t_mini *mini);
@@ -114,6 +113,7 @@ void	ft_error(t_mini *mini, char **cmds, char *msg);
 void	free_Llist(t_mini *mini, t_list *env_list);
 void	clear_env_var(void *content);
 void	ft_free_cmds(t_mini *mini);
+void	ft_free(t_mini *mini, int type);
 
 //main.c
 void	add_env_var(t_mini *mini, char *key, char *value);

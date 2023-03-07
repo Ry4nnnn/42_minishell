@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 16:46:27 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/06 18:06:43 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,17 +102,14 @@ int main(int ac, char **av, char **ev)
 			ft_exit(&mini);
 		if (mini.input[0] == '\0')
 		{
-			free (mini.prompt);
-			free (mini.input);
+			ft_free(&mini, 4);
 			continue ;
 		}
 		mini.cmds = ft_split(mini.input, ' '); // the budget lexer
 		// lexer(&mini);
 		handle_commands(&mini, mini.cmds); // this handles all the inputs after getting filtered by lexer
 		add_history(mini.input);
-		ft_free_cmds(&mini);
-		free(mini.prompt);
-		free(mini.input);
+		ft_free(&mini, 5);
 	}
 	return(0);
 }

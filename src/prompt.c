@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 14:41:46 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/06 20:28:04 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	free(prompt0);
 	prompt0 = ft_strjoin(prompt1, dir);
 	free(prompt1);
-	prompt1 = ft_strjoin(prompt0, " $ \033[0;37m");
+	prompt1 = ft_strjoin(prompt0, " $ ");
 	free(prompt0);
-	mini->prompt = prompt1;
+	prompt0 = ft_strjoin(prompt1, RESET);
+	free (prompt1);
+	mini->prompt = prompt0;
 }
 
 //this function is so fucking useless that i have to use one more function

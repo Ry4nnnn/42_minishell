@@ -6,13 +6,13 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 14:44:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/06 20:00:53 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//linked list to 2d array
+//converts linked list to 2d array
 char	**ft_llto2darr(t_list *list)
 {
 	int	len;
