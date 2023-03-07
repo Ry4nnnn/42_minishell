@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/07 15:18:21 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 16:01:53 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
-// int glob_errno;//not used
+int g_errno;
 
 enum e_spliters {
 	BEGINNING,

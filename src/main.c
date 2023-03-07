@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/07 15:14:32 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 16:02:30 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ int main(int ac, char **av, char **ev)
 	mini.exit_status = 0;
 	init_env(&mini, ev);
 	init_builtins(&mini);
+	g_errno = 0;
 	// init_operators(&mini); (not used yet)
 	while (1)
 	{

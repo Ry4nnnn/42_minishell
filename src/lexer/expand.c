@@ -6,13 +6,21 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 15:23:37 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/07 15:57:42 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+void	expand_exit_status(t_mini *mini, char **input_addr, int *i)
+{
+	char	*str_exit_status;
 
+	str_exit_status = ft_itoa(mini->exit_status);
+	ft_strexpand(input_addr, str_exit_status, *i, 2);
+	free(str_exit_status);
+	*i += 1;	
+}
 
 void	expand_var(t_mini *mini, char **input_addr, int quote, int *i)
 {
@@ -22,6 +30,8 @@ void	expand_var(t_mini *mini, char **input_addr, int quote, int *i)
 
 	n = 0;
 	env_var = NULL;
+	if ((*input_addr + *i)[1] == '?')
+		return (expand_exit_status(mini, input_addr, i));
 	while ((ft_isalnum((*input_addr + *i)[++n]) || (*input_addr + *i)[n] == '_') && (*input_addr + *i)[n] != quote) // when the current char is not quote, '$' or space, continue finding the key
 		;
 	temp_key = ft_strndup((*input_addr + *i + 1), n - 1);
