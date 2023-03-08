@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 16:35:00 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/08 20:55:04 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int	get_tokens_size(char *input)
 			quote = 0;
 			size++;
 		}
+		if (input[i] == 0)
+			break ;
 	}
 	return (size);
 }
