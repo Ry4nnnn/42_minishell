@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 19:23:05 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/08 21:10:19 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,13 @@ typedef struct s_mini
 	char	**builtins;
 	char	**operators;
 	char	*input;
-	char	**cmds;
 	t_list	*cmdblock_list;
 	int		exit_status;
 }		t_mini;
 
 //----------BUILTINS----------//
 //cd.c
-void	ft_cd(t_mini *mini);
+void	ft_cd(t_mini *mini, char **cmds);
 void	update_pwd(t_mini *mini, char *key);
 void	update_oldpwd(t_mini *mini, char *old_path);
 

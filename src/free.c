@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:18 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 18:20:44 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/08 21:11:56 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,18 +61,6 @@ void	clear_env_var(void *content)
 //type 5 - free mini.cmds && mini.input && mini.prompt
 void	ft_free(t_mini *mini, int type)
 {
-	char **temp;
-	
-	if (type == 1 || type == 5)
-	{
-		temp = mini->cmds;
-		while (temp && *temp)
-		{
-			free(*temp);
-			temp++;
-		}
-		free (mini->cmds);
-	}
 	if (type == 2 || type == 4 || type == 5)
 		free (mini->prompt);
 	if (type == 3 || type == 4 || type == 5)

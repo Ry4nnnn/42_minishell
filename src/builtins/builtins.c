@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 19:24:59 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/08 21:10:35 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	exec_builtins(t_mini *mini, char **cmds)
 	else if (ft_strncmp(cmds[0], "export", 7) == 0)
 		ft_export(mini, cmds);
 	else if (ft_strncmp(cmds[0], "cd", 3) == 0)
-		ft_cd(mini);
+		ft_cd(mini, cmds);
 	else if (ft_strncmp(cmds[0], "echo", 5) == 0)
 		ft_echo(cmds);
 	else

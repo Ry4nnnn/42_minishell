@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/04 20:56:40 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/08 21:10:55 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ void	update_oldpwd(t_mini *mini, char *old_path)
 	}
 }
 
-void	ft_cd_args(t_mini *mini)
+void	ft_cd_args(t_mini *mini, char **cmds)
 {
 	char	*oldpwd;
 
 	oldpwd = get_env(mini, "OLDPWD");
-	if (!ft_strcmp(mini->cmds[1], "-")) // if args is only "-"
+	if (!ft_strcmp(cmds[1], "-")) // if args is only "-"
 	{
 		if (!oldpwd) // if oldpwd is empty
 			printf ("cd: OLDPWD not set\n");
@@ -71,8 +71,8 @@ void	ft_cd_args(t_mini *mini)
 	}
 	else
 	{
-		if (chdir(mini->cmds[1])) // if input is not valid
-			printf ("cd: %s: No such file or directory\n", mini->cmds[1]);
+		if (chdir(cmds[1])) // if input is not valid
+			printf ("cd: %s: No such file or directory\n", cmds[1]);
 		update_pwd(mini, "PWD");
 		update_oldpwd(mini, oldpwd);
 	}
@@ -81,12 +81,12 @@ void	ft_cd_args(t_mini *mini)
 // work like normal cd
 // (cd) will go to home path
 // (cd -) will switch between PWD and OLDPWD
-void	ft_cd(t_mini *mini)
+void	ft_cd(t_mini *mini, char **cmds)
 {
 	char	*home;
 
 	home = get_env(mini, "HOME");
-	if (!mini->cmds[1] || (!ft_strcmp(mini->cmds[1], "~"))) // if only cd or cd ~
+	if (!cmds[1] || (!ft_strcmp(cmds[1], "~"))) // if only cd or cd ~
 	{
 		if (!home)
 			printf ("cd: HOME not set\n");
@@ -97,6 +97,6 @@ void	ft_cd(t_mini *mini)
 			update_pwd(mini, "PWD"); // will change cur pwd to home path
 		}
 	}
-	else if (mini->cmds[1] != NULL) // if cd got args
-		ft_cd_args(mini);
+	else if (cmds[1] != NULL) // if cd got args
+		ft_cd_args(mini, cmds);
 }

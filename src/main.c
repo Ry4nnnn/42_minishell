@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 19:24:43 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/08 21:12:31 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,14 +191,10 @@ int main(int ac, char **av, char **ev)
 			ft_free(&mini, 4);
 			continue ;
 		}
-		// mini.cmds = ft_split(mini.input, ' '); // the budget lexer
 		mini.cmdblock_list = split_cmdblocks(mini.input);
 		mini.exit_status = handle_cmdblocks(&mini, mini.cmdblock_list);
-		// handle_commands(&mini, mini.cmds); // this handles all the inputs after getting filtered by lexer
 		add_history(mini.input);
-		// ft_free_cmds(&mini);
-		free(mini.prompt);
-		free(mini.input);
+		ft_free(&mini, 4);
 	}
 	return(0);
 }
