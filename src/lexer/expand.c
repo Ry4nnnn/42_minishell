@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/08 20:59:59 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/08 21:51:33 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ void	expand_exit_status(t_mini *mini, char **input_addr, int *i)
 {
 	char	*str_exit_status;
 
-	str_exit_status = ft_itoa(mini->exit_status);
+	(void)mini;
+	str_exit_status = ft_itoa(g_errno);
 	ft_strexpand(input_addr, str_exit_status, *i, 2);
 	*i += ft_strlen(str_exit_status) - 1;
 	free(str_exit_status);

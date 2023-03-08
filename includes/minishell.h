@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 21:10:19 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/08 21:45:18 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	init_prompt(t_mini *mini);
 
 //execve.c
 char	*get_exec_path(t_mini *mini, char **cmds);
-void	exec_non_builtins(t_mini *mini, char **cmds);
-void	exec_program(t_mini *mini, char **cmds);
+int		exec_non_builtins(t_mini *mini, char **cmds);
+int		exec_program(t_mini *mini, char **cmds);
 
 #endif

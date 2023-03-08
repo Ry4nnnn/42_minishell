@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 21:12:31 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/08 22:22:59 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,20 @@ int		handle_commands(t_mini *mini, char **cmds)
 {
 	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
 	{
-		exec_builtins(mini, cmds);
+		return (exec_builtins(mini, cmds));
 	}
 	else if (get_env(mini, "PATH") == NULL)
 	{
 		ft_error(mini, cmds, NSFD);
+		return (127);
 	}
 	else if (ft_strchr(cmds[0], '/') != NULL)
 	{
-		exec_program(mini, cmds);
+		return (exec_program(mini, cmds));
 	}
 	else // non builtins
 	{
-		exec_non_builtins(mini, cmds);
+		return (exec_non_builtins(mini, cmds));
 	}
 	return (0);
 }
@@ -130,10 +131,9 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	expand_input(mini, &cmdblock->input);
 	printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
-	handle_commands(mini, cmdblock->cmd_argv);
+	cmdblock->exit_status = handle_commands(mini, cmdblock->cmd_argv);
 	ft_free2darr((void *)cmdblock->cmd_argv);
-	cmdblock->exit_status = g_errno;
-	return (g_errno);
+	return (cmdblock->exit_status);
 }
 
 int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
@@ -158,8 +158,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		temp = temp->next;	
 	}
 	exit_status = get_exit_status(cmdblocks_list);
-	printf("exit_status: %i\n", exit_status);
-	printf("g_errno: %i\n", g_errno);
+	// printf("exit_status: %i\n", exit_status);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
 	return (exit_status);
 }
@@ -178,9 +177,10 @@ int main(int ac, char **av, char **ev)
 	init_env(&mini, ev);
 	init_builtins(&mini);
 	// init_operators(&mini); (not used yet)
+	g_errno = 0;
+	printf("minishell pid: %i\n", getpid());
 	while (1)
 	{
-		g_errno = 0;
 		init_signal();
 		init_prompt(&mini);
 		mini.input = readline(mini.prompt);
@@ -192,7 +192,8 @@ int main(int ac, char **av, char **ev)
 			continue ;
 		}
 		mini.cmdblock_list = split_cmdblocks(mini.input);
-		mini.exit_status = handle_cmdblocks(&mini, mini.cmdblock_list);
+		g_errno = handle_cmdblocks(&mini, mini.cmdblock_list);
+		// printf("g_errno: %i\n", g_errno);
 		add_history(mini.input);
 		ft_free(&mini, 4);
 	}
