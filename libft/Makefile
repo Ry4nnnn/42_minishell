@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/11 20:15:17 by wxuerui           #+#    #+#              #
-#    Updated: 2023/02/24 19:30:13 by wxuerui          ###   ########.fr        #
+#    Updated: 2023/03/06 13:46:05 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ SRC_FILES	= ft_isalpha ft_isdigit ft_isalnum ft_isascii ft_isprint \
 				ft_printf ft_print_hex ft_putunsign ft_putvoidptr ft_putcharf ft_putnbrf ft_putstrf ft_get_flags ft_printf_utils ft_putnbrstrf \
 				ft_quick_sort ft_2darrlen ft_free2darr \
 				get_next_line_bonus get_next_line_utils_bonus \
-				ft_strndup ft_strcmp
+				ft_strndup ft_strcmp ft_llto2darr ft_strninsert ft_strinsert
 
 SRCS 		= 	$(addprefix $(SRCS_DIR), $(addsuffix .c, $(SRC_FILES)))
 OBJS 		= 	$(addprefix $(OBJS_DIR), $(addsuffix .o, $(SRC_FILES)))

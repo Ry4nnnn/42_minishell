@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 18:17:03 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/08 19:23:05 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 # include <stdint.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-# include <linux/limits.h> // (for wsl)
+# include <stdbool.h>
+// # include <linux/limits.h> // (for wsl)
 
 # define SUCCESS 0
 # define ERROR 1
@@ -46,7 +47,31 @@
 # define CMD_NF "command not found\n"
 # define NSFD "No such file or directory\n"
 
-// int glob_errno;//not used
+// Special characters
+# define HARD_SPLITERS "(&|"
+# define SOFT_SPLITERS " $'\""
+# define IGNORE_CHARS "\\;"
+
+int g_errno;
+
+enum e_spliters {
+	BEGINNING,
+	PIPE,
+	OPEN_BRACKET,
+	CLOSE_BRACKET,
+	AND,
+	OR,
+	INVALID
+};
+
+typedef struct s_cmdblock {
+	char	*input;
+	int		spliter_type;
+	int		exit_status;
+	int		executed;
+	int		in_bracket;
+	char	**cmd_argv;
+}	t_cmdblock;
 
 typedef struct s_env
 {
@@ -62,6 +87,8 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	char	**cmds;
+	t_list	*cmdblock_list;
+	int		exit_status;
 }		t_mini;
 
 //----------BUILTINS----------//
@@ -82,7 +109,6 @@ void	ft_exit(t_mini *mini);
 
 //export.c
 void	ft_export(t_mini *mini, char **key);
-void	print_export_x(t_mini *mini);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
@@ -102,7 +128,14 @@ t_env	*check_env_var(t_list *env, char *key);
 
 //----------LEXER----------//
 
-void	lexer(t_mini *mini);
+t_list	*split_cmdblocks(char *input);
+int	ft_incharset(char *charset, char c);
+int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
+int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
+void	ft_strexpand(char **s, char *insert, int start, int n);
+void	expand_input(t_mini *mini, char **input_addr);
+void	ft_strremove(char **s, int start, int n);
+char	**tokenize_cmd(t_mini *mini, char *input);
 
 //----------MAIN_DIR----------//
 
@@ -134,7 +167,6 @@ void	init_signal(void);
 void	init_prompt(t_mini *mini);
 
 //execve.c
-char	**ft_llto2darr(t_list *list);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	exec_non_builtins(t_mini *mini, char **cmds);
 void	exec_program(t_mini *mini, char **cmds);

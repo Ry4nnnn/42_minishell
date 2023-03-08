@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/05 14:43:22 by welim            ###   ########.fr        #
+#    Updated: 2023/03/07 13:16:31 by wxuerui          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,11 @@ INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
 CFLAGS		:= $(INCLUDE) -Wall -Werror -Wextra #-fsanitize=address
 
-CC			:= gcc -g3
+ifeq ($(DB), 1)
+	CFLAGS	+= -fsanitize=address -g3
+endif
+
+CC			:= gcc
 
 NEWLINE 	= \e[1K\r
 
@@ -57,7 +61,7 @@ LIBFT_PATH		:= libft
 
 BUILTINS	= env exit unset export cd echo builtins builtin_utils
 PARSER		= pwd
-LEXER		= lexer
+LEXER		= lexer lexer_utils expand tokenize
 MAIN		= main free error signal execve prompt utils
 
 #------------------------------------------------------#
