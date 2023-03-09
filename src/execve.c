@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 22:12:56 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 23:11:28 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!exec_path)
 		return (127);
-	// fprintf(stderr, "do: %i, prep: %i\n", mini->pipes.do_pipe, mini->pipes.prep_pipe);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	cmdblock->pid = fork();
@@ -78,9 +77,10 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	{
 		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
+		if (mini->pipes.prep_pipe)
+			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		// fprintf(stderr, "cmds[0]: %s\n", cmds[0]);
 		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command

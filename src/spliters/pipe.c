@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 14:32:39 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/09 22:16:45 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 23:06:13 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	prepare_pipe(t_mini *mini)
 
 void	do_pipe(t_mini *mini)
 {
-	// close(mini->pipes.pipe[WRITE]);
+	close(mini->pipes.pipe[WRITE]);
 	if (mini->pipes.temp_read_fd != -1)
 		dup2(mini->pipes.temp_read_fd, STDIN_FILENO);
 }

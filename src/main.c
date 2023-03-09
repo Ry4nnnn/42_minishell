@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 22:20:47 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 23:15:28 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		if (access(cmdblock->cmd_argv[0], F_OK) == 0)
 		{
 			if (access(cmdblock->cmd_argv[0], X_OK) == 0)
-			{
-				printf("XOK\n");
 				return (exec_program(mini, cmdblock));
-			}
 			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
 			return (126);
 		}
@@ -87,9 +84,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		
 	}
 	else // non builtins
-	{
 		return (exec_non_builtins(mini, cmdblock));
-	}
 	return (0);
 }
 
@@ -165,13 +160,24 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		prev_cmdblock = cmdblock;
 		temp = temp->next;	
 	}
-	exit_status = get_exit_status(cmdblocks_list);
 	temp = cmdblocks_list;
 	while (temp != NULL)
 	{
 		waitpid(((t_cmdblock *)temp->content)->pid, &((t_cmdblock *)temp->content)->estatus, WUNTRACED);
+		if (WIFEXITED(((t_cmdblock *)temp->content)->estatus))
+		{
+			printf("%i exited normally\n", (int)((t_cmdblock *)temp->content)->pid);
+			g_errno = (WEXITSTATUS(((t_cmdblock *)temp->content)->estatus));
+		}
+		if (WIFSIGNALED(((t_cmdblock *)temp->content)->estatus))
+		{
+			printf("%i exited abnormally\n", (int)((t_cmdblock *)temp->content)->pid);
+			g_errno = WTERMSIG(((t_cmdblock *)temp->content)->estatus);
+		}
+		printf("pid: %i, errno: %i\n", (int)((t_cmdblock *)temp->content)->pid, g_errno);
 		temp = temp->next;
 	}
+	exit_status = get_exit_status(cmdblocks_list);
 	// printf("exit_status: %i\n", exit_status);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
 	return (exit_status);
