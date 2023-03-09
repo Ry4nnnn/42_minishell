@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 22:22:59 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 14:19:17 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void init_builtins(t_mini *mini)
 
 int		handle_commands(t_mini *mini, char **cmds)
 {
+	signal(SIGINT, SIG_IGN);
 	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
 	{
 		return (exec_builtins(mini, cmds));
@@ -70,7 +71,7 @@ int		handle_commands(t_mini *mini, char **cmds)
 		ft_error(mini, cmds, NSFD);
 		return (127);
 	}
-	else if (ft_strchr(cmds[0], '/') != NULL)
+	else if (access(cmds[0], X_OK) || ft_strchr(cmds[0], '/') != NULL)
 	{
 		return (exec_program(mini, cmds));
 	}

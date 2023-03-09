@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 22:17:29 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 14:16:40 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,19 +75,19 @@ int	exec_non_builtins(t_mini *mini, char **cmds)
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
+		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
 		if (execve(exec_path, cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmds, CMD_NF); //prints error msg for invalid command
 			exit(127);
 		}
-		exit(errno);
 	}
 	else
 		waitpid(-1, &estatus, 0);
 	free (exec_path);
 	if (WIFSIGNALED(estatus))
-		return (WTERMSIG(estatus));
+		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(estatus));
 }
 
@@ -101,6 +101,7 @@ int	exec_program(t_mini *mini, char **cmds)
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
+		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (execve(cmds[0], cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
