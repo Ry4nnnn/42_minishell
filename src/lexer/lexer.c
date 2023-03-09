@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/06 12:53:27 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/09 22:27:44 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_list	*get_new_cmdblock(char *input, int spliter_type)
 		else if (quote == 0 && (input[len] == '\"' || input[len] == '\''))
 			quote = input[len];
 		len++;
-		if (get_spliter_type(input + len) != INVALID)
+		if (quote == 0 && get_spliter_type(input + len) != INVALID)
 			break ;
 	}
 	new_cmdblock = malloc(sizeof(t_cmdblock));

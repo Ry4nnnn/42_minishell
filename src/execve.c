@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 15:28:57 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 22:12:56 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,68 +62,68 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 }
 
 // execute non-builtin inputs
-int	exec_non_builtins(t_mini *mini, char **cmds)
+int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
-	pid_t	pid;
 	char	*exec_path;
 	char	**envp;
-	int		estatus;
 
-	exec_path = get_exec_path(mini, cmds);
+	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!exec_path)
 		return (127);
+	// fprintf(stderr, "do: %i, prep: %i\n", mini->pipes.do_pipe, mini->pipes.prep_pipe);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
-	pid = fork();
-	if (pid == 0) //this code will only run on child process
+	cmdblock->pid = fork();
+	if (cmdblock->pid == 0) //this code will only run on child process
 	{
 		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		if (execve(exec_path, cmds, envp) == -1) // if execve fail means (its a invalid command)
+		// fprintf(stderr, "cmds[0]: %s\n", cmds[0]);
+		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
-			ft_error(mini, cmds, CMD_NF); //prints error msg for invalid command
+			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 			exit(127);
 		}
+		exit(0);
 	}
-	else
-		waitpid(-1, &estatus, 0);
+	if (mini->pipes.prep_pipe == 0)
+		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	free (exec_path);
-	if (mini->pipes.do_pipe)
+	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
 		finish_pipe(mini);
-	if (WIFSIGNALED(estatus))
-		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
-	return (WEXITSTATUS(estatus));
+	if (WIFSIGNALED(cmdblock->estatus))
+		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
+	return (WEXITSTATUS(cmdblock->estatus));
 }
 
 // ./minishell
-int	exec_program(t_mini *mini, char **cmds)
+int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 {
-	pid_t	pid;
-	int		estatus;
 	char	**envp;
 
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
-	pid = fork();
-	if (pid == 0) //this code will only run on child process
+	cmdblock->pid = fork();
+	if (cmdblock->pid == 0) //this code will only run on child process
 	{
 		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		if (execve(cmds[0], cmds, envp) == -1) // if execve fail means (its a invalid command)
+		if (execve(cmdblock->cmd_argv[0], cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
-			ft_error(mini, cmds, NSFD); //prints error msg for invalid command
+			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED); //prints error msg for invalid command
 			exit(127);
 		}
+		exit(0);
 	}
-	else
-		waitpid(-1, &estatus, 0);
-	if (mini->pipes.do_pipe)
+	if (mini->pipes.prep_pipe == 0)
+		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
+	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
 		finish_pipe(mini);
-	if (WIFSIGNALED(estatus))
-		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
-	return (WEXITSTATUS(estatus));
+	if (WIFSIGNALED(cmdblock->estatus))
+		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
+	return (WEXITSTATUS(cmdblock->estatus));
 }

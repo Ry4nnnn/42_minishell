@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 15:28:06 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 21:36:04 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@
 // Error Messages
 # define CMD_NF "command not found\n"
 # define NSFD "No such file or directory\n"
+# define PERMISSION_DENIED "Permission denied\n"
 
 // Special characters
 # define HARD_SPLITERS "(&|"
@@ -75,6 +76,8 @@ typedef struct s_cmdblock {
 	int		executed;
 	int		in_bracket;
 	char	**cmd_argv;
+	int		estatus;
+	pid_t	pid;
 }	t_cmdblock;
 
 typedef struct s_env
@@ -90,6 +93,7 @@ typedef struct s_pipes
 	int	prep_pipe;
 	int	saved_stdout;
 	int	saved_stdin;
+	int	temp_read_fd;
 }	t_pipes;
 
 typedef struct s_mini
@@ -164,7 +168,6 @@ void	ft_error(t_mini *mini, char **cmds, char *msg);
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);
 void	clear_env_var(void *content);
-void	ft_free_cmds(t_mini *mini);
 void	ft_free(t_mini *mini, int type);
 
 //main.c
@@ -172,7 +175,7 @@ void	add_env_var(t_mini *mini, char *key, char *value);
 int		init_env(t_mini *mini, char **ev);
 char	*get_env(t_mini *mini, char *key);
 void	init_prompt(t_mini *mini);
-int		handle_commands(t_mini *mini, char **cmds);
+int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
 
 //utils.c
 int		valid_input(char *key);
@@ -187,7 +190,7 @@ void	init_prompt(t_mini *mini);
 
 //execve.c
 char	*get_exec_path(t_mini *mini, char **cmds);
-int		exec_non_builtins(t_mini *mini, char **cmds);
-int		exec_program(t_mini *mini, char **cmds);
+int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
+int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 
 #endif

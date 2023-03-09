@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 15:27:22 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 22:20:47 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,36 @@ void init_builtins(t_mini *mini)
 // 	mini->operators = operators;
 // }
 
-int		handle_commands(t_mini *mini, char **cmds)
+int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
-	if (check_builtins(mini, cmds[0]) == 1)// it is a builtin!
+	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
 	{
-		return (exec_builtins(mini, cmds));
+		return (exec_builtins(mini, cmdblock->cmd_argv));
 	}
 	else if (get_env(mini, "PATH") == NULL)
 	{
-		ft_error(mini, cmds, NSFD);
+		ft_error(mini, cmdblock->cmd_argv, NSFD);
 		return (127);
 	}
-	else if (ft_strchr(cmds[0], '/') != NULL)
+	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)
 	{
-		return (exec_program(mini, cmds));
+		if (access(cmdblock->cmd_argv[0], F_OK) == 0)
+		{
+			if (access(cmdblock->cmd_argv[0], X_OK) == 0)
+			{
+				printf("XOK\n");
+				return (exec_program(mini, cmdblock));
+			}
+			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
+			return (126);
+		}
+		ft_error(mini, cmdblock->cmd_argv, NSFD);
+		
 	}
 	else // non builtins
 	{
-		return (exec_non_builtins(mini, cmds));
+		return (exec_non_builtins(mini, cmdblock));
 	}
 	return (0);
 }
@@ -128,7 +139,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	expand_input(mini, &cmdblock->input);
 	printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
-	cmdblock->exit_status = handle_commands(mini, cmdblock->cmd_argv);
+	cmdblock->exit_status = handle_commands(mini, cmdblock);
 	ft_free2darr((void *)cmdblock->cmd_argv);
 	return (cmdblock->exit_status);
 }
@@ -155,6 +166,12 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		temp = temp->next;	
 	}
 	exit_status = get_exit_status(cmdblocks_list);
+	temp = cmdblocks_list;
+	while (temp != NULL)
+	{
+		waitpid(((t_cmdblock *)temp->content)->pid, &((t_cmdblock *)temp->content)->estatus, WUNTRACED);
+		temp = temp->next;
+	}
 	// printf("exit_status: %i\n", exit_status);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
 	return (exit_status);
@@ -175,11 +192,11 @@ int main(int ac, char **av, char **ev)
 	init_builtins(&mini);
 	// init_operators(&mini); (not used yet)
 	g_errno = 0;
-	init_pipe(&mini);
 	while (1)
 	{
 		init_signal();
 		init_prompt(&mini);
+		init_pipe(&mini);
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)
 			ft_exit(&mini);
