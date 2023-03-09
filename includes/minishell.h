@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 21:45:18 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 15:28:06 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,10 @@
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
+// For pipe
+# define READ 0
+# define WRITE 1
+
 int g_errno;
 
 enum e_spliters {
@@ -79,6 +83,15 @@ typedef struct s_env
 	char	*value;
 }		t_env;
 
+typedef struct s_pipes
+{
+	int	pipe[2];
+	int	do_pipe;
+	int	prep_pipe;
+	int	saved_stdout;
+	int	saved_stdin;
+}	t_pipes;
+
 typedef struct s_mini
 {
 	t_list	*envp;// call env
@@ -87,6 +100,7 @@ typedef struct s_mini
 	char	**operators;
 	char	*input;
 	t_list	*cmdblock_list;
+	t_pipes	pipes;	
 	int		exit_status;
 }		t_mini;
 
@@ -135,6 +149,12 @@ void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **input_addr);
 void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
+
+//----------SPLITERS----------//
+void	prepare_pipe(t_mini *mini);
+void	do_pipe(t_mini *mini);
+void	finish_pipe(t_mini *mini);
+void	init_pipe(t_mini *mini);
 
 //----------MAIN_DIR----------//
 

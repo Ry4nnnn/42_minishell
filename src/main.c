@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 14:19:17 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 15:27:22 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int		handle_commands(t_mini *mini, char **cmds)
 		ft_error(mini, cmds, NSFD);
 		return (127);
 	}
-	else if (access(cmds[0], X_OK) || ft_strchr(cmds[0], '/') != NULL)
+	else if (ft_strchr(cmds[0], '/') != NULL)
 	{
 		return (exec_program(mini, cmds));
 	}
@@ -119,14 +119,10 @@ int	get_exit_status(t_list *cmdblock_list)
 int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock)
 {
 	(void)prev_cmdblock;
-	if (next_cmdblock != NULL && next_cmdblock->spliter_type == PIPE) // if the next cmdblock is piping, prepare the pipe here
-	{
-		// prep_pipe();
-	}
 	if (cmdblock->spliter_type == PIPE) // if the current cmdblock is piping, do the piping
-	{
-		// do_pipe();
-	}
+		mini->pipes.do_pipe = 1;
+	if (next_cmdblock != NULL && next_cmdblock->spliter_type == PIPE) // if the next cmdblock is piping, prepare the pipe here
+		mini->pipes.prep_pipe = 1;
 	if (cmdblock->in_bracket)
 		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input)));
 	expand_input(mini, &cmdblock->input);
@@ -179,7 +175,7 @@ int main(int ac, char **av, char **ev)
 	init_builtins(&mini);
 	// init_operators(&mini); (not used yet)
 	g_errno = 0;
-	printf("minishell pid: %i\n", getpid());
+	init_pipe(&mini);
 	while (1)
 	{
 		init_signal();

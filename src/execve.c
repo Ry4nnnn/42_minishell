@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 14:25:14 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 15:28:57 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,15 @@ int	exec_non_builtins(t_mini *mini, char **cmds)
 	exec_path = get_exec_path(mini, cmds);
 	if (!exec_path)
 		return (127);
+	if (mini->pipes.prep_pipe)
+		prepare_pipe(mini);
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
 		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
+		if (mini->pipes.do_pipe)
+			do_pipe(mini);
 		if (execve(exec_path, cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmds, CMD_NF); //prints error msg for invalid command
@@ -86,6 +90,8 @@ int	exec_non_builtins(t_mini *mini, char **cmds)
 	else
 		waitpid(-1, &estatus, 0);
 	free (exec_path);
+	if (mini->pipes.do_pipe)
+		finish_pipe(mini);
 	if (WIFSIGNALED(estatus))
 		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(estatus));
@@ -98,11 +104,15 @@ int	exec_program(t_mini *mini, char **cmds)
 	int		estatus;
 	char	**envp;
 
+	if (mini->pipes.prep_pipe)
+		prepare_pipe(mini);
 	pid = fork();
 	if (pid == 0) //this code will only run on child process
 	{
 		signal(SIGINT, SIG_DFL);
 		envp = ft_llto2darr(mini->envp, env_to_str);
+		if (mini->pipes.do_pipe)
+			do_pipe(mini);
 		if (execve(cmds[0], cmds, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmds, NSFD); //prints error msg for invalid command
@@ -111,6 +121,8 @@ int	exec_program(t_mini *mini, char **cmds)
 	}
 	else
 		waitpid(-1, &estatus, 0);
+	if (mini->pipes.do_pipe)
+		finish_pipe(mini);
 	if (WIFSIGNALED(estatus))
 		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(estatus));
