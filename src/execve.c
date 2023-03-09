@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 14:16:40 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/09 14:25:14 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,7 @@ int	exec_program(t_mini *mini, char **cmds)
 	}
 	else
 		waitpid(-1, &estatus, 0);
+	if (WIFSIGNALED(estatus))
+		return (WTERMSIG(estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(estatus));
 }
