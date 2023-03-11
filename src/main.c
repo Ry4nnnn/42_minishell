@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 23:15:28 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:41:57 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void init_builtins(t_mini *mini)
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
+	cmdblock->need_wait = 0;
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
 	{
 		return (exec_builtins(mini, cmdblock->cmd_argv));
@@ -108,9 +109,9 @@ int	get_exit_status(t_list *cmdblock_list)
 	while (cmdblock_list != NULL)
 	{
 		cmdblock = (t_cmdblock *)cmdblock_list->content;
-		if (cmdblock->spliter_type == OR && cmdblock->executed && cmdblock->exit_status == 0) // if executed and successed and is in OR logic
+		if (cmdblock->spliter_type == OR && cmdblock->exit_status == 0) // if executed and successed and is in OR logic
 				return (0);
-		else if (cmdblock->spliter_type == AND && cmdblock->executed) // if executed and in AND logic
+		else if (cmdblock->spliter_type == AND) // if executed and in AND logic
 		{
 			if ((cmdblock->exit_status == 0 && exit_status == 0) || (cmdblock->exit_status != 0)) // if (success and previous are all success) or (not success)
 				exit_status = cmdblock->exit_status;
@@ -160,23 +161,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		prev_cmdblock = cmdblock;
 		temp = temp->next;	
 	}
-	temp = cmdblocks_list;
-	while (temp != NULL)
-	{
-		waitpid(((t_cmdblock *)temp->content)->pid, &((t_cmdblock *)temp->content)->estatus, WUNTRACED);
-		if (WIFEXITED(((t_cmdblock *)temp->content)->estatus))
-		{
-			printf("%i exited normally\n", (int)((t_cmdblock *)temp->content)->pid);
-			g_errno = (WEXITSTATUS(((t_cmdblock *)temp->content)->estatus));
-		}
-		if (WIFSIGNALED(((t_cmdblock *)temp->content)->estatus))
-		{
-			printf("%i exited abnormally\n", (int)((t_cmdblock *)temp->content)->pid);
-			g_errno = WTERMSIG(((t_cmdblock *)temp->content)->estatus);
-		}
-		printf("pid: %i, errno: %i\n", (int)((t_cmdblock *)temp->content)->pid, g_errno);
-		temp = temp->next;
-	}
+	wait_childs(cmdblocks_list);
 	exit_status = get_exit_status(cmdblocks_list);
 	// printf("exit_status: %i\n", exit_status);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
@@ -205,7 +190,7 @@ int main(int ac, char **av, char **ev)
 		init_pipe(&mini);
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)
-			ft_exit(&mini);
+			ms_exit(&mini);
 		if (mini.input[0] == '\0')
 		{
 			ft_free(&mini, 4);

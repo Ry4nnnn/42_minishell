@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/03 11:04:16 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/11 13:44:25 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	rm_env_var(t_mini *ms, t_env *env)
 }
 
 // delete var from linked list
-void	ft_unset(t_mini *mini, char **key)
+void	ms_unset(t_mini *mini, char **key)
 {
 	t_env	*envp;
 	int		i;
 
 	i = 1;
-	if (key[i] == NULL)
+	if (key[i] == NULL || mini->pipes.do_pipe)
 		return ;
 	while (key[i] != NULL)
 	{

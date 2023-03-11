@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/08 21:40:42 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:40:32 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_option(char *input)
 	return (0);
 }
 
-int	ft_echo(char **input)
+int	ms_echo(char **input)
 {
 	int		i;
 	int		option;

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 21:36:04 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:40:16 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdbool.h>
+# include <errno.h>
 // # include <linux/limits.h> // (for wsl)
 
 # define SUCCESS 0
@@ -73,7 +74,7 @@ typedef struct s_cmdblock {
 	char	*input;
 	int		spliter_type;
 	int		exit_status;
-	int		executed;
+	int		need_wait;
 	int		in_bracket;
 	char	**cmd_argv;
 	int		estatus;
@@ -110,30 +111,30 @@ typedef struct s_mini
 
 //----------BUILTINS----------//
 //cd.c
-void	ft_cd(t_mini *mini, char **cmds);
+void	ms_cd(t_mini *mini, char **cmds);
 void	update_pwd(t_mini *mini, char *key);
 void	update_oldpwd(t_mini *mini, char *old_path);
 
 //echo.c
-int		ft_echo(char **input);
+int		ms_echo(char **input);
 int		is_option(char *input);
 
 //env.c
-int		ft_env(t_mini *mini);
+int		ms_env(t_mini *mini);
 
 //exit.c
-void	ft_exit(t_mini *mini);
+void	ms_exit(t_mini *mini);
 
 //export.c
-void	ft_export(t_mini *mini, char **key);
+void	ms_export(t_mini *mini, char **key);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
-void	ft_unset(t_mini *mini, char **args);
+void	ms_unset(t_mini *mini, char **args);
 void	rm_env_var(t_mini *ms, t_env *env);
 
 //pwd.c
-void 	ft_pwd(void);
+void 	ms_pwd(void);
 
 //builtins.c
 int		check_builtins(t_mini *mini, char *cmds);
@@ -159,6 +160,7 @@ void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
+void	wait_childs(t_list *cmdblocks);
 
 //----------MAIN_DIR----------//
 

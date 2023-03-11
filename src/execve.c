@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 23:11:28 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:24:20 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!exec_path)
 		return (127);
+	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	cmdblock->pid = fork();
@@ -103,6 +104,7 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	**envp;
 
+	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	cmdblock->pid = fork();

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 21:10:55 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:44:49 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,12 @@ void	ft_cd_args(t_mini *mini, char **cmds)
 // work like normal cd
 // (cd) will go to home path
 // (cd -) will switch between PWD and OLDPWD
-void	ft_cd(t_mini *mini, char **cmds)
+void	ms_cd(t_mini *mini, char **cmds)
 {
 	char	*home;
 
+	if (mini->pipes.do_pipe)
+		return ;
 	home = get_env(mini, "HOME");
 	if (!cmds[1] || (!ft_strcmp(cmds[1], "~"))) // if only cd or cd ~
 	{

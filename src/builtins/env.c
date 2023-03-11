@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:06 by welim             #+#    #+#             */
-/*   Updated: 2023/03/03 11:02:21 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/11 13:40:39 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_mini *mini)
+int	ms_env(t_mini *mini)
 {
 	t_list	*env_list;
 	t_env	*env_node;

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 14:55:49 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 13:46:32 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 
 //if export with no '=' only add to export(envx)
 //if export with = add to both export(envx) and env(envp)
-void	ft_export(t_mini *mini, char **input)
+void	ms_export(t_mini *mini, char **input)
 {
 	char	*key;
 	char	*value;
@@ -114,6 +114,8 @@ void	ft_export(t_mini *mini, char **input)
 		print_export(mini);
 		return ;
 	}
+	if (mini->pipes.do_pipe)
+		return ;
 	while (input[i] != NULL)
 	{
 		get_key_value(input[i], &key, &value); // extracting key and value from input //malloc
