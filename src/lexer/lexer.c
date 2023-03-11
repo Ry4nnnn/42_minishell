@@ -3,26 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 22:27:44 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 16:51:45 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// void	print_list(t_list *list)
-// {
-// 	while (list != NULL)
-// 	{
-// 		printf("[%s]\n", ((t_cmdblock *)list->content)->input);
-// 		printf("spliter: %i\n", ((t_cmdblock *)list->content)->spliter_type);
-// 		list = list->next;
-// 	}
-// }
-
-// ()&|
 int	get_spliter_type(char *input)
 {
 	if (ft_strncmp(input, "(", 1) == 0)

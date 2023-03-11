@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 13:41:57 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 16:59:30 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ void init_builtins(t_mini *mini)
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
-	cmdblock->need_wait = 0;
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
 	{
 		return (exec_builtins(mini, cmdblock->cmd_argv));
@@ -125,7 +124,14 @@ int	get_exit_status(t_list *cmdblock_list)
 
 int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock)
 {
-	(void)prev_cmdblock;
+	cmdblock->need_wait = 0;
+	if (prev_cmdblock != NULL)
+	{
+		if (cmdblock->spliter_type == AND && prev_cmdblock->exit_status != 0)
+			return (0);
+		else if (cmdblock->spliter_type == OR && prev_cmdblock->exit_status == 0)
+			return (0);
+	}
 	if (cmdblock->spliter_type == PIPE) // if the current cmdblock is piping, do the piping
 		mini->pipes.do_pipe = 1;
 	if (next_cmdblock != NULL && next_cmdblock->spliter_type == PIPE) // if the next cmdblock is piping, prepare the pipe here
@@ -176,7 +182,6 @@ int main(int ac, char **av, char **ev)
 
 	(void)ac;
 	(void)av;
-	// glob_errno = 0; (not used yet)
 	mini.envp = NULL;
 	mini.exit_status = 0;
 	init_env(&mini, ev);
@@ -198,7 +203,6 @@ int main(int ac, char **av, char **ev)
 		}
 		mini.cmdblock_list = split_cmdblocks(mini.input);
 		g_errno = handle_cmdblocks(&mini, mini.cmdblock_list);
-		// printf("g_errno: %i\n", g_errno);
 		add_history(mini.input);
 		ft_free(&mini, 4);
 	}

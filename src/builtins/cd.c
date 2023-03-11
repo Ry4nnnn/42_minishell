@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 13:44:49 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 17:30:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,27 +54,31 @@ void	update_oldpwd(t_mini *mini, char *old_path)
 void	ft_cd_args(t_mini *mini, char **cmds)
 {
 	char	*oldpwd;
+	char	*pwd;
 
 	oldpwd = get_env(mini, "OLDPWD");
-	if (!ft_strcmp(cmds[1], "-")) // if args is only "-"
+	pwd = get_env(mini, "PWD");
+	if (ft_strcmp(cmds[1], "-") == 0) // if args is only "-"
 	{
 		if (!oldpwd) // if oldpwd is empty
 			printf ("cd: OLDPWD not set\n");
 		else
 		{
-			oldpwd = get_env(mini, "PWD");
 			chdir(get_env(mini, "OLDPWD")); // change to oldpwd address
+			update_oldpwd(mini, pwd); //oldpwd will be updated
 			update_pwd(mini, "PWD"); // pwd will be updated
-			update_oldpwd(mini, oldpwd); //oldpwd will be updated
 			printf ("%s\n", get_env(mini, "PWD"));
 		}
 	}
 	else
 	{
-		if (chdir(cmds[1])) // if input is not valid
+		if (chdir(cmds[1]) != 0) // if input is not valid
 			printf ("cd: %s: No such file or directory\n", cmds[1]);
-		update_pwd(mini, "PWD");
-		update_oldpwd(mini, oldpwd);
+		else
+		{
+			update_oldpwd(mini, pwd);
+			update_pwd(mini, "PWD");
+		}
 	}
 }
 
