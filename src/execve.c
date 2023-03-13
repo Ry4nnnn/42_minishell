@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 13:24:20 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/13 11:58:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	char	*exec_path;
 	char	**envp;
 
-	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
-	if (!exec_path)
-		return (127);
 	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
@@ -82,6 +79,9 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
+		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
+		if (!exec_path)
+			exit(127);
 		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
@@ -91,7 +91,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	if (mini->pipes.prep_pipe == 0)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	free (exec_path);
 	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
 		finish_pipe(mini);
 	if (WIFSIGNALED(cmdblock->estatus))
@@ -114,6 +113,16 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
+		if (access(cmdblock->cmd_argv[0], F_OK) != 0)
+		{
+			ft_error(mini, cmdblock->cmd_argv, NSFD);
+			exit(127);
+		}
+		if (access(cmdblock->cmd_argv[0], X_OK) != 0)
+		{
+			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
+			exit(126);
+		}
 		if (execve(cmdblock->cmd_argv[0], cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED); //prints error msg for invalid command

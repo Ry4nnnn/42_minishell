@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 16:59:30 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/13 12:10:47 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void init_builtins(t_mini *mini)
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
+	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
+		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
 	{
 		return (exec_builtins(mini, cmdblock->cmd_argv));
@@ -73,14 +75,14 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)
 	{
-		if (access(cmdblock->cmd_argv[0], F_OK) == 0)
-		{
-			if (access(cmdblock->cmd_argv[0], X_OK) == 0)
-				return (exec_program(mini, cmdblock));
-			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
-			return (126);
-		}
-		ft_error(mini, cmdblock->cmd_argv, NSFD);
+		// if (access(cmdblock->cmd_argv[0], F_OK) == 0)
+		// {
+		// 	if (access(cmdblock->cmd_argv[0], X_OK) == 0)
+		// 		return (exec_program(mini, cmdblock));
+		// 	ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
+		// 	return (126);
+		// }
+		return (exec_program(mini, cmdblock));
 		
 	}
 	else // non builtins
@@ -165,7 +167,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 			next_cmdblock = (t_cmdblock *)temp->next->content;
 		cmdblock->exit_status = handle_cmdblock(mini, prev_cmdblock, cmdblock, next_cmdblock);
 		prev_cmdblock = cmdblock;
-		temp = temp->next;	
+		temp = temp->next;
 	}
 	wait_childs(cmdblocks_list);
 	exit_status = get_exit_status(cmdblocks_list);
@@ -196,7 +198,8 @@ int main(int ac, char **av, char **ev)
 		mini.input = readline(mini.prompt);
 		if (mini.input == NULL)
 			ms_exit(&mini);
-		if (mini.input[0] == '\0')
+		mini.input = trim_input(mini.input);
+		if (mini.input[0] == '\0' || check_syntax(&mini) == 0)
 		{
 			ft_free(&mini, 4);
 			continue ;

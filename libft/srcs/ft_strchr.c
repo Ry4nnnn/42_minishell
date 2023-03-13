@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/04 16:36:51 by wxuerui           #+#    #+#             */
-/*   Updated: 2022/07/04 16:49:31 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/13 10:27:25 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ char	*ft_strchr(const char *s, int c)
 	int	i;
 
 	i = 0;
+	if (s == NULL)
+		return (NULL);
 	while (c > 256)
 		c -= 256;
 	if (c == 0)

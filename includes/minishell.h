@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 13:40:16 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/13 11:34:36 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@
 # define CMD_NF "command not found\n"
 # define NSFD "No such file or directory\n"
 # define PERMISSION_DENIED "Permission denied\n"
+# define UNEXPECTED_TOKEN "syntax error near unexpected token"
+# define UNCLOSED_QUOTE "Unclosed quote"
 
 // Special characters
 # define HARD_SPLITERS "(&|"
@@ -63,8 +65,6 @@ int g_errno;
 enum e_spliters {
 	BEGINNING,
 	PIPE,
-	OPEN_BRACKET,
-	CLOSE_BRACKET,
 	AND,
 	OR,
 	INVALID
@@ -154,6 +154,8 @@ void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **input_addr);
 void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
+int		check_syntax(t_mini *mini);
+char	*trim_input(char *input);
 
 //----------SPLITERS----------//
 void	prepare_pipe(t_mini *mini);
@@ -166,6 +168,7 @@ void	wait_childs(t_list *cmdblocks);
 
 //error.c
 void	ft_error(t_mini *mini, char **cmds, char *msg);
+void	syntax_error(t_mini *mini, char *err_msg, char *token);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);

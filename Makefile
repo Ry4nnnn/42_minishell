@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/11 13:19:00 by wxuerui          ###   ########.fr        #
+#    Updated: 2023/03/13 11:32:59 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ LIBFT_PATH		:= libft
 
 BUILTINS	= env exit unset export cd echo builtins builtin_utils
 PARSER		= pwd
-LEXER		= lexer lexer_utils expand tokenize
+LEXER		= lexer lexer_utils expand tokenize syntax
 SPLITERS	= pipe spliter_utils
 MAIN		= main free error signal execve prompt utils
 
