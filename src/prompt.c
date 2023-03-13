@@ -6,87 +6,87 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 14:10:11 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 16:49:04 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// char	*get_branch_name(void)
-// {
-// 	char	*argv[] = {"git", "branch", NULL};
+char	*get_branch_name(void)
+{
+	char	*argv[] = {"git", "branch", NULL};
 
-// 	if (access(".git", F_OK) == -1)
-// 		return (NULL);
-// 	int pipefd[2];
-// 	if (pipe(pipefd) == -1)
-// 	{
-// 		perror("pipe");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	pid_t pid = fork();
-// 	if (pid == -1)
-// 	{
-// 		perror("fork");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	else if (pid == 0)
-// 	{
-// 		// Child process
-// 		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
-// 		{
-// 			perror("dup2");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		if (close(pipefd[0]) == -1)
-// 		{
-// 			perror("close");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		if (execve("/usr/bin/git", argv, NULL) == -1)
-// 		{
-// 			perror("execve");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}
-// 	else
-// 	{
-// 		char buf[1024];
-// 		ssize_t nread;
-// 		char *current_branch;
-// 		char *line;
+	if (access(".git", F_OK) == -1)
+		return (NULL);
+	int pipefd[2];
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	pid_t pid = fork();
+	if (pid == -1)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		// Child process
+		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
+		{
+			perror("dup2");
+			exit(EXIT_FAILURE);
+		}
+		if (close(pipefd[0]) == -1)
+		{
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
+		if (execve("/usr/bin/git", argv, NULL) == -1)
+		{
+			perror("execve");
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
+		char buf[1024];
+		ssize_t nread;
+		char *current_branch;
+		char *line;
 
-// 		current_branch = NULL;
-// 		line = strtok(buf, "\n");
-// 		if (close(pipefd[1]) == -1)
-// 		{
-// 			perror("close");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		if ((nread = read(pipefd[0], buf, 1024 - 1)) == -1)
-// 		{
-// 			perror("read");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		buf[nread] = '\0';
-// 		if (close(pipefd[0]) == -1)
-// 		{
-// 			perror("close");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		while (line != NULL)
-// 		{
-// 			if (line[0] == '*' && line[1] == ' ')
-// 			{
-// 				current_branch = ft_strdup(line + 2);
-// 				break;
-// 			}
-// 			line = strtok(NULL, "\n");
-// 		}
-// 		return (current_branch);
-// 	}
-// 	return (NULL);
-// }
+		current_branch = NULL;
+		if (close(pipefd[1]) == -1)
+		{
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
+		if ((nread = read(pipefd[0], buf, 1024 - 1)) == -1)
+		{
+			perror("read");
+			exit(EXIT_FAILURE);
+		}
+		buf[nread] = '\0';
+		line = strtok(buf, "\n");
+		if (close(pipefd[0]) == -1)
+		{
+			perror("close");
+			exit(EXIT_FAILURE);
+		}
+		while (line != NULL)
+		{
+			if (line[0] == '*' && line[1] == ' ')
+			{
+				current_branch = ft_strdup(line + 2);
+				break;
+			}
+			line = strtok(NULL, "\n");
+		}
+		return (current_branch);
+	}
+	return (NULL);
+}
 
 //to strjoin the prompt tgt
 static void	combine_prompt(t_mini *mini, char *user, char *dir)
@@ -95,9 +95,9 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	char	*prompt1;
 	char	*cur_branch;
 
-	// cur_branch = get_branch_name();
-	// if (!cur_branch)
-	cur_branch = ft_strdup("?");
+	cur_branch = get_branch_name();
+	if (!cur_branch)
+		cur_branch = ft_strdup("?");
 	prompt0 = ft_strjoin(GREEN , user);
 	prompt1 = ft_strjoin(prompt0, " @ ");
 	free(prompt0);

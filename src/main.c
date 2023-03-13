@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 18:11:33 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 16:27:18 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,10 @@ void	init_redir(t_mini *mini)
 	char	**redir;
 
 	redir = ft_calloc(4 + 1, sizeof(char *));
-	redir[0] = ">>";
-	redir[1] = "<<";
-	redir[2] = ">";
-	redir[3] = "<";
+	redir[0] = ">";
+	redir[1] = ">>";
+	redir[2] = "<";
+	redir[3] = "<<";
 	mini->redir = redir;
 }
 
@@ -81,19 +81,11 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		}
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
 	}
-	int fd_in = dup(STDOUT_FILENO);
-	cmdblock->pid = fork();
-	if (cmdblock->pid == 0)
-		exit (exec_redir(mini, cmdblock));
-	set_io(fd_in, STDIN_FILENO);
-	// else if (check_redir_type(mini, cmdblock) > 0)
-	// {
-	// 	printf ("redir\n");
-	// 	exec_redir(mini, cmdblock);
-	// }
-	exec_non_builtins(mini, cmdblock);
-	// else // non builtins
-	// 	return (exec_non_builtins(mini, cmdblock));
+	else // non builtins
+	{
+		// exec_redir(mini, cmdblock);
+		return (exec_non_builtins(mini, cmdblock));
+	}
 	return (0);
 }
 
