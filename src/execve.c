@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 18:24:02 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 22:19:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ char	*env_to_str(void *arg)
 
 // gets a list executable paths from envp and split it into a 2d array
 // then use access() function to check if input can be found in the list of executable paths
-// when found
-// this function returns the exec_path for execve() function to execute
+// when found, this function returns the exec_path for execve() function to execute
 char	*get_exec_path(t_mini *mini, char **cmds)
 {
 	char *plist;
@@ -57,7 +56,6 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 		return (NULL);
 	}
 	ft_free2darr((void *)path); // free 2d array
-	// printf ("%s\n", temp2);
 	return (temp2);
 }
 
@@ -67,7 +65,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	char	*exec_path;
 	char	**envp;
 
-	printf("execve run\n");
 	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!exec_path)
 		return (127);

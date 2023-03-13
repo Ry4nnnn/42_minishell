@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 21:11:56 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 22:18:39 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ char	*get_branch_name(void)
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	else if (pid == 0)
+	else if (pid == 0) //Child process
 	{
-		// Child process
 		if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 		{
 			perror("dup2");
@@ -62,7 +61,8 @@ char	*get_branch_name(void)
 			perror("close");
 			exit(EXIT_FAILURE);
 		}
-		if ((nread = read(pipefd[0], buf, 1024 - 1)) == -1)
+		nread = read(pipefd[0], buf, 1024 - 1);
+		if (nread == -1)
 		{
 			perror("read");
 			exit(EXIT_FAILURE);
@@ -79,7 +79,7 @@ char	*get_branch_name(void)
 			if (line[0] == '*' && line[1] == ' ')
 			{
 				current_branch = ft_strdup(line + 2);
-				break;
+				break ;
 			}
 			line = strtok(NULL, "\n");
 		}
@@ -88,7 +88,12 @@ char	*get_branch_name(void)
 	return (NULL);
 }
 
-//to strjoin the prompt tgt
+/**
+ * @brief to combine the prompts into a single line
+ * 
+ * @param user user name
+ * @param dir current directory path
+**/
 static void	combine_prompt(t_mini *mini, char *user, char *dir)
 {
 	char	*prompt0;
@@ -98,7 +103,7 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	cur_branch = get_branch_name();
 	if (!cur_branch)
 		cur_branch = ft_strdup("?");
-	prompt0 = ft_strjoin(GREEN , user);
+	prompt0 = ft_strjoin(GREEN, user);
 	prompt1 = ft_strjoin(prompt0, " @ ");
 	free(prompt0);
 	prompt0 = ft_strjoin(prompt1, dir);
@@ -110,7 +115,7 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	free(prompt1);
 	prompt1 = ft_strjoin(prompt0, ") ");
 	free(prompt0);
-	prompt0 = ft_strjoin(prompt1, " $ ");
+	prompt0 = ft_strjoin(prompt1, "$ ");
 	free(prompt1);
 	prompt1 = ft_strjoin(prompt0, RESET);
 	free (prompt0);

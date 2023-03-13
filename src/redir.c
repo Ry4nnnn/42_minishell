@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 18:21:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 22:52:53 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,11 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 	return (0);
 }
 
-// void	set_io(int fd, int std_file_no)
-// {
-// 	dup2(fd, std_file_no);
-// 	close(fd);
-// }
+void	handle_io(int fd, int std_file_no)
+{
+	dup2(fd, std_file_no);
+	close(fd);
+}
 
 
 // char *find_file_name(t_cmdblock *cmdblock)
@@ -71,32 +71,34 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 // 	return (args);
 // }
 
-void	redir_in(t_cmdblock *cmdblock)
-{
-	int  fd;
-
-	fd = open(cmdblock->file_name, O_CREAT | O_WRONLY, 0644);
-	printf ("%s\n", cmdblock->file_name);
-	if (fd == -1)
-	{
-		printf ("Error!\n");
-	}
-	dup2(fd, STDOUT_FILENO);
-	close (fd);
-}
-
 void	redir_out(t_cmdblock *cmdblock)
 {
-	int fd;
+	pid_t  fd;
 
-	fd = open(cmdblock->file_name, O_RDONLY);
-	printf ("%s\n", cmdblock->file_name);
-	if (fd == -1)
+	fd = open(cmdblock->file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	printf ("file->name: %s\n", cmdblock->file_name);
+	if (fd < 0)
 	{
 		printf ("Error!\n");
 	}
-	dup2(fd, STDIN_FILENO);
-	close(fd);
+	handle_io(fd, STDOUT_FILENO);
+	// dup2(fd, STDOUT_FILENO);
+	// close (fd);
+}
+
+void	redir_in(t_cmdblock *cmdblock)
+{
+	pid_t fd;
+
+	fd = open(cmdblock->file_name, O_RDONLY);
+	printf ("file->name: %s\n", cmdblock->file_name);
+	if (fd < 0)
+	{
+		printf ("Error!\n");
+	}
+	handle_io(fd, STDIN_FILENO);
+	// dup2(fd, STDIN_FILENO);
+	// close(fd);
 }
 
 int exec_redir(t_mini *mini, t_cmdblock *cmdblock)
@@ -108,14 +110,14 @@ int exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	if (type == 1 || type == 2)// ">"
 	{
 		//redir_in
-		printf("redir_in\n");
+		printf("redir_out\n");
 		redir_in(cmdblock);
 	}
 	if (type == 3 || type == 4) // "<"
 	{
 		//redir out
-		printf("redir_out\n");
-		redir_out(cmdblock);
+		printf("redir_in\n");
+		redir_in(cmdblock);
 	}
 	return (0);
 }
