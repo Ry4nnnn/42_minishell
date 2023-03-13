@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 23:15:28 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 18:11:33 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,17 @@ void init_builtins(t_mini *mini)
 	mini->builtins = builtins;
 }
 
-// void	init_operators(t_mini *mini)
-// {
-// 	char	**operators;
+void	init_redir(t_mini *mini)
+{
+	char	**redir;
 
-// 	operators = ft_calloc(7 + 1, sizeof(char *));
-// 	operators[0] = "|";
-// 	operators[1] = ">>";
-// 	operators[2] = "<<";
-// 	operators[3] = ">";
-// 	operators[4] = "<";
-// 	mini->operators = operators;
-// }
+	redir = ft_calloc(4 + 1, sizeof(char *));
+	redir[0] = ">>";
+	redir[1] = "<<";
+	redir[2] = ">";
+	redir[3] = "<";
+	mini->redir = redir;
+}
 
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
@@ -81,10 +80,20 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 			return (126);
 		}
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
-		
 	}
-	else // non builtins
-		return (exec_non_builtins(mini, cmdblock));
+	int fd_in = dup(STDOUT_FILENO);
+	cmdblock->pid = fork();
+	if (cmdblock->pid == 0)
+		exit (exec_redir(mini, cmdblock));
+	set_io(fd_in, STDIN_FILENO);
+	// else if (check_redir_type(mini, cmdblock) > 0)
+	// {
+	// 	printf ("redir\n");
+	// 	exec_redir(mini, cmdblock);
+	// }
+	exec_non_builtins(mini, cmdblock);
+	// else // non builtins
+	// 	return (exec_non_builtins(mini, cmdblock));
 	return (0);
 }
 
@@ -132,7 +141,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	if (cmdblock->in_bracket)
 		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input)));
 	expand_input(mini, &cmdblock->input);
-	printf("expanded: %s\n", cmdblock->input);
+	// printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
 	ft_free2darr((void *)cmdblock->cmd_argv);
@@ -166,15 +175,15 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 		waitpid(((t_cmdblock *)temp->content)->pid, &((t_cmdblock *)temp->content)->estatus, WUNTRACED);
 		if (WIFEXITED(((t_cmdblock *)temp->content)->estatus))
 		{
-			printf("%i exited normally\n", (int)((t_cmdblock *)temp->content)->pid);
-			g_errno = (WEXITSTATUS(((t_cmdblock *)temp->content)->estatus));
+			// printf("%i exited normally\n", (int)((t_cmdblock *)temp->content)->pid);
+			WEXITSTATUS(((t_cmdblock *)temp->content)->estatus);
 		}
 		if (WIFSIGNALED(((t_cmdblock *)temp->content)->estatus))
 		{
-			printf("%i exited abnormally\n", (int)((t_cmdblock *)temp->content)->pid);
-			g_errno = WTERMSIG(((t_cmdblock *)temp->content)->estatus);
+			// printf("%i exited abnormally\n", (int)((t_cmdblock *)temp->content)->pid);
+			WTERMSIG(((t_cmdblock *)temp->content)->estatus);
 		}
-		printf("pid: %i, errno: %i\n", (int)((t_cmdblock *)temp->content)->pid, g_errno);
+		// printf("pid: %i, errno: %i\n", (int)((t_cmdblock *)temp->content)->pid, errno);
 		temp = temp->next;
 	}
 	exit_status = get_exit_status(cmdblocks_list);
@@ -191,12 +200,11 @@ int main(int ac, char **av, char **ev)
 
 	(void)ac;
 	(void)av;
-	// glob_errno = 0; (not used yet)
 	mini.envp = NULL;
 	mini.exit_status = 0;
 	init_env(&mini, ev);
 	init_builtins(&mini);
-	// init_operators(&mini); (not used yet)
+	init_redir(&mini);
 	g_errno = 0;
 	while (1)
 	{

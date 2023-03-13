@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/09 21:36:04 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/11 18:12:02 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <stdbool.h>
+# include <sys/stat.h>
 // # include <linux/limits.h> // (for wsl)
 
 # define SUCCESS 0
 # define ERROR 1
 
-//COLORS//
+//----------COLOURS----------//
 # define RESET		"\033[0m"
 # define WHITE		"\033[0;37m"
 # define GREEN		"\033[0;32m"
@@ -57,7 +58,12 @@
 # define READ 0
 # define WRITE 1
 
+
+//----------GLOBAL-VARIABLE----------//
+
 int g_errno;
+
+//----------STRUCTS----------//
 
 enum e_spliters {
 	BEGINNING,
@@ -78,6 +84,7 @@ typedef struct s_cmdblock {
 	char	**cmd_argv;
 	int		estatus;
 	pid_t	pid;
+	char	*file_name;
 }	t_cmdblock;
 
 typedef struct s_env
@@ -101,7 +108,7 @@ typedef struct s_mini
 	t_list	*envp;// call env
 	char	*prompt;
 	char	**builtins;
-	char	**operators;
+	char	**redir;
 	char	*input;
 	t_list	*cmdblock_list;
 	t_pipes	pipes;	
@@ -192,5 +199,10 @@ void	init_prompt(t_mini *mini);
 char	*get_exec_path(t_mini *mini, char **cmds);
 int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
+
+// redir.c
+int exec_redir(t_mini *mini, t_cmdblock *cmdblock);
+int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
+void	set_io(int fd, int std_file_no);
 
 #endif
