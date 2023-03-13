@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 16:27:32 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 18:21:15 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,59 +71,51 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 // 	return (args);
 // }
 
-// void	redir_in(t_cmdblock* cmdblock)
-// {
-// 	int  fd;
+void	redir_in(t_cmdblock *cmdblock)
+{
+	int  fd;
 
-// 	fd = open(cmdblock->file_name, O_CREAT | O_WRONLY, 0644);
-// 	if (fd == -1)
-// 	{
-// 		printf ("Error!\n");
-// 	}
-// 	dup2(fd, 1);
-// 	close (fd);
-// }
+	fd = open(cmdblock->file_name, O_CREAT | O_WRONLY, 0644);
+	printf ("%s\n", cmdblock->file_name);
+	if (fd == -1)
+	{
+		printf ("Error!\n");
+	}
+	dup2(fd, STDOUT_FILENO);
+	close (fd);
+}
 
-// int exec_redir(t_mini *mini, t_cmdblock *cmdblock)
-// {
-// 	int type;
-// 	int port;
-// 	char *file;
-// 	// int fd_in = dup(STDOUT_FILENO);
+void	redir_out(t_cmdblock *cmdblock)
+{
+	int fd;
 
-// 	cmdblock->pid = fork();
-// 	fd = 0;
-// 	type = check_redir_type(mini, cmdblock);
-// 	// file = find_file_name(cmdblock);
-// 	file = cmdblock->file_name;
-// 	printf ("file: %s\n", file);
-// 	// if (cmdblock->pid == 0)
-// 	// {
-// 	if (type == 1)// ">"
-// 	{
-// 		printf ("check\n");
-// 		redir_in(cmdblock);
-// 		//redir in	
-// 	}
-// 	if (type == 2) // ">>"
-// 	{
-// 		printf ("do nothing\n");
-// 		//redir in
-// 	}
-// 	if (type == 3) // "<"
-// 	{
-// 		printf ("2\n");
-// 		fd = open(file , O_RDONLY);
-// 		printf ("fd: %d\n", fd);
-// 		// redir out
-// 	}
-// 	if (type == 4) // "<<"
-// 	{
-// 		printf ("do nothing\n");
-// 		//redir out	
-// 	}
-// 	dup2(fd, 0);
-// 	close(port);
-// 	// }
-// 	return (0);
-// }
+	fd = open(cmdblock->file_name, O_RDONLY);
+	printf ("%s\n", cmdblock->file_name);
+	if (fd == -1)
+	{
+		printf ("Error!\n");
+	}
+	dup2(fd, STDIN_FILENO);
+	close(fd);
+}
+
+int exec_redir(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int type;
+
+	type = check_redir_type(mini, cmdblock);
+	// file = find_file_name(cmdblock);
+	if (type == 1 || type == 2)// ">"
+	{
+		//redir_in
+		printf("redir_in\n");
+		redir_in(cmdblock);
+	}
+	if (type == 3 || type == 4) // "<"
+	{
+		//redir out
+		printf("redir_out\n");
+		redir_out(cmdblock);
+	}
+	return (0);
+}

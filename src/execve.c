@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 16:10:50 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 18:24:02 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	char	*exec_path;
 	char	**envp;
 
+	printf("execve run\n");
 	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!exec_path)
 		return (127);

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 16:27:18 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:03:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,16 @@ void	init_redir(t_mini *mini)
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
+	exec_redir(mini, cmdblock);
+
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
-	{
 		return (exec_builtins(mini, cmdblock->cmd_argv));
-	}
-	else if (get_env(mini, "PATH") == NULL)
+	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
 		return (127);
 	}
-	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)
+	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
 	{
 		if (access(cmdblock->cmd_argv[0], F_OK) == 0)
 		{
@@ -82,10 +82,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
 	}
 	else // non builtins
-	{
-		// exec_redir(mini, cmdblock);
 		return (exec_non_builtins(mini, cmdblock));
-	}
 	return (0);
 }
 

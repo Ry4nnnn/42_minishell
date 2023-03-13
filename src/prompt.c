@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 16:49:04 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/13 21:11:56 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,21 @@
 char	*get_branch_name(void)
 {
 	char	*argv[] = {"git", "branch", NULL};
+	pid_t	pid;
+	int		pipefd[2];
+	char	buf[1024];
+	ssize_t	nread;
+	char	*current_branch;
+	char	*line;
 
-	if (access(".git", F_OK) == -1)
+	if ((access("../.git", F_OK) == -1) && (access(".git", F_OK) == -1)) //only works for cur and sub directory
 		return (NULL);
-	int pipefd[2];
 	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
 		exit(EXIT_FAILURE);
 	}
-	pid_t pid = fork();
+	pid = fork();
 	if (pid == -1)
 	{
 		perror("fork");
@@ -51,11 +56,6 @@ char	*get_branch_name(void)
 	}
 	else
 	{
-		char buf[1024];
-		ssize_t nread;
-		char *current_branch;
-		char *line;
-
 		current_branch = NULL;
 		if (close(pipefd[1]) == -1)
 		{
