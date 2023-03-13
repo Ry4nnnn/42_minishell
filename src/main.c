@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 12:10:47 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/13 23:13:20 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,45 +46,33 @@ void init_builtins(t_mini *mini)
 	mini->builtins = builtins;
 }
 
-// void	init_operators(t_mini *mini)
-// {
-// 	char	**operators;
+void	init_redir(t_mini *mini)
+{
+	char	**redir;
 
-// 	operators = ft_calloc(7 + 1, sizeof(char *));
-// 	operators[0] = "|";
-// 	operators[1] = ">>";
-// 	operators[2] = "<<";
-// 	operators[3] = ">";
-// 	operators[4] = "<";
-// 	mini->operators = operators;
-// }
+	redir = ft_calloc(4 + 1, sizeof(char *));
+	redir[0] = ">";
+	redir[1] = ">>";
+	redir[2] = "<";
+	redir[3] = "<<";
+	mini->redir = redir;
+}
 
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
+	exec_redir(mini, cmdblock);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
-	{
 		return (exec_builtins(mini, cmdblock->cmd_argv));
-	}
-	else if (get_env(mini, "PATH") == NULL)
+	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
 		return (127);
 	}
-	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)
-	{
-		// if (access(cmdblock->cmd_argv[0], F_OK) == 0)
-		// {
-		// 	if (access(cmdblock->cmd_argv[0], X_OK) == 0)
-		// 		return (exec_program(mini, cmdblock));
-		// 	ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
-		// 	return (126);
-		// }
+	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
 		return (exec_program(mini, cmdblock));
-		
-	}
 	else // non builtins
 		return (exec_non_builtins(mini, cmdblock));
 	return (0);
@@ -141,7 +129,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	if (cmdblock->in_bracket)
 		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input)));
 	expand_input(mini, &cmdblock->input);
-	printf("expanded: %s\n", cmdblock->input);
+	// printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
 	ft_free2darr((void *)cmdblock->cmd_argv);
@@ -188,7 +176,7 @@ int main(int ac, char **av, char **ev)
 	mini.exit_status = 0;
 	init_env(&mini, ev);
 	init_builtins(&mini);
-	// init_operators(&mini); (not used yet)
+	init_redir(&mini);
 	g_errno = 0;
 	while (1)
 	{

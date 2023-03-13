@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/13 11:32:59 by codespace        ###   ########.fr        #
+#    Updated: 2023/03/13 23:14:39 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) -Wall -Werror -Wextra #-fsanitize=address
+CFLAGS		:= $(INCLUDE) -fcommon #-Wall -Wextra -Werror #-fsanitize=address
 
 ifeq ($(DB), 1)
 	CFLAGS	+= -fsanitize=address -g3
@@ -65,7 +65,7 @@ BUILTINS	= env exit unset export cd echo builtins builtin_utils
 PARSER		= pwd
 LEXER		= lexer lexer_utils expand tokenize syntax
 SPLITERS	= pipe spliter_utils
-MAIN		= main free error signal execve prompt utils
+MAIN		= main free error signal execve prompt utils redir
 
 #------------------------------------------------------#
 

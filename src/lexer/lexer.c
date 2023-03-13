@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 09:49:11 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/13 23:06:12 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ t_list	*get_bracket_cmdblock(char *input, int spliter_type)
 	new_cmdblock->spliter_type = spliter_type;
 	new_cmdblock->in_bracket = 1;
 	new_node = ft_lstnew((void *)new_cmdblock);
-	return (new_node);	
+	return (new_node);
 }
 
 t_list	*get_new_cmdblock(char *input, int spliter_type)
