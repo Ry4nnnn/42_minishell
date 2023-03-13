@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 23:05:56 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 02:57:46 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,10 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*exec_path;
 	char	**envp;
+	// char *test[2];
+
+	// test[0] = "/bin/ls" ;
+	// test[1] = NULL;
 
 	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
@@ -76,7 +80,17 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		if (mini->pipes.prep_pipe)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
+		{
 			do_pipe(mini);
+		}
+		if (check_redir_type(mini, cmdblock) == 1 || check_redir_type(mini, cmdblock) == 2)
+		{
+			redir_out(cmdblock); // overwrite the standard output
+		}
+		if (check_redir_type(mini, cmdblock) == 3)
+		{
+			redir_in(cmdblock);
+		}
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);

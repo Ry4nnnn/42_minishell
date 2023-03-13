@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 23:13:20 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 03:07:28 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ void	init_redir(t_mini *mini)
 
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
+	int saved_fd;
+	saved_fd = dup(1);
 	signal(SIGINT, SIG_IGN);
-	exec_redir(mini, cmdblock);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
-		return (exec_builtins(mini, cmdblock->cmd_argv));
+		return (exec_builtins(mini, cmdblock->cmd_argv, cmdblock));
 	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
@@ -132,6 +133,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	// printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
+
 	ft_free2darr((void *)cmdblock->cmd_argv);
 	return (cmdblock->exit_status);
 }
