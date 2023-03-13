@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 03:18:30 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 04:11:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,17 @@ void	handle_io(int fd, int std_file_no)
 	close(fd);
 }
 
-void	redir_out(t_cmdblock *cmdblock)
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 {
 	pid_t  fd;
+	int flag;
 
 	printf ("redirOUT!\n\n\n");
-	fd = open(cmdblock->file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	if (check_redir_type(mini, cmdblock) == OUT)
+		flag = O_CREAT | O_TRUNC | O_WRONLY;
+	if (check_redir_type(mini, cmdblock) == APPEND)
+		flag = O_CREAT | O_APPEND | O_WRONLY;
+	fd = open(cmdblock->file_name, flag, 0644);
 	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{

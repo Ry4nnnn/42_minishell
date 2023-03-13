@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 02:45:04 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 04:13:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	exec_builtins(t_mini *mini, char **cmds, t_cmdblock *cmdblock)
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	if (check_redir_type(mini, cmdblock) == 1 || check_redir_type(mini, cmdblock) == 2)
-		redir_out(cmdblock); // overwrite the standard output
+		redir_out(mini, cmdblock); // overwrite the standard output
 	if (check_redir_type(mini, cmdblock) == 3)
 		redir_in(cmdblock);
 	if (ft_strncmp(cmds[0], "exit", 5) == 0)

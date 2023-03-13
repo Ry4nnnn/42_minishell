@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 03:07:28 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 03:57:41 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
 		return (exec_program(mini, cmdblock));
 	else // non builtins
-		return (exec_non_builtins(mini, cmdblock));
+		return (exec_non_builtins(mini, cmdblock));// execve
 	return (0);
 }
 
@@ -161,7 +161,6 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 	}
 	wait_childs(cmdblocks_list);
 	exit_status = get_exit_status(cmdblocks_list);
-	// printf("exit_status: %i\n", exit_status);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
 	return (exit_status);
 }

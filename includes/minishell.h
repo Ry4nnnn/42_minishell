@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 03:37:07 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 04:12:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,14 @@ enum e_spliters {
 	AND,
 	OR,
 	INVALID
+};
+
+enum e_redir {
+	NON_REDIR,
+	OUT,
+	APPEND,
+	IN,
+	HEREDOC
 };
 
 typedef struct s_cmdblock {
@@ -218,7 +226,7 @@ int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 int exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 void	handle_io(int fd, int std_file_no);
-void	redir_out(t_cmdblock *cmdblock);
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
 void	redir_in(t_cmdblock *cmdblock);
 
 #endif

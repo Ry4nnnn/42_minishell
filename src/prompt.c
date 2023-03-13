@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 03:49:54 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 04:27:20 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,15 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 
 	cur_branch = get_branch_name();
 	if (!cur_branch)
-		cur_branch = ft_strdup("?");
+		cur_branch = ft_strdup("🍆");
 		prompt = ft_strdup(" ");
 	prompt = ft_strjoin_free(prompt, BGREEN);
+	prompt = ft_strjoin_free(prompt, "❒ ");
 	prompt = ft_strjoin_free(prompt, user);
-	prompt = ft_strjoin_free(prompt, " @ ");
+	prompt = ft_strjoin_free(prompt, " ↩ ");
 	prompt = ft_strjoin_free(prompt, BCYAN);
 	prompt = ft_strjoin_free(prompt, dir);
+	prompt = ft_strjoin_free(prompt, " ✘");
 	prompt = ft_strjoin_free(prompt, BBLUE);
 	prompt = ft_strjoin_free(prompt, " (");
 	prompt = ft_strjoin_free(prompt, BMAGEN);
