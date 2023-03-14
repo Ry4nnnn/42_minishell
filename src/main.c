@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 23:13:20 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 11:59:40 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
 		return (exec_builtins(mini, cmdblock->cmd_argv));
+	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
+		return (exec_program(mini, cmdblock));
 	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
 		ft_error(mini, cmdblock->cmd_argv, NSFD);
 		return (127);
 	}
-	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
-		return (exec_program(mini, cmdblock));
 	else // non builtins
 		return (exec_non_builtins(mini, cmdblock));
 	return (0);
