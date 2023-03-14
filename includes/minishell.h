@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 14:14:37 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 22:55:01 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
-# include <limits.h>
+
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
@@ -27,6 +27,11 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <errno.h>
+# ifdef __linux__
+#  include <linux/limits.h>
+# else
+#  include <limits.h>
+# endif
 
 # define SUCCESS 0
 # define ERROR 1
