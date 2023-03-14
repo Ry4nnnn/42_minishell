@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 23:10:51 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 13:09:57 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_cmdblock {
 	int		exit_status;
 	int		need_wait;
 	int		in_bracket;
+	int		was_in_bracket;
 	char	**cmd_argv;
 	int		estatus;
 	pid_t	pid;
@@ -116,7 +117,7 @@ typedef struct s_mini
 
 //----------BUILTINS----------//
 //cd.c
-void	ms_cd(t_mini *mini, char **cmds);
+void	ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 void	update_pwd(t_mini *mini, char *key);
 void	update_oldpwd(t_mini *mini, char *old_path);
 
@@ -143,7 +144,7 @@ void 	ms_pwd(void);
 
 //builtins.c
 int		check_builtins(t_mini *mini, char *cmds);
-int		exec_builtins(t_mini *mini, char **cmds);
+int		exec_builtins(t_mini *mini, t_cmdblock *cmdblock);
 
 //builtin_utils.c
 int		valid_input(char *key);
@@ -151,7 +152,7 @@ t_env	*check_env_var(t_list *env, char *key);
 
 //----------LEXER----------//
 
-t_list	*split_cmdblocks(char *input);
+t_list	*split_cmdblocks(char *input, int bracket);
 int	ft_incharset(char *charset, char c);
 int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
 int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
@@ -159,7 +160,7 @@ void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **input_addr);
 void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
-int		check_syntax(t_mini *mini);
+int		check_syntax(t_list *cmdblocks_list);
 char	*trim_input(char *input);
 
 //----------SPLITERS----------//
@@ -173,7 +174,7 @@ void	wait_childs(t_list *cmdblocks);
 
 //error.c
 void	ft_error(t_mini *mini, char **cmds, char *msg);
-void	syntax_error(t_mini *mini, char *err_msg, char *token);
+void	syntax_error(char *err_msg, char *token);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);

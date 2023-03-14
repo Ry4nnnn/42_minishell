@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 23:06:38 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 12:08:52 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,24 +32,24 @@ int	check_builtins(t_mini *mini, char *cmds)
 }
 
 //this function is to execute the builtins
-int	exec_builtins(t_mini *mini, char **cmds)
+int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
-	if (ft_strncmp(cmds[0], "exit", 5) == 0)
+	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
 		ms_exit(mini);
-	else if (ft_strncmp(cmds[0], "env", 4) == 0)
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
 		ms_env(mini);
-	else if (ft_strncmp(cmds[0], "pwd", 4) == 0)
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "pwd", 4) == 0)
 		ms_pwd();
-	else if (ft_strncmp(cmds[0], "unset", 6) == 0)
-		ms_unset(mini, cmds);
-	else if (ft_strncmp(cmds[0], "export", 7) == 0)
-		ms_export(mini, cmds);
-	else if (ft_strncmp(cmds[0], "cd", 3) == 0)
-		ms_cd(mini, cmds);
-	else if (ft_strncmp(cmds[0], "echo", 5) == 0)
-		ms_echo(cmds);
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "unset", 6) == 0)
+		ms_unset(mini, cmdblock->cmd_argv);
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "export", 7) == 0)
+		ms_export(mini, cmdblock->cmd_argv);
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "cd", 3) == 0)
+		ms_cd(mini, cmdblock);
+	else if (ft_strncmp(cmdblock->cmd_argv[0], "echo", 5) == 0)
+		ms_echo(cmdblock->cmd_argv);
 	else
 		g_errno = 1;
 	if (mini->pipes.prep_pipe)

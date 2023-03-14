@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 17:30:17 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 13:12:17 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ void	ft_cd_args(t_mini *mini, char **cmds)
 // work like normal cd
 // (cd) will go to home path
 // (cd -) will switch between PWD and OLDPWD
-void	ms_cd(t_mini *mini, char **cmds)
+void	ms_cd(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*home;
 
-	if (mini->pipes.do_pipe)
+	if (mini->pipes.do_pipe || cmdblock->was_in_bracket)
 		return ;
 	home = get_env(mini, "HOME");
-	if (!cmds[1] || (!ft_strcmp(cmds[1], "~"))) // if only cd or cd ~
+	if (!cmdblock->cmd_argv[1] || (!ft_strcmp(cmdblock->cmd_argv[1], "~"))) // if only cd or cd ~
 	{
 		if (!home)
 			printf ("cd: HOME not set\n");
@@ -103,6 +103,6 @@ void	ms_cd(t_mini *mini, char **cmds)
 			update_pwd(mini, "PWD"); // will change cur pwd to home path
 		}
 	}
-	else if (cmds[1] != NULL) // if cd got args
-		ft_cd_args(mini, cmds);
+	else if (cmdblock->cmd_argv[1] != NULL) // if cd got args
+		ft_cd_args(mini, cmdblock->cmd_argv);
 }

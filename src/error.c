@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:31:52 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 11:21:45 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 12:43:48 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ void	ft_error(t_mini *mini, char **cmds, char *msg)
 		printf("\033[95m%s: \033[0m: %s", user, msg);
 }
 
-void	syntax_error(t_mini *mini, char *err_msg, char *token)
+void	syntax_error(char *err_msg, char *token)
 {
 	char *user;
 
-	user = get_env(mini, "USER");
+	user = getenv("USER");
 	if (user == NULL)
 		user = "user";
 	if (token != NULL)

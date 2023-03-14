@@ -1,7 +1,8 @@
 problems to solve:
 
+Done. Syntax error handling got big problem
 Done. after unset PATH, should be able to execute by absolute path like /bin/ls
-2. cd in brackets shouldn't execute
+Done. cd in brackets shouldn't execute
 3. prompt use of forbidden functions
 4. exit in pipes shouldn't execute
 5. parser folder no need

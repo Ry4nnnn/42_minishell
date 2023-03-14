@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 11:59:40 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 13:12:03 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
-		return (exec_builtins(mini, cmdblock->cmd_argv));
+		return (exec_builtins(mini, cmdblock));
 	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
 		return (exec_program(mini, cmdblock));
 	else if (get_env(mini, "PATH") == NULL)// error for empty path
@@ -127,9 +127,9 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	if (next_cmdblock != NULL && next_cmdblock->spliter_type == PIPE) // if the next cmdblock is piping, prepare the pipe here
 		mini->pipes.prep_pipe = 1;
 	if (cmdblock->in_bracket)
-		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input)));
+		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input, 1)));
 	expand_input(mini, &cmdblock->input);
-	// printf("expanded: %s\n", cmdblock->input);
+	printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
 	ft_free2darr((void *)cmdblock->cmd_argv);
@@ -146,6 +146,11 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 
 	temp = cmdblocks_list;
 	prev_cmdblock = NULL;
+	if (check_syntax(cmdblocks_list) == 0)
+	{
+		ft_lstclear(&cmdblocks_list, free_cmdblock);
+		return (258);
+	}
 	while (temp != NULL)
 	{
 		cmdblock = (t_cmdblock *)temp->content;
@@ -187,12 +192,12 @@ int main(int ac, char **av, char **ev)
 		if (mini.input == NULL)
 			ms_exit(&mini);
 		mini.input = trim_input(mini.input);
-		if (mini.input[0] == '\0' || check_syntax(&mini) == 0)
+		if (mini.input[0] == '\0') // || check_syntax(&mini) == 0)
 		{
 			ft_free(&mini, 4);
 			continue ;
 		}
-		mini.cmdblock_list = split_cmdblocks(mini.input);
+		mini.cmdblock_list = split_cmdblocks(mini.input, 0);
 		g_errno = handle_cmdblocks(&mini, mini.cmdblock_list);
 		add_history(mini.input);
 		ft_free(&mini, 4);
