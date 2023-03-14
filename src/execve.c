@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 12:00:49 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 14:20:20 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,14 @@ char	*env_to_str(void *arg)
 	return (output);
 }
 
-// gets a list executable paths from envp and split it into a 2d array
-// then use access() function to check if input can be found in the list of executable paths
-// when found, this function returns the exec_path for execve() function to execute
+/**
+ * @brief gets a list executable paths from envp and split it into a 2d array
+ * then use access() function to check if input can be found in the list of executable paths
+ * when found, this function returns the exec_path for execve() function to execute
+ * 
+ * @param mini t_mini struct
+ * @param cmds input command
+**/
 char	*get_exec_path(t_mini *mini, char **cmds)
 {
 	char *plist;
@@ -77,6 +82,10 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
+		if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
+			redir_out(mini, cmdblock); // overwrite the standard output
+		if (check_redir_type(mini, cmdblock) == IN)
+			redir_in(cmdblock);
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);

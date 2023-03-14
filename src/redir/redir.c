@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/13 22:52:53 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 16:29:13 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 ** @brief Find the redir type
 * return 0 if input does not contain any redir
 * return 1 if contain >
-* return 2 if contain >>
+* return 2 if contain >> (append)
 * return 3 if contain <
-* return 4 if contain <<
+* return 4 if contain << (heredoc)
 **/
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 {
@@ -50,13 +50,6 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 	return (0);
 }
 
-void	handle_io(int fd, int std_file_no)
-{
-	dup2(fd, std_file_no);
-	close(fd);
-}
-
-
 // char *find_file_name(t_cmdblock *cmdblock)
 // {
 // 	char **args;
@@ -71,19 +64,29 @@ void	handle_io(int fd, int std_file_no)
 // 	return (args);
 // }
 
-void	redir_out(t_cmdblock *cmdblock)
+void	handle_io(int fd, int std_file_no)
+{
+	dup2(fd, std_file_no);
+	close(fd);
+}
+
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 {
 	pid_t  fd;
+	int flag;
 
-	fd = open(cmdblock->file_name, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	printf ("redirOUT!\n\n\n");
+	if (check_redir_type(mini, cmdblock) == OUT)
+		flag = O_CREAT | O_TRUNC | O_WRONLY;
+	if (check_redir_type(mini, cmdblock) == APPEND)
+		flag = O_CREAT | O_APPEND | O_WRONLY;
+	fd = open(cmdblock->file_name, flag, 0644);
 	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{
-		printf ("Error!\n");
+		printf ("ErrorOUT!\n");
 	}
 	handle_io(fd, STDOUT_FILENO);
-	// dup2(fd, STDOUT_FILENO);
-	// close (fd);
 }
 
 void	redir_in(t_cmdblock *cmdblock)
@@ -94,30 +97,8 @@ void	redir_in(t_cmdblock *cmdblock)
 	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{
-		printf ("Error!\n");
+		handle_io(fd, STDIN_FILENO);
+		printf ("ErrorIN!\n");
 	}
 	handle_io(fd, STDIN_FILENO);
-	// dup2(fd, STDIN_FILENO);
-	// close(fd);
-}
-
-int exec_redir(t_mini *mini, t_cmdblock *cmdblock)
-{
-	int type;
-
-	type = check_redir_type(mini, cmdblock);
-	// file = find_file_name(cmdblock);
-	if (type == 1 || type == 2)// ">"
-	{
-		//redir_in
-		printf("redir_out\n");
-		redir_in(cmdblock);
-	}
-	if (type == 3 || type == 4) // "<"
-	{
-		//redir out
-		printf("redir_in\n");
-		redir_in(cmdblock);
-	}
-	return (0);
 }

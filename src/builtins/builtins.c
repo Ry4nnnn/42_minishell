@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 12:08:52 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 14:16:41 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,17 @@ int	check_builtins(t_mini *mini, char *cmds)
 //this function is to execute the builtins
 int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
+	int fd_out;
+	int fd_in;
+
+	fd_out = dup(1);
+	fd_in = dup(0);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
+	if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
+		redir_out(mini, cmdblock); // overwrite the standard output
+	if (check_redir_type(mini, cmdblock) == IN)
+		redir_in(cmdblock);
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
 		ms_exit(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
@@ -52,6 +61,10 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		ms_echo(cmdblock->cmd_argv);
 	else
 		g_errno = 1;
+	dup2(fd_out, 1);// change fd back to std output fd
+	close(fd_out);
+	dup2(fd_in, 0);// change fd back to std input fd
+	close(fd_in);
 	if (mini->pipes.prep_pipe)
 		finish_pipe(mini);
 	return (0);

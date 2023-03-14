@@ -6,7 +6,7 @@
 /*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 13:09:57 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/14 14:14:37 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,27 @@
 # define ERROR 1
 
 //----------COLOURS----------//
+/* Regular */
 # define RESET		"\033[0m"
-# define WHITE		"\033[0;37m"
-# define GREEN		"\033[0;32m"
-# define RED		"\033[0;31m"
-# define UNDERLINE	"\033[4m"
-# define HEADER		"\033[95m"
-# define OKBLUE		"\033[94m"
-# define OKCYAN		"\033[96m"
-# define WARNING	"\033[93m"
-# define BOLD		"\033[1m"
+#define BLACK		"\033[0;30m"
+#define RED			"\033[0;31m"
+#define GREEN		"\033[0;32m"
+#define YELLOW		"\033[0;33m"
+#define BLUE		"\033[0;34m"
+#define MAGENTA		"\033[0;35m"
+#define CYAN		"\033[0;36m"
+#define WHITE		"\033[0;37m"
+
+/* Bolded */
+#define BBLACK		"\033[1;30m"
+#define BRED		"\033[1;31m"
+#define BGREEN		"\033[1;32m"
+#define BYELLOW		"\033[1;33m"
+#define BBLUE		"\033[1;34m"
+#define BMAGEN		"\033[1;35m"
+#define BCYAN		"\033[1;36m"
+#define BWHITE		"\033[1;37m"
+
 
 // Error Messages
 # define CMD_NF "command not found\n"
@@ -72,6 +83,14 @@ enum e_spliters {
 	AND,
 	OR,
 	INVALID
+};
+
+enum e_redir {
+	NON_REDIR,
+	OUT,
+	APPEND,
+	IN,
+	HEREDOC
 };
 
 typedef struct s_cmdblock {
@@ -208,5 +227,7 @@ int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 int exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 void	handle_io(int fd, int std_file_no);
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
+void	redir_in(t_cmdblock *cmdblock);
 
 #endif

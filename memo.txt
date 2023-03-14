@@ -5,8 +5,12 @@ Done. after unset PATH, should be able to execute by absolute path like /bin/ls
 Done. cd in brackets shouldn't execute
 3. prompt use of forbidden functions
 Done. exit in pipes shouldn't execute
-5. parser folder no need
-6. rename spliter folder and combine pipes and redir files into one folder
+Done. parser folder no need
+Done. rename spliter folder and combine pipes and redir files into one folder
+1. Multiple redirections
+2. Heredoc
+4. Pipe and redirection combined got problem
+5. redir operators should be removed from the cmd_argv
 
 big goals:
 

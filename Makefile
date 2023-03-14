@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/13 23:14:39 by welim            ###   ########.fr        #
+#    Updated: 2023/03/14 14:23:30 by codespace        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ CC			:= gcc
 
 NEWLINE 	= \e[1K\r
 
-READLINE	:= -lreadline -L ./readline-8.1/lib -L/usr/local/opt/readline/lib -I/usr/local/opt/readline/include
+READLINE	:= -lreadline -L ./readline-8.1/lib #-L/usr/local/opt/readline/lib #-I/usr/local/opt/readline/include
 
 
 #------------------------COLORS------------------------#
@@ -51,7 +51,7 @@ OBJS_PATH		:= obj
 
 BUILTINS_PATH	:= builtins
 
-PARSER_PATH		:= parser
+REDIR_PATH		:= redir
 
 LEXER_PATH		:= lexer
 
@@ -61,29 +61,26 @@ LIBFT_PATH		:= libft
 
 #------------------------FILES-------------------------#
 
-BUILTINS	= env exit unset export cd echo builtins builtin_utils
-PARSER		= pwd
+BUILTINS	= env exit unset export cd echo pwd builtins builtin_utils
+REDIR		= redir pipe spliter_utils
 LEXER		= lexer lexer_utils expand tokenize syntax
-SPLITERS	= pipe spliter_utils
 MAIN		= main free error signal execve prompt utils redir
 
 #------------------------------------------------------#
 
 SRCS		:= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(BUILTINS_PATH)/, $(BUILTINS)))
-SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(PARSER_PATH)/, $(PARSER)))
+SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(REDIR_PATH)/, $(REDIR)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(LEXER_PATH)/, $(LEXER)))
-SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(SPLITERS_PATH)/, $(SPLITERS)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/, $(MAIN)))
 
 OBJS		:= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(BUILTINS)))
-OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(PARSER)))
+OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(REDIR)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(LEXER)))
-OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(SPLITERS)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(MAIN)))
 
 #------------------------------------------------------#
 
-vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(PARSER_PATH)/ $(SRCS_PATH)/$(LEXER_PATH)/ $(SRCS_PATH)/$(SPLITERS_PATH) $(SRCS_PATH)/
+vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(REDIR_PATH)/ $(SRCS_PATH)/$(LEXER_PATH)/ $(SRCS_PATH)/$(SPLITERS_PATH) $(SRCS_PATH)/
 
 $(OBJS_PATH)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
