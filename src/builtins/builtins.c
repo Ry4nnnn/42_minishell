@@ -6,17 +6,11 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 04:13:10 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 16:39:02 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	write_str(char *str)
-{
-	while (*str)
-		write (1, str++, 1);
-}
 
 // check if cmds is a builtin
 // returns 1 means its a builtin
@@ -40,15 +34,16 @@ int	check_builtins(t_mini *mini, char *cmds)
 //this function is to execute the builtins
 int	exec_builtins(t_mini *mini, char **cmds, t_cmdblock *cmdblock)
 {
-	char *temp;
 	int fd_out;
+	int fd_in;
 
 	fd_out = dup(1);
+	fd_in = dup(0);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
-	if (check_redir_type(mini, cmdblock) == 1 || check_redir_type(mini, cmdblock) == 2)
+	if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
 		redir_out(mini, cmdblock); // overwrite the standard output
-	if (check_redir_type(mini, cmdblock) == 3)
+	if (check_redir_type(mini, cmdblock) == IN)
 		redir_in(cmdblock);
 	if (ft_strncmp(cmds[0], "exit", 5) == 0)
 		ms_exit(mini);
@@ -66,8 +61,10 @@ int	exec_builtins(t_mini *mini, char **cmds, t_cmdblock *cmdblock)
 		ms_echo(cmds);
 	else
 		g_errno = 1;
-	dup2(fd_out, 1);
-	close(fd_out);// change back to std output fd
+	dup2(fd_out, 1);// change fd back to std output fd
+	close(fd_out);
+	dup2(fd_in, 0);// change fd back to std input fd
+	close(fd_in);
 	if (mini->pipes.prep_pipe)
 		finish_pipe(mini);
 	return (0);

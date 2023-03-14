@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 04:11:10 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 16:29:13 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 ** @brief Find the redir type
 * return 0 if input does not contain any redir
 * return 1 if contain >
-* return 2 if contain >> //append
+* return 2 if contain >> (append)
 * return 3 if contain <
-* return 4 if contain << //heredoc
+* return 4 if contain << (heredoc)
 **/
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 {
@@ -97,6 +97,7 @@ void	redir_in(t_cmdblock *cmdblock)
 	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{
+		handle_io(fd, STDIN_FILENO);
 		printf ("ErrorIN!\n");
 	}
 	handle_io(fd, STDIN_FILENO);

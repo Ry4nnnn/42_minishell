@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 06:08:02 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 17:53:30 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,14 @@ char	*env_to_str(void *arg)
 	return (output);
 }
 
-// gets a list executable paths from envp and split it into a 2d array
-// then use access() function to check if input can be found in the list of executable paths
-// when found, this function returns the exec_path for execve() function to execute
+/**
+ * @brief gets a list executable paths from envp and split it into a 2d array
+ * then use access() function to check if input can be found in the list of executable paths
+ * when found, this function returns the exec_path for execve() function to execute
+ * 
+ * @param mini t_mini struct
+ * @param cmds input command
+**/
 char	*get_exec_path(t_mini *mini, char **cmds)
 {
 	char *plist;
@@ -59,16 +64,71 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 	return (temp2);
 }
 
+int get_exec_argv2(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int i;
+	char **redir;
+	// char **res;
+
+	redir = mini->redir;
+	while (cmdblock->cmd_argv[i])
+	{
+		int j = 0;
+		while (redir[j])
+		{
+			i = 0;
+			if (ft_strcmp(redir[j], cmdblock->cmd_argv[i]) == 0)
+			{
+				return (i);
+				// res[i + 1] = 0;
+				// while (cmdblock->cmd_argv[i])
+				// {
+				// 	printf ("res[%d]: %s\n", i, res[i]);
+				// 	printf ("cmdblock[%d]: %s\n", i, cmdblock->cmd_argv[i]);
+				// 	res[i] = cmdblock->cmd_argv[i];
+				// 	i--;
+				// }
+				break ;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+char	**get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int size;
+	char **res;
+	int i = 0;
+	int j;
+
+	size  = get_exec_argv2(mini, cmdblock);
+	while (size > 0)
+	{
+		printf ("res[%d]: %s\n", i, res[i]);
+		printf ("cmdblock[%d]: %s\n", i, cmdblock->cmd_argv[i]);
+		res[i] = cmdblock->cmd_argv[i];
+		i++;
+		size--;
+	}
+	res[i] = NULL;
+	return (res);
+}
+
 // execute non-builtin inputs
 int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*exec_path;
 	char	**envp;
+	char	**argv;
 	// char *test[2];
 
 	// test[0] = "ls" ;
+	// test[1] = la
 	// test[1] = NULL;
-
+	argv = get_exec_argv(mini, cmdblock);
 	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
@@ -81,14 +141,14 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		if (check_redir_type(mini, cmdblock) == 1 || check_redir_type(mini, cmdblock) == 2)
+		if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
 			redir_out(mini, cmdblock); // overwrite the standard output
-		if (check_redir_type(mini, cmdblock) == 3)
+		if (check_redir_type(mini, cmdblock) == IN)
 			redir_in(cmdblock);
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);
-		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
+		if (execve(exec_path, argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 			exit(127);
