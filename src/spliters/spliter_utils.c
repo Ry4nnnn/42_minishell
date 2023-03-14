@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   spliter_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 13:13:03 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/11 13:24:43 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/14 13:25:33 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ void	wait_childs(t_list *cmdblocks)
 			if (WIFEXITED((curr->estatus)))
 			{
 				printf("%i exited normally\n", (int)curr->pid);
-				g_errno = WEXITSTATUS((curr->estatus));
+				curr->exit_status = WEXITSTATUS((curr->estatus));
 			}
 			if (WIFSIGNALED(curr->estatus))
 			{
 				printf("%i exited abnormally\n", (int)curr->pid);
-				g_errno = WTERMSIG(curr->estatus) + 128;
+				curr->exit_status = WTERMSIG(curr->estatus) + 128;
 			}
 			printf("pid: %i, errno: %i\n", (int)curr->pid, g_errno);
 		}

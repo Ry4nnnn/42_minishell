@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/10 06:24:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/14 13:31:11 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	expand_exit_status(t_mini *mini, char **input_addr, int *i)
 	char	*str_exit_status;
 
 	(void)mini;
-	str_exit_status = ft_itoa(0);
+	str_exit_status = ft_itoa(g_errno);
 	ft_strexpand(input_addr, str_exit_status, *i, 2);
 	*i += ft_strlen(str_exit_status) - 1;
 	free(str_exit_status);
