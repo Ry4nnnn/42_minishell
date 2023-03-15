@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 13:12:17 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/15 21:37:53 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	ms_cd(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*home;
 
-	if (mini->pipes.do_pipe || cmdblock->was_in_bracket)
+	if (mini->pipes.prep_pipe || mini->pipes.do_pipe || cmdblock->was_in_bracket)
 		return ;
 	home = get_env(mini, "HOME");
 	if (!cmdblock->cmd_argv[1] || (!ft_strcmp(cmdblock->cmd_argv[1], "~"))) // if only cd or cd ~

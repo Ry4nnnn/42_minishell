@@ -110,4 +110,17 @@ re : fclean all
 norm :
 	norminette libft/ includes/ src/
 
+docker_build:
+	docker build -t minishell_image .
+
+docker_run:
+	@docker rm -f minishell_container > /dev/null 2>&1
+	docker run -dit --name minishell_container -v $(shell pwd):/minishell/ minishell_image
+	docker exec minishell_container make
+	docker exec -it minishell_container ./minishell
+	@docker rm -f minishell_container > /dev/null 2>&1
+
+docker_clean:
+	docker rmi -f minishell_image > /dev/null 2>&1
+
 .PHONY: all clean fclean re
