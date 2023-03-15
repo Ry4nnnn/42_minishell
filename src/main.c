@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 19:21:39 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/15 21:56:30 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,10 +130,10 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	if (cmdblock->in_bracket)
 		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input, 1)));
 	expand_input(mini, &cmdblock->input);
-	printf("expanded: %s\n", cmdblock->input);
+	// printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
-
+	ft_free2darr((void *)cmdblock->redir_argv);
 	ft_free2darr((void *)cmdblock->cmd_argv);
 	return (cmdblock->exit_status);
 }

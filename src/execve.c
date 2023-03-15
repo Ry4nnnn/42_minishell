@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 19:18:02 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/15 21:55:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 	while (i--)
 	{
 		j = 0;
-		printf("K:%d\n", k);
+		// printf("K:%d\n", k);
 		res[k] = malloc(sizeof(char) * (ft_strlen(cmdblock->cmd_argv[k]) + 1));
 		while (cmd_argv[k][j])
 		{
@@ -117,7 +117,7 @@ void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	res[k] = NULL;
 	cmdblock->redir_argv = res;
-	//free 2d array
+	// free
 }
 
 // execute non-builtin inputs
