@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 18:25:16 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/15 22:42:57 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 		{
 			if (ft_strcmp(redir[i], args[j]) == 0)
 			{
-				cmdblock->file_name = args[j + 1];
+				cmdblock->file_name = args[j + 1]; // for now hardcoded
 				return (i + 1);
 			}
 			i++;
@@ -75,7 +75,7 @@ void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 	pid_t  fd;
 	int flag;
 
-	printf ("redirOUT!\n\n\n");
+	printf ("redirOUT!\n");
 	if (check_redir_type(mini, cmdblock) == OUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
 	if (check_redir_type(mini, cmdblock) == APPEND)
@@ -95,6 +95,7 @@ void	redir_in(t_cmdblock *cmdblock)
 	pid_t fd;
 
 	fd = open(cmdblock->file_name, O_RDONLY);
+	printf ("redirIN!\n");
 	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{

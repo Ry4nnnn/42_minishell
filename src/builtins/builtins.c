@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 19:11:38 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/15 22:44:25 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ int	check_builtins(t_mini *mini, char *cmds)
 //this function is to execute the builtins
 int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
-	int fd_out;
-	int fd_in;
-
-	fd_out = dup(1);
-	fd_in = dup(0);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	if (check_redir_type(mini, cmdblock) != 0)
@@ -59,10 +54,8 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		ms_echo(cmdblock->cmd_argv);
 	else
 		g_errno = 1;
-	dup2(fd_out, 1);// change fd back to std output fd
-	close(fd_out);
-	dup2(fd_in, 0);// change fd back to std input fd
-	close(fd_in);
+	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 	if (mini->pipes.prep_pipe)
 		finish_pipe(mini);
 	return (0);

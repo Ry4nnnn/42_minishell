@@ -24,3 +24,5 @@ export _= (should ignore)
 command not found has leaks
 echo hi | grep hi (leaks)
 > test (not working)
+echo < Makefile (should do nothing and print a newline)
+cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
