@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 14:20:20 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/15 19:18:02 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,62 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 	return (temp2);
 }
 
+static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
+{
+	char **cmd_argv = cmdblock->cmd_argv;
+	char **redir = mini->redir;
+	int i = 0;
+	int j;
+
+	while (cmd_argv[i])
+	{
+		j = 0;
+		while (redir[j])
+		{
+			// printf ("comparing argv: %s, redir: %s \n", cmd_argv[i], redir[j]);
+			if (ft_strcmp(cmd_argv[i], redir[j]) == 0)
+			{
+				// printf ("HEREcmd_argv: %s\n", cmd_argv[i]);
+				// printf ("HEREredir: %s\n", redir[j]);
+				return (i) ;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+//get the input in 2d array and check if theres a redir
+//and remove the args after the redir including the redir
+void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int i = get_exec_argv_sz(mini, cmdblock);
+	char **cmd_argv = cmdblock->cmd_argv;
+	char **res;
+	int j;
+	int k;
+
+	k = 0;
+	res = (char **)malloc(sizeof(char *) * (i + 1));
+	while (i--)
+	{
+		j = 0;
+		printf("K:%d\n", k);
+		res[k] = malloc(sizeof(char) * (ft_strlen(cmdblock->cmd_argv[k]) + 1));
+		while (cmd_argv[k][j])
+		{
+			res[k][j] = cmd_argv[k][j];
+			j++;
+		}
+		res[k][j] = '\0';
+		k++;
+	}
+	res[k] = NULL;
+	cmdblock->redir_argv = res;
+	//free 2d array
+}
+
 // execute non-builtin inputs
 int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
@@ -73,22 +129,29 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
+	get_exec_argv(mini, cmdblock); // cmdblock->redir_argv
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0) //this code will only run on child process
 	{
 		signal(SIGINT, SIG_DFL);
-		envp = ft_llto2darr(mini->envp, env_to_str);// translate updated linked list env to a 2d array
+		envp = ft_llto2darr(mini->envp, env_to_str);// convert linked list env to a 2d array
 		if (mini->pipes.prep_pipe)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
-			redir_out(mini, cmdblock); // overwrite the standard output
-		if (check_redir_type(mini, cmdblock) == IN)
-			redir_in(cmdblock);
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);
+		if (check_redir_type(mini, cmdblock) != 0) // checking if input has a redir type
+		{
+			call_redir(mini, cmdblock);
+			if (execve(exec_path, cmdblock->redir_argv, envp) == -1) // if execve fail means (its a invalid command)
+			{
+				ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
+				exit(127);
+			}
+			exit(0);
+		}
 		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
 			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command

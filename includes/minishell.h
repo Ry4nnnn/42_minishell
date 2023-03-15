@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 22:55:01 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/15 19:11:18 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ typedef struct s_cmdblock {
 	int		estatus;
 	pid_t	pid;
 	char	*file_name;
+	char	**redir_argv;
 }	t_cmdblock;
 
 typedef struct s_env
@@ -156,7 +157,8 @@ int		ms_env(t_mini *mini);
 void	ms_exit(t_mini *mini);
 
 //export.c
-void	ms_export(t_mini *mini, char **key);
+// void	ms_export(t_mini *mini, char **key);
+void	ms_export(t_mini *mini, char **input, t_cmdblock *cmdblock);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
@@ -229,10 +231,10 @@ int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 
 // redir.c
-int exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 void	handle_io(int fd, int std_file_no);
 void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
 void	redir_in(t_cmdblock *cmdblock);
+void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
 
 #endif

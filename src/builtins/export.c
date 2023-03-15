@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/11 13:46:32 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/15 19:10:55 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,14 +102,14 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 
 //if export with no '=' only add to export(envx)
 //if export with = add to both export(envx) and env(envp)
-void	ms_export(t_mini *mini, char **input)
+void	ms_export(t_mini *mini, char **input, t_cmdblock *cmdblock)
 {
 	char	*key;
 	char	*value;
 	int		i;
 
 	i = 1;
-	if (input[i] == NULL) //when input is only export with no paramters
+	if (input[i] == NULL || check_redir_type(mini, cmdblock) != 0) //when input is only export with no paramters
 	{
 		print_export(mini);
 		return ;

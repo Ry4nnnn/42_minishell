@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 14:15:54 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/15 19:21:39 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,6 @@ void	init_redir(t_mini *mini)
 
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
-	int saved_fd;
-	saved_fd = dup(1);
 	signal(SIGINT, SIG_IGN);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
@@ -75,7 +73,9 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		return (127);
 	}
 	else // non builtins
+	{
 		return (exec_non_builtins(mini, cmdblock));// execve
+	}
 	return (0);
 }
 

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/14 14:23:30 by codespace        ###   ########.fr        #
+#    Updated: 2023/03/15 17:58:30 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) -fcommon #-Wall -Wextra -Werror #-fsanitize=address
+CFLAGS		:= $(INCLUDE) -fcommon -Wall -Wextra -Werror
 
 ifeq ($(DB), 1)
 	CFLAGS	+= -fsanitize=address -g3

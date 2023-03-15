@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/14 14:16:41 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/15 19:11:38 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	fd_in = dup(0);
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
-	if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
-		redir_out(mini, cmdblock); // overwrite the standard output
-	if (check_redir_type(mini, cmdblock) == IN)
-		redir_in(cmdblock);
+	if (check_redir_type(mini, cmdblock) != 0)
+		call_redir(mini, cmdblock);
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
 		ms_exit(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
@@ -54,7 +52,7 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "unset", 6) == 0)
 		ms_unset(mini, cmdblock->cmd_argv);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "export", 7) == 0)
-		ms_export(mini, cmdblock->cmd_argv);
+		ms_export(mini, cmdblock->cmd_argv, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "cd", 3) == 0)
 		ms_cd(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "echo", 5) == 0)
