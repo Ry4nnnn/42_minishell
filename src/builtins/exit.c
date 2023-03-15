@@ -17,7 +17,9 @@ void	ms_exit(t_mini *mini)
 	if (mini->pipes.do_pipe == 1 || mini->pipes.prep_pipe == 1)
 		return ;
 	rl_clear_history();
-	system("leaks minishell");
+	# ifndef __linux__
+		system("leaks minishell")
+	# endif
 	printf("exit 🤍\n");
 	exit(0);
 }
