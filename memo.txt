@@ -18,3 +18,9 @@ big goals:
 2. redirections
 3. norminette :)
 
+unsolved test case:
+cd | cd  (should not work)
+export _= (should ignore)
+command not found has leaks
+echo hi | grep hi (leaks)
+> test (not working)
