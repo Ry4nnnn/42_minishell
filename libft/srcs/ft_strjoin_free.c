@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 11:24:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/16 21:35:29 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/16 21:36:37 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	*ft_strjoin_free(char const *s1, char const *s2)
 	while (++i < s1_len + s2_len)
 		res[i] = s2[i - s1_len];
 	res[i] = 0;
-    free ((void *)s1);
+	if (s1 != NULL)
+    	free ((void *)s1);
 	return (res);
 }
