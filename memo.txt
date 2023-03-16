@@ -1,9 +1,9 @@
-problems to solve:
+Problems to solve:
 
 Done. Syntax error handling got big problem
 Done. after unset PATH, should be able to execute by absolute path like /bin/ls
 Done. cd in brackets shouldn't execute
-3. prompt use of forbidden functions
+Done. prompt use of forbidden functions
 Done. exit in pipes shouldn't execute
 Done. parser folder no need
 Done. rename spliter folder and combine pipes and redir files into one folder
@@ -11,18 +11,17 @@ Done. rename spliter folder and combine pipes and redir files into one folder
 2. Heredoc
 4. Pipe and redirection combined got problem
 5. redir operators should be removed from the cmd_argv
+Done. cd | cd  (should not work)
+6. export _= (should ignore)
+7. command not found has leaks
+8. echo hi | grep hi (leaks)
+9. > test (not working)
+10. echo < Makefile (should do nothing and print a newline)
+11. cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
+12. for "cat" (only cat), when press ctrl-c, the ^C should appear
 
 big goals:
 
 1. wildcards
 2. redirections
 3. norminette :)
-
-unsolved test case:
-cd | cd  (should not work)
-export _= (should ignore)
-command not found has leaks
-echo hi | grep hi (leaks)
-> test (not working)
-echo < Makefile (should do nothing and print a newline)
-cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
