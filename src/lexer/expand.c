@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 00:09:04 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 00:46:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,15 @@ void	expand_input(t_mini *mini, char **pinput)
 		if ((*pinput)[i] == 0)
 			break ;
 	}
+	if (need_wildcard_expand(*pinput) == 0)
+		return ;
 	i = -1;
-	while ((*pinput)[++i] != 0)
+	while ((*pinput)[++i] != 0) // expand wildcard
 	{
 		quote = (*pinput)[i];
 		token = get_next_token(*pinput, i, quote);
 		del_len = ft_strlen(token);
-		if (quote != '\'' && ft_strchr(token, '*') != NULL)
+		if (quote != '\'' && quote != '"' && ft_strchr(token, '*') != NULL)
 		{
 			expand_wildcard(mini, &token);
 			ft_strexpand(pinput, token, i, del_len);
