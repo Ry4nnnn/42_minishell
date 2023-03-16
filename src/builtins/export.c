@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/15 19:10:55 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/16 21:13:25 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,13 @@ void	ms_export(t_mini *mini, char **input, t_cmdblock *cmdblock)
 	while (input[i] != NULL)
 	{
 		get_key_value(input[i], &key, &value); // extracting key and value from input //malloc
+		if (!ft_strcmp(key, "_")) // ignore export _
+		{
+			free (key);
+			if (value)
+				free (value);
+			return ;
+		}
 		if (valid_input(key) == 0) // invalid input
 		{
 			printf("export: `%s': not a valid identifier\n", input[i]);

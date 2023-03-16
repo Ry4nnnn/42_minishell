@@ -19,7 +19,7 @@ big goals:
 3. norminette :)
 
 unsolved test case:
-cd | cd  (should not work)
+cd | cd  (should not work) done
 export _= (should ignore)
 command not found has leaks
 echo hi | grep hi (leaks)

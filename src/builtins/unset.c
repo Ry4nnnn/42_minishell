@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/11 13:44:25 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/16 21:03:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ void	ms_unset(t_mini *mini, char **key)
 		return ;
 	while (key[i] != NULL)
 	{
+		if  (!ft_strcmp(key[i], "_")) // ignore unset _
+			return ;
 		if (valid_input(key[i]) == 0)
 			printf("unset: `%s': not a valid identifier\n", key[i]);
 		envp = check_env_var(mini->envp, key[i]);
