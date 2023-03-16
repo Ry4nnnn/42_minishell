@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 19:11:18 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/16 22:49:23 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ typedef struct s_mini
 {
 	t_list	*envp;// call env
 	char	*prompt;
-	char	**builtins;
-	char	**redir;
+	char	*builtins[8];
+	char	*redir[5];
 	char	*input;
 	t_list	*cmdblock_list;
 	t_pipes	pipes;	
@@ -183,11 +183,13 @@ int	ft_incharset(char *charset, char c);
 int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
 int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 void	ft_strexpand(char **s, char *insert, int start, int n);
-void	expand_input(t_mini *mini, char **input_addr);
+void	expand_input(t_mini *mini, char **pinput);
 void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
+char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_list *cmdblocks_list);
 char	*trim_input(char *input);
+void	expand_wildcard(t_mini *mini, char **ptoken);
 
 //----------SPLITERS----------//
 void	prepare_pipe(t_mini *mini);
@@ -229,6 +231,7 @@ void	init_prompt(t_mini *mini);
 char	*get_exec_path(t_mini *mini, char **cmds);
 int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
+char	*env_to_str(void *arg);
 
 // redir.c
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);

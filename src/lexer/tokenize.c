@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/15 19:29:21 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/16 23:23:25 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	get_tokens_size(char *input)
 	return (size);
 }
 
-char	*get_next_token(char *input, int *i, int quote)
+char	*get_next_token(char *input, int i, int quote)
 {
 	int	len;
 	int	target;
@@ -55,40 +55,43 @@ char	*get_next_token(char *input, int *i, int quote)
 	len = 0;
 	if (quote == '\'' || quote == '"')
 	{
-		while ((input + *i)[++len] != quote && (input + *i)[len] != 0)
+		while ((input + i)[++len] != quote && (input + i)[len] != 0)
 			;
-		result = ft_strndup(input + *i + 1, len - 1);
-		*i += len;
+		result = ft_strndup(input + i + 1, len - 1);
+		i += len;
 		return (result); 
 	}
 	target = ' ';
-	while ((input + *i)[len] != 0 && (input + *i)[len] != target)
+	while ((input + i)[len] != 0 && (input + i)[len] != target)
 	{
-		if ((input + *i)[len] == '"' || (input + *i)[len] == '\'')
-			target = (input + *i)[len];
+		if ((input + i)[len] == '"' || (input + i)[len] == '\'')
+			target = (input + i)[len];
 		len++;
 	}
-	result = ft_strndup((input + *i), len + (target != ' '));
-	*i += len;
+	result = ft_strndup((input + i), len + (target != ' '));
+	// *i += len;
 	return (result);
 }
 
 char	**tokenize_cmd(t_mini *mini, char *input)
 {
-	int	size;
 	int	i;
 	int	j;
+	int	quote;
 	char	**result;
 
 	(void)mini;
-	size = get_tokens_size(input);
 	i = -1;
 	j = -1;
-	result = malloc((size + 1) * sizeof(char *));
+	result = malloc((get_tokens_size(input) + 1) * sizeof(char *));
 	while (input[++i] != 0)
 	{
-		result[++j] = get_next_token(input, &i, input[i]);
-		// printf("token[%i]: %s\n", j, result[j]);
+		while (input[i] == ' ')
+			i++;
+		quote = input[i];
+		result[++j] = get_next_token(input, i, quote);
+		i += ft_strlen(result[j]);
+		printf("token[%i]: %s\n", j, result[j]);
 		if (input[i] == 0)
 			break ;
 	}

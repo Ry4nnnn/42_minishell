@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 22:46:20 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/16 21:27:01 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,29 +33,23 @@ int		init_env(t_mini *mini, char **ev)
 // dont have to NULL the last one (calloc alrdy did it)
 void init_builtins(t_mini *mini)
 {
-	char	**builtins;
-
-	builtins = ft_calloc(7 + 1, sizeof(char *));
-	builtins[0] = "pwd";
-	builtins[1] = "env";
-	builtins[2] = "echo";
-	builtins[3] = "cd";
-	builtins[4] = "unset";
-	builtins[5] = "export";
-	builtins[6] = "exit";
-	mini->builtins = builtins;
+	mini->builtins[0] = "pwd";
+	mini->builtins[1] = "env";
+	mini->builtins[2] = "echo";
+	mini->builtins[3] = "cd";
+	mini->builtins[4] = "unset";
+	mini->builtins[5] = "export";
+	mini->builtins[6] = "exit";
+	mini->builtins[7] = NULL;
 }
 
 void	init_redir(t_mini *mini)
 {
-	char	**redir;
-
-	redir = ft_calloc(4 + 1, sizeof(char *));
-	redir[0] = ">";
-	redir[1] = ">>";
-	redir[2] = "<";
-	redir[3] = "<<";
-	mini->redir = redir;
+	mini->redir[0] = ">";
+	mini->redir[1] = ">>";
+	mini->redir[2] = "<";
+	mini->redir[3] = "<<";
+	mini->redir[4] = NULL;
 }
 
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
@@ -131,7 +125,8 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	if (cmdblock->in_bracket)
 		return (handle_cmdblocks(mini, split_cmdblocks(cmdblock->input, 1)));
 	expand_input(mini, &cmdblock->input);
-	// printf("expanded: %s\n", cmdblock->input);
+	printf("expanded: %s\n", cmdblock->input);
+	// expand_wildcard(mini, cmdblock);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
 	ft_free2darr((void **)cmdblock->redir_argv);
@@ -173,7 +168,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 
 //expand then tokenize
 //lexer, pipes, heredoc, redirection
-int main(int ac, char **av, char **ev)
+int main(int ac, char **av, char **envp)
 {
 	t_mini	mini;
 
@@ -181,7 +176,7 @@ int main(int ac, char **av, char **ev)
 	(void)av;
 	mini.envp = NULL;
 	mini.exit_status = 0;
-	init_env(&mini, ev);
+	init_env(&mini, envp);
 	init_builtins(&mini);
 	init_redir(&mini);
 	g_errno = 0;
@@ -194,7 +189,7 @@ int main(int ac, char **av, char **ev)
 		if (mini.input == NULL)
 			ms_exit(&mini);
 		mini.input = trim_input(mini.input);
-		if (mini.input[0] == '\0') // || check_syntax(&mini) == 0)
+		if (mini.input[0] == '\0')
 		{
 			ft_free(&mini, 4);
 			continue ;

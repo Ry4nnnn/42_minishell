@@ -6,7 +6,7 @@
 #    By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/16 19:52:15 by wangxuerui       ###   ########.fr        #
+#    Updated: 2023/03/16 21:53:37 by wangxuerui       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ LIBFT_PATH		:= libft
 
 BUILTINS	= env exit unset export cd echo pwd builtins builtin_utils
 REDIR		= redir pipe spliter_utils
-LEXER		= lexer lexer_utils expand tokenize syntax
+LEXER		= lexer lexer_utils expand tokenize syntax wildcard
 MAIN		= main free error signal execve prompt utils redir
 
 #------------------------------------------------------#
