@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/16 22:39:43 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 00:09:04 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	expand_input(t_mini *mini, char **pinput)
 			expand_wildcard(mini, &token);
 			ft_strexpand(pinput, token, i, del_len);
 		}
+		i += ft_strlen(token);
 		free(token);
 		if ((*pinput)[i] == 0)
 			break ;	
