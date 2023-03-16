@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/15 17:58:30 by welim            ###   ########.fr        #
+#    Updated: 2023/03/16 19:52:15 by wangxuerui       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,10 @@ CFLAGS		:= $(INCLUDE) -fcommon -Wall -Wextra -Werror
 
 ifeq ($(DB), 1)
 	CFLAGS	+= -fsanitize=address -g3
+endif
+
+ifeq ($(LK), 1)
+	CFLAGS	+= -fsanitize=leak -g3
 endif
 
 CC			:= gcc
@@ -115,12 +119,13 @@ docker_build:
 
 docker_run:
 	@docker rm -f minishell_container > /dev/null 2>&1
-	docker run -dit --name minishell_container -v $(shell pwd):/minishell/ minishell_image
-	docker exec minishell_container make
+	docker run -dit --name minishell_container -v $(shell pwd):/home/wxuerui/Desktop/minishell minishell_image
+	docker exec minishell_container make LK=1
 	docker exec -it minishell_container ./minishell
 	@docker rm -f minishell_container > /dev/null 2>&1
 
 docker_clean:
+	docker system prune
 	docker rmi -f minishell_image > /dev/null 2>&1
 
 .PHONY: all clean fclean re

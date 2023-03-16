@@ -1,6 +1,6 @@
 FROM ubuntu:20.04
 
-WORKDIR /minishell
+WORKDIR /home/wxuerui/Desktop/minishell
 
 RUN apt-get update && apt-get install -y \
 	git \
@@ -9,11 +9,9 @@ RUN apt-get update && apt-get install -y \
 	make \
 	bash
 
-RUN useradd -ms /bin/bash newuser
-USER newuser
-ENV USER=newuser
-ENV HOME=/home
+RUN useradd -ms /bin/bash wxuerui
+USER wxuerui
+ENV USER=wxuerui
+ENV PWD=/home/wxuerui/Desktop/minishell
 
-
-#CMD ["make", "DB=1"]
 
