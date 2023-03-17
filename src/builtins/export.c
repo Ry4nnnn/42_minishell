@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 18:56:06 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:29:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	print_export(t_mini *mini)
 }
 
 // extracting key and value from input
-void	get_key_value(char *arg, char **key, char **value)
+static void	get_key_value(char *arg, char **key, char **value)
 {
 	*value = ft_strchr(arg, '=');
 	if (*value == NULL)

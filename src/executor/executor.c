@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 21:38:40 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:30:43 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*env_to_str(void *arg)
+static char	*env_to_str(void *arg)
 {
 	t_env	*env_t;
 	char	*temp;
@@ -33,7 +33,7 @@ char	*env_to_str(void *arg)
  * @param mini t_mini struct
  * @param cmds input command
 **/
-char	*get_exec_path(t_mini *mini, char **cmds)
+static char	*get_exec_path(t_mini *mini, char **cmds)
 {
 	char *plist;
 	char **path;

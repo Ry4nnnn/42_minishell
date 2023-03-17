@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:22:38 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:31:30 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,9 +184,6 @@ t_list	*split_cmdblocks(char *input, int bracket);
 char	*skip_spliter(char *input, int spliter_type);
 int		get_spliter_type(char *input);
 int		ft_incharset(char *charset, char c);
-int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
-int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
-			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **pinput);
 void	ft_strremove(char **s, int start, int n);
@@ -200,12 +197,23 @@ int		get_pattern_len(char *str);
 t_list	*get_names_list(int *buf);
 void	store_names(int *buf);
 
-//----------SPLITERS----------//
+//----------REDIR----------//
 void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
-void	wait_childs(t_list *cmdblocks);
+int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
+void	handle_io(int fd, int std_file_no);
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
+void	redir_in(t_cmdblock *cmdblock);
+void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
+
+//----------EXECUTOR----------//
+
+int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
+int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
+			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
+int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------MAIN_DIR----------//
 
@@ -220,12 +228,8 @@ void	clear_env_var(void *content);
 void	free_cmdblock(void *arg);
 void	ms_free(t_mini *mini);
 
-//main.c
-int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
-int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
-
 //utils.c
-void	get_key_value(char *arg, char **key, char **value);
+void	wait_childs(t_list *cmdblocks);
 
 //signal.c
 void	signal_handler(int signo);
@@ -235,17 +239,8 @@ void	init_signal(void);
 void	init_prompt(t_mini *mini);
 
 //execve.c
-char	*get_exec_path(t_mini *mini, char **cmds);
 int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
-char	*env_to_str(void *arg);
-
-// redir.c
-int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
-void	handle_io(int fd, int std_file_no);
-void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
-void	redir_in(t_cmdblock *cmdblock);
-void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
 
 // init.c
 void	ms_init(t_mini *mini, char **envp);

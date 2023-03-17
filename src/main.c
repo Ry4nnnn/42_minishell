@@ -6,15 +6,13 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:01:55 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:32:10 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//expand then tokenize
-//lexer, pipes, heredoc, redirection
-int main(int ac, char **av, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_mini	mini;
 
@@ -39,6 +37,5 @@ int main(int ac, char **av, char **envp)
 		add_history(mini.input);
 		ms_free(&mini);
 	}
-	return(0);
+	return (0);
 }
-
