@@ -3,41 +3,60 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 19:21:02 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 14:10:46 by codespace        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	detect_normal_token(char *input)
+{
+	int	i;
+
+	i = -1;
+	while (input[++i] != 0)
+	{
+		if (input[i] != ' ')
+			break ;
+	}
+	if (input[i] == 0)
+		return (i - 1);
+	return (i);
+}
+
+static int	detect_quote_token(char *input, int quote)
+{
+	int	i;
+
+	i = -1;
+	while (input[++i] != 0)
+	{
+		if (input[i] == quote)
+			break ;
+	}
+	return (i);
+}
+
 int	get_tokens_size(char *input)
 {
-	int	quote;
 	int	i;
 	int	size;
 
-	quote = 0;
 	i = -1;
 	size = 1;
 	while (input[++i] != 0)
 	{
-		if (quote == 0 && input[i] == ' ')
+		if (input[i] == ' ')
 		{
-			while (input[i] == ' ' && input[i] != 0)
-				i++;
-			if (input[i] != 0 && input[i] != '\'' && input[i] != '"')
-				size++;
-			else
-				i--;
+			i += detect_normal_token(input + i);
+			size++;
 		}
-		else if (quote == 0 && (input[i] == '\'' || input[i] == '"'))
+		else if (input[i] == '\'' || input[i] == '"')
 		{
-			quote = input[i];
-			while (input[++i] != 0 && input[i] != quote)
-				i++;
-			quote = 0;
+			i += detect_quote_token(input + i, input[i]);
 			size++;
 		}
 		if (input[i] == 0)
@@ -88,6 +107,7 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 			i++;
 		quote = input[i];
 		result[++j] = get_next_token(input, i, quote);
+		printf("token[%i]: %s\n", j, result[j]);
 		i += ft_strlen(result[j]);
 		if (quote == '\'' || quote == '"')
 			i += 2;
