@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/11 13:40:32 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/18 02:04:15 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,15 @@ int	ms_echo(char **input)
 	}
 	while (input[i] != NULL)
 	{
-		printf("%s", input[i++]);
+		if (!ft_strncmp(input[i], "<", 2)
+			|| !ft_strncmp(input[i], "<<", 3)
+			|| !ft_strncmp(input[i], ">", 2)
+			|| !ft_strncmp(input[i], ">>", 3))
+			break ;
+		printf("%s", input[i]);
 		if (input[i] != NULL)
 			printf(" ");
+		i++;
 	}
 	if (option == 0)
 		printf("\n");

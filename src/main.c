@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 00:30:51 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 00:33:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	get_input(t_mini *mini, int *commanded)
 	mini->input = trim_input(mini->input);
 	if (mini->input[0] == '\0')
 	{
-		ms_free(&mini);
+		ms_free(mini);
 		*commanded = 0;
 		return (0);
 	}
