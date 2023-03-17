@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 16:44:31 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:21:45 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ typedef struct s_mini
 	char	*input;
 	t_list	*cmdblock_list;
 	t_pipes	pipes;	
-	int		exit_status;
 }		t_mini;
 
 //----------BUILTINS----------//
@@ -204,7 +203,7 @@ void	wait_childs(t_list *cmdblocks);
 
 //error.c
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
-void	syntax_error(t_mini *mini, char *err_msg, char *token);
+int		syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cd_error(t_mini *mini, char **cmds, char *msg);
 void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 

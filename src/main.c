@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 14:49:47 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:10:25 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,6 @@ int main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	mini.envp = NULL;
-	mini.exit_status = 0;
 	init_env(&mini, envp);
 	init_builtins(&mini);
 	init_redir(&mini);

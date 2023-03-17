@@ -3,29 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:18 by welim             #+#    #+#             */
-/*   Updated: 2023/03/08 21:11:56 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/17 18:30:59 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_Llist(t_mini *mini, t_list *env_list)
-{
-	t_env	*env_node;
-
-	(void) mini;
-	while (env_list != NULL)
-	{
-		env_node = (t_env *)env_list->content;
-		free (env_node->key);
-		free (env_node->value);
-		free (env_node);
-		env_list = env_list->next;
-	}
-}
 
 void	clear_env_var(void *content)
 {

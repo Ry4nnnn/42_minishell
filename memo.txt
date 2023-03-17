@@ -19,11 +19,11 @@ Done. cd | cd  (should not work)
 10. echo < Makefile (should do nothing and print a newline)
 Done. cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
 12. for "cat" (only cat), when press ctrl-c, the ^C should appear
-
+13. exit should handle with arguments such as exit 1
 Done. ms_cd no errno, should return errno
 
 big goals:
 
-1. wildcards
+Done. wildcards
 2. redirections
 3. norminette :)
