@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 19:29:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 00:30:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,18 @@ void	redir_in(t_cmdblock *cmdblock)
 		printf ("ErrorIN!\n");
 	}
 	handle_io(fd, STDIN_FILENO);
+}
+
+void	done_redir(t_mini *mini)
+{
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.do_pipe)
+		dup2(mini->pipes.pipe[READ], STDIN_FILENO);
+	else
+		dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 }
 
 void	call_redir(t_mini *mini, t_cmdblock *cmdblock)

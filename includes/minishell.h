@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:31:30 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:52:29 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,10 +183,8 @@ t_env	*check_env_var(t_list *env, char *key);
 t_list	*split_cmdblocks(char *input, int bracket);
 char	*skip_spliter(char *input, int spliter_type);
 int		get_spliter_type(char *input);
-int		ft_incharset(char *charset, char c);
 void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **pinput);
-void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
 char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
@@ -207,6 +205,7 @@ void	handle_io(int fd, int std_file_no);
 void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
 void	redir_in(t_cmdblock *cmdblock);
 void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
+void	done_redir(t_mini *mini);
 
 //----------EXECUTOR----------//
 
@@ -214,6 +213,8 @@ int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
 int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
 			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
+int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
+int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------MAIN_DIR----------//
 
@@ -237,10 +238,6 @@ void	init_signal(void);
 
 //prompt.c
 void	init_prompt(t_mini *mini);
-
-//execve.c
-int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
-int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 
 // init.c
 void	ms_init(t_mini *mini, char **envp);

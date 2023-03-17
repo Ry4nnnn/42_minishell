@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 20:47:31 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:36:40 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	exec_git_cmd(int *buf)
 	waitpid(getter, NULL, 0);
 }
 
-char	*get_branch_name(void)
+static char	*get_branch_name(void)
 {
 	char	*branch;
 	int		buf[2];
@@ -84,7 +84,7 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	mini->prompt = prompt;
 }
 
-char	*get_relative_path(char *home, char *pwd)
+static char	*get_relative_path(char *home, char *pwd)
 {
 	char	*path;
 
