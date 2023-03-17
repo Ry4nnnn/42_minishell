@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 22:42:57 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 00:31:54 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	redir_in(t_cmdblock *cmdblock)
 
 void	call_redir(t_mini *mini, t_cmdblock *cmdblock)
 {
+	// if ()
 	if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
 		redir_out(mini, cmdblock); // overwrite the standard output
 	if (check_redir_type(mini, cmdblock) == IN)
