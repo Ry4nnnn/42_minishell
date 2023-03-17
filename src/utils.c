@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:31:42 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:33:21 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 21:37:56 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	wait_childs(t_list *cmdblocks)
 	while (cmdblocks != NULL)
 	{
 		curr = (t_cmdblock *)cmdblocks->content;
-		if (curr->need_wait)	
+		if (curr->need_wait)
 		{
 			waitpid(curr->pid, &curr->estatus, WUNTRACED);
 			if (WIFEXITED((curr->estatus)))

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 00:32:29 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 19:21:02 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	get_tokens_size(char *input)
 
 char	*get_next_token(char *input, int i, int quote)
 {
-	int	len;
-	int	target;
+	int		len;
+	int		target;
 	char	*result;
 
 	len = 0;
@@ -58,7 +58,7 @@ char	*get_next_token(char *input, int i, int quote)
 		while ((input + i)[++len] != quote && (input + i)[len] != 0)
 			;
 		result = ft_strndup(input + i + 1, len - 1);
-		return (result); 
+		return (result);
 	}
 	target = ' ';
 	while ((input + i)[len] != 0 && (input + i)[len] != target)
@@ -73,16 +73,15 @@ char	*get_next_token(char *input, int i, int quote)
 
 char	**tokenize_cmd(t_mini *mini, char *input)
 {
-	int	i;
-	int	j;
-	int	quote;
+	int		i;
+	int		j;
+	int		quote;
 	char	**result;
 
 	(void)mini;
 	i = -1;
 	j = -1;
 	result = malloc((get_tokens_size(input) + 1) * sizeof(char *));
-	// printf("tksize: %i\n", get_tokens_size(input));
 	while (input[++i] != 0)
 	{
 		while (input[i] == ' ')
@@ -92,7 +91,6 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 		i += ft_strlen(result[j]);
 		if (quote == '\'' || quote == '"')
 			i += 2;
-		// printf("token[%i]: %s\n", j, result[j]);
 		if (input[i] == 0)
 			break ;
 	}

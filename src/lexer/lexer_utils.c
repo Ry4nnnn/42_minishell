@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:58:16 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/07 14:32:09 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/17 20:27:52 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,26 @@ void	ft_strexpand(char **s, char *insert, int start, int n)
 		result[i - 2 - n] = (*s)[i - 2 - insert_len];
 	free(*s);
 	*s = result;
+}
+
+char	*skip_spliter(char *input, int spliter_type)
+{
+	if (spliter_type == 0)
+		return (input);
+	else if (spliter_type == PIPE)
+		return (input + 1);
+	else if (spliter_type >= AND && spliter_type <= OR)
+		return (input + 2);
+	return (input);
+}
+
+int	get_spliter_type(char *input)
+{
+	if (ft_strncmp(input, "&&", 2) == 0)
+		return (AND);
+	else if (ft_strncmp(input, "||", 2) == 0)
+		return (OR);
+	else if (ft_strncmp(input, "|", 1) == 0)
+		return (PIPE);
+	return (INVALID);
 }

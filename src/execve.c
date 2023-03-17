@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:35:52 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 21:38:40 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	char	**envp;
 
 	cmdblock->need_wait = 1;
-	if (mini->pipes.prep_pipe)
-		prepare_pipe(mini);
 	get_exec_argv(mini, cmdblock); // cmdblock->redir_argv
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0) //this code will only run on child process
@@ -153,10 +151,8 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		}
 		exit(0);
 	}
-	if (mini->pipes.prep_pipe == 0)
+	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-		finish_pipe(mini);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(cmdblock->estatus));
@@ -168,8 +164,6 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 	char	**envp;
 
 	cmdblock->need_wait = 1;
-	if (mini->pipes.prep_pipe)
-		prepare_pipe(mini);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0) //this code will only run on child process
 	{
@@ -194,10 +188,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 		}
 		exit(0);
 	}
-	if (mini->pipes.prep_pipe == 0)
+	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-		finish_pipe(mini);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(cmdblock->estatus));

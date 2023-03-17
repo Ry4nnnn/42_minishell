@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:21:45 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 21:04:27 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,8 @@ t_env	*check_env_var(t_list *env, char *key);
 //----------LEXER----------//
 
 t_list	*split_cmdblocks(char *input, int bracket);
+char	*skip_spliter(char *input, int spliter_type);
+int		get_spliter_type(char *input);
 int		ft_incharset(char *charset, char c);
 int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
 int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
@@ -191,6 +193,10 @@ char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
 char	*trim_input(char *input);
 void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
+int		name_pattern_match(char *wildcard, char *name, int pattern_len);
+int		get_pattern_len(char *str);
+t_list	*get_names_list(int *buf);
+void	store_names(int *buf);
 
 //----------SPLITERS----------//
 void	prepare_pipe(t_mini *mini);
@@ -218,6 +224,7 @@ int		init_env(t_mini *mini, char **ev);
 char	*get_env(t_mini *mini, char *key);
 void	init_prompt(t_mini *mini);
 int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
+int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 
 //utils.c
 int		valid_input(char *key);
