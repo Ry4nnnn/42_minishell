@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 21:39:34 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:52:42 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	if (check_redir_type(mini, cmdblock) != 0)
 		call_redir(mini, cmdblock);
 	errnum = choose_and_exec(mini, cmdblock);
-	// dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
-	// dup2(mini->pipes.saved_stdin, STDIN_FILENO);
+	done_redir(mini);
 	return (errnum);
 }

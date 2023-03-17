@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 00:31:54 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 23:52:17 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,18 @@ void	redir_in(t_cmdblock *cmdblock)
 		printf ("ErrorIN!\n");
 	}
 	handle_io(fd, STDIN_FILENO);
+}
+
+void	done_redir(t_mini *mini)
+{
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.do_pipe)
+		dup2(mini->pipes.pipe[READ], STDIN_FILENO);
+	else
+		dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 }
 
 void	call_redir(t_mini *mini, t_cmdblock *cmdblock)

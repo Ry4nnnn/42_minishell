@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 22:40:50 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/17 23:22:43 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 00:03:38 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ static void		init_env(t_mini *mini, char **envp)
 
 void	ms_init(t_mini *mini, char **envp)
 {
+	g_errno = 0;
 	mini->envp = NULL;
 	init_env(mini, envp);
 	init_builtins(mini);
