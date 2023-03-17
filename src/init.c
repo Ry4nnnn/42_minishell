@@ -6,13 +6,13 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 22:40:50 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/18 00:03:38 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 00:10:32 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void init_builtins(t_mini *mini)
+static void	init_builtins(t_mini *mini)
 {
 	mini->builtins[0] = "pwd";
 	mini->builtins[1] = "env";
@@ -33,7 +33,7 @@ static void	init_redir(t_mini *mini)
 	mini->redir[4] = NULL;
 }
 
-static void		init_env(t_mini *mini, char **envp)
+static void	init_env(t_mini *mini, char **envp)
 {
 	char	*key;
 	char	*value;
