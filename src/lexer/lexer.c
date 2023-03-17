@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 21:56:27 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 21:57:49 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ t_list	*get_bracket_cmdblock(char *input, int spliter_type)
 			quote = input[len];
 		len++;
 	}
-	if (create_new_cmdblock(spliter_type, 1) == NULL)
+	new_cmdblock = create_new_cmdblock(spliter_type, 1);
+	if (new_cmdblock == NULL)
 		return (NULL);
 	if (input[len] != ')')
 		new_cmdblock->input = ft_strndup(input, len);
@@ -73,7 +74,8 @@ t_list	*get_new_cmdblock(char *input, int spliter_type)
 		else if (quote == 0 && (input[len] == '\"' || input[len] == '\''))
 			quote = input[len];
 	}
-	if (create_new_cmdblock(spliter_type, 0) == NULL)
+	new_cmdblock = create_new_cmdblock(spliter_type, 0);
+	if (new_cmdblock == NULL)
 		return (NULL);
 	new_cmdblock->input = ft_strndup(input, len);
 	return (ft_lstnew((void *)new_cmdblock));
