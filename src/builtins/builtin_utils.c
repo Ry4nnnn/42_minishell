@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:06:05 by welim             #+#    #+#             */
-/*   Updated: 2023/03/05 14:36:19 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 16:26:42 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,14 @@ int	valid_input(char *key)
 //if yes then returns the key pointer form env list
 t_env	*check_env_var(t_list *env, char *key)
 {
-	t_env	*env_list;
+	t_env	*temp_env;
 
 	while (env != NULL)
 	{
-		env_list = env->content;
-		if (ft_strcmp(key, env_list->key) == 0)
-			return (env_list);
+		temp_env = env->content;
+		if (ft_strcmp(key, temp_env->key) == 0)
+			return (temp_env);
 		env = env->next;
 	}
 	return (NULL);
 }
-

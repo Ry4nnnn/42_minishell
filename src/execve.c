@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 22:42:35 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 14:51:05 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 	}
 	if (path[j] == NULL)
 	{
-		ft_error(mini, cmds, CMD_NF);
+		cmd_error(mini, cmds, CMD_NF);
 		ft_free2darr((void *)path); // free 2d array
 		return (NULL);
 	}
@@ -147,14 +147,14 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			call_redir(mini, cmdblock);
 			if (execve(exec_path, cmdblock->redir_argv, envp) == -1) // if execve fail means (its a invalid command)
 			{
-				ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
+				cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 				exit(127);
 			}
 			exit(0);
 		}
 		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
-			ft_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
+			cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 			exit(127);
 		}
 		exit(0);
@@ -185,17 +185,17 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 			do_pipe(mini);
 		if (access(cmdblock->cmd_argv[0], F_OK) != 0)
 		{
-			ft_error(mini, cmdblock->cmd_argv, NSFD);
+			cmd_error(mini, cmdblock->cmd_argv, NSFD);
 			exit(127);
 		}
 		if (access(cmdblock->cmd_argv[0], X_OK) != 0)
 		{
-			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
+			cmd_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
 			exit(126);
 		}
 		if (execve(cmdblock->cmd_argv[0], cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
 		{
-			ft_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED); //prints error msg for invalid command
+			cmd_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED); //prints error msg for invalid command
 			exit(127);
 		}
 		exit(0);

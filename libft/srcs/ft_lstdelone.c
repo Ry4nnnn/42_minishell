@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42kl.edu.my>      +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 19:21:59 by wxuerui           #+#    #+#             */
-/*   Updated: 2022/07/05 19:22:02 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/17 16:47:54 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,8 @@
 
 void	ft_lstdelone(t_list *lst, void (*del)(void *))
 {
-	t_list	*temp;
-
 	if (!lst)
 		return ;
-	(*del)(lst->content);
-	temp = lst->next;
+	del(lst->content);
 	free(lst);
-	lst = temp;
 }

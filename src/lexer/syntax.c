@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:08:58 by codespace         #+#    #+#             */
-/*   Updated: 2023/03/14 12:44:25 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/17 12:49:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*find_unexpected_token(char *input)
 	return (ft_strndup(input, i));
 }
 
-int	check_cmdblock_syntax(t_cmdblock *cmdblock)
+int	check_cmdblock_syntax(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	i;
 	int	quote;
@@ -52,7 +52,7 @@ int	check_cmdblock_syntax(t_cmdblock *cmdblock)
 	{
 		if (quote == 0 && (cmdblock->input[i] == '(' || cmdblock->input[i] == ')'))
 		{
-			syntax_error(UNEXPECTED_TOKEN, find_unexpected_token(cmdblock->input + i));
+			syntax_error(mini, UNEXPECTED_TOKEN, find_unexpected_token(cmdblock->input + i));
 			g_errno = 258;
 			return (0);
 		}
@@ -63,21 +63,21 @@ int	check_cmdblock_syntax(t_cmdblock *cmdblock)
 	}
 	if (quote != 0)
 	{
-		syntax_error(UNCLOSED_QUOTE, NULL);
+		syntax_error(mini, UNCLOSED_QUOTE, NULL);
 		return (0);
 	}
 	return (1);
 	
 }
 
-int	check_syntax(t_list *cmdblocks_list)
+int	check_syntax(t_mini *mini, t_list *cmdblocks_list)
 {
 	t_cmdblock	*cmdblock;
 
 	while (cmdblocks_list != NULL)
 	{
 		cmdblock = (t_cmdblock *)cmdblocks_list->content;
-		if (check_cmdblock_syntax(cmdblock) == 0)
+		if (check_cmdblock_syntax(mini, cmdblock) == 0)
 			return (0);
 		cmdblocks_list = cmdblocks_list->next;
 	}

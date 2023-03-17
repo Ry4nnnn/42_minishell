@@ -6,12 +6,21 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/16 21:13:25 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 18:24:05 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Print env from smallest to biggest, and add a declare -x in front
+ * The inner loop is used to find the current smallest key
+ * First assign temp_content to biggest, and gradualy find the smallest
+ * 
+ * @param smallest 
+ * @param biggest 
+ * @param envp 
+ */
 static void	show_export(t_env *smallest, t_env *biggest, t_list *envp)
 {
 	t_env	*temp_content;
@@ -32,7 +41,7 @@ static void	show_export(t_env *smallest, t_env *biggest, t_list *envp)
 		while (temp != NULL)
 		{
 			if (ft_strcmp(((t_env *)temp->content)->key, temp_content->key) < 0
-				&& ft_strcmp(((t_env *)temp->content)->key, smallest->key) > 0) // if looping key is smaller than temp_content key and temp_content key is greater than first_content key
+				&& ft_strcmp(((t_env *)temp->content)->key, smallest->key) > 0)
 				temp_content = (t_env *)temp->content;
 			temp = temp->next;
 		}
@@ -40,8 +49,14 @@ static void	show_export(t_env *smallest, t_env *biggest, t_list *envp)
 	}
 }
 
-// this function is to print the already sorted linked list
-void	print_export(t_mini *mini)
+/**
+ * @brief First find the smallest and biggest key by ascii value,
+ * then use show_export function to print out the env
+ * 
+ * @param mini 
+ * @return int 
+ */
+int	print_export(t_mini *mini)
 {
 	t_list	*temp;
 	t_env	*smallest_content;
@@ -52,16 +67,15 @@ void	print_export(t_mini *mini)
 	biggest_content = ((t_env *)temp->content);
 	while (temp != NULL)
 	{
-		if (ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) < 0) // if looping key is smaller than first_content key
+		if (ft_strcmp(((t_env *)temp->content)->key, smallest_content->key) < 0)
 			smallest_content = (t_env *)temp->content;
-		if (ft_strcmp(((t_env *)temp->content)->key, biggest_content->key) > 0) // if looping key is greater than biggest_content key
+		if (ft_strcmp(((t_env *)temp->content)->key, biggest_content->key) > 0)
 			biggest_content = (t_env *)temp->content;
 		temp = temp->next;
 	}
 	show_export(smallest_content, biggest_content, mini->envp);
+	return (0);
 }
-
-
 
 // extracting key and value from input
 void	get_key_value(char *arg, char **key, char **value)
@@ -79,62 +93,65 @@ void	get_key_value(char *arg, char **key, char **value)
 		*value = ft_strdup(*value + 1);
 }
 
-
-// (adding \ changing) key and value to envp
 void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*envp;
 
 	envp = check_env_var(mini->envp, key);
-	if (envp == NULL) // if key doesnt exist in envp (adding new variable)
-	{
+	if (envp == NULL)
 		add_env_var(mini, key, value);
-	}
-	else if (value != NULL) // editing variable (envp != NULL)
+	else
 	{
 		free(envp->value);
 		envp->value = value;
 		free (key);
 	}
-	else
-		free (key);
 }
 
-//if export with no '=' only add to export(envx)
-//if export with = add to both export(envx) and env(envp)
-void	ms_export(t_mini *mini, char **input, t_cmdblock *cmdblock)
+/**
+ * @brief Builtin command export
+ * export: print env including the ones with no value, with declare -x in front
+ * export KEY : export the key with no value
+ * export KEY= : export the key with no value but with =
+ * export KEY=VALUE : like normal export
+ * 
+ * @param mini 
+ * @param input 
+ * @param cmdblock 
+ * @return int 
+ */
+int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*key;
 	char	*value;
 	int		i;
+	int		errnum;
 
-	i = 1;
-	if (input[i] == NULL || check_redir_type(mini, cmdblock) != 0) //when input is only export with no paramters
+	i = 0;
+	errnum = 0;
+	if (cmdblock->cmd_argv[1] == NULL || check_redir_type(mini, cmdblock) != 0)
+		return (print_export(mini));
+	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
+		return (0);
+	while (cmdblock->cmd_argv[++i] != NULL)
 	{
-		print_export(mini);
-		return ;
-	}
-	if (mini->pipes.do_pipe)
-		return ;
-	while (input[i] != NULL)
-	{
-		get_key_value(input[i], &key, &value); // extracting key and value from input //malloc
+		get_key_value(cmdblock->cmd_argv[i], &key, &value);
 		if (!ft_strcmp(key, "_")) // ignore export _
 		{
 			free (key);
 			if (value)
 				free (value);
-			return ;
+			return (errnum);
 		}
-		if (valid_input(key) == 0) // invalid input
+		if (valid_input(key))
+			edit_env_var(mini, key, value);
+		else
 		{
-			printf("export: `%s': not a valid identifier\n", input[i]);
+			identifier_error(mini, cmdblock->cmd_argv, i, INVALID_IDENTIFIER);
+			errnum = 1;
 			free (key);
 			free (value);
-			i++;
-			continue ;
 		}
-		edit_env_var(mini, key, value); // adding key and value to envp or envx
-		i++;
 	}
+	return (errnum);
 }

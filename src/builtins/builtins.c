@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 22:44:25 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 16:42:06 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 //returns 0 means its not a builtin
 int	check_builtins(t_mini *mini, char *cmds)
 {
-	char **builtins;
+	char	**builtins;
 
 	builtins = mini->builtins;
 	if (cmds == NULL)
@@ -31,13 +31,11 @@ int	check_builtins(t_mini *mini, char *cmds)
 	return (0);
 }
 
-//this function is to execute the builtins
-int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
+static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 {
-	if (mini->pipes.prep_pipe)
-		prepare_pipe(mini);
-	if (check_redir_type(mini, cmdblock) != 0)
-		call_redir(mini, cmdblock);
+	int	errnum;
+
+	errnum = 0;
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
 		ms_exit(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
@@ -47,16 +45,36 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "unset", 6) == 0)
 		ms_unset(mini, cmdblock->cmd_argv);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "export", 7) == 0)
-		ms_export(mini, cmdblock->cmd_argv, cmdblock);
+		errnum = ms_export(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "cd", 3) == 0)
-		ms_cd(mini, cmdblock);
+		errnum = ms_cd(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "echo", 5) == 0)
-		ms_echo(cmdblock->cmd_argv);
-	else
-		g_errno = 1;
+		errnum = ms_echo(cmdblock->cmd_argv);
+	return (errnum);
+}
+
+/**
+ * @brief execute builtin functions
+ * check pipe and redir first, then execute builtin and take errnum,
+ * finally wrap up redir and pipe
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int errnum
+ */
+int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int	errnum;
+
+	errnum = 0;
+	if (mini->pipes.prep_pipe)
+		prepare_pipe(mini);
+	if (check_redir_type(mini, cmdblock) != 0)
+		call_redir(mini, cmdblock);
+	errnum = choose_and_exec(mini, cmdblock);
 	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 	dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 	if (mini->pipes.prep_pipe)
 		finish_pipe(mini);
-	return (0);
+	return (errnum);
 }
