@@ -6,103 +6,82 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 21:37:53 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 15:01:35 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_pwd(t_mini *mini, char *key)
+int	ms_chdir(t_mini *mini, char *path)
 {
 	t_list	*envp;
-	t_env	*env_var;
 
 	envp = mini->envp;
+	if (chdir(path) != 0)
+		return (-1);
 	while (envp != NULL)
 	{
-		env_var = envp->content;
-		if (ft_strcmp(key, env_var->key) == 0)
+		if (ft_strcmp((char *)((t_env *)envp->content)->key, "PWD") == 0)
 		{
-			if (env_var->value)
-				free (env_var->value);
-			env_var->value = getcwd(NULL, PATH_MAX);
-			return ;
+			if ((char *)((t_env *)envp->content)->value != NULL)
+				free(((t_env *)envp->content)->value);
+			((t_env *)envp->content)->value = getcwd(NULL, PATH_MAX);
+			break ;
 		}
 		envp = envp->next;
 	}
+	if (envp == NULL)
+		add_env_var(mini, "PWD", getcwd(NULL, PATH_MAX));
+	return (0);
 }
 
-void	update_oldpwd(t_mini *mini, char *old_path)
+int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 {
-	t_list	*envp;
-	t_env	*env_var;
+	char	*home;
 
-	envp = mini->envp;
-	while (envp != NULL)
+	home = get_env(mini, "HOME");
+	if (home == NULL)
 	{
-		env_var = envp->content;
-		if (ft_strcmp("OLDPWD", env_var->key) == 0)
-		{
-			if (env_var->value)
-				free(env_var->value);
-			env_var->value = ft_strdup(old_path);
-		}
-		envp = envp->next;
+		cmd_error(mini, cmdblock->cmd_argv, NOHOME);
+		return (1);
 	}
-}
-
-void	ft_cd_args(t_mini *mini, char **cmds)
-{
-	char	*oldpwd;
-	char	*pwd;
-
-	oldpwd = get_env(mini, "OLDPWD");
-	pwd = get_env(mini, "PWD");
-	if (ft_strcmp(cmds[1], "-") == 0) // if args is only "-"
-	{
-		if (!oldpwd) // if oldpwd is empty
-			printf ("cd: OLDPWD not set\n");
-		else
-		{
-			chdir(get_env(mini, "OLDPWD")); // change to oldpwd address
-			update_oldpwd(mini, pwd); //oldpwd will be updated
-			update_pwd(mini, "PWD"); // pwd will be updated
-			printf ("%s\n", get_env(mini, "PWD"));
-		}
-	}
+	if (ms_chdir(mini, home) == 0)
+		return (0);
+	if (access(home, F_OK) == 0)
+		cd_error(mini, cmdblock->cmd_argv, NOTDIR);
 	else
+		cd_error(mini, cmdblock->cmd_argv, NSFD);
+	return (1);
+}
+
+int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
+{
+	char	*home;
+
+	home = getenv("HOME");
+	if (ft_strcmp(cmdblock->cmd_argv[1], "~") == 0)
+		ft_strexpand(&(cmdblock->cmd_argv[1]), home, 0, 1);
+	if (ft_strncmp(cmdblock->cmd_argv[1], "~/", 2) == 0)
+		ft_strexpand(&(cmdblock->cmd_argv[1]), home, 0, 1);
+	if (ms_chdir(mini, cmdblock->cmd_argv[1]) != 0)
 	{
-		if (chdir(cmds[1]) != 0) // if input is not valid
-			printf ("cd: %s: No such file or directory\n", cmds[1]);
+		if (access(cmdblock->cmd_argv[1], F_OK) == 0)
+			cd_error(mini, cmdblock->cmd_argv, NOTDIR);
 		else
-		{
-			update_oldpwd(mini, pwd);
-			update_pwd(mini, "PWD");
-		}
+			cd_error(mini, cmdblock->cmd_argv, NSFD);
+		return (1);
 	}
+	return (0);
 }
 
 // work like normal cd
 // (cd) will go to home path
-// (cd -) will switch between PWD and OLDPWD
-void	ms_cd(t_mini *mini, t_cmdblock *cmdblock)
+int	ms_cd(t_mini *mini, t_cmdblock *cmdblock)
 {
-	char	*home;
-
-	if (mini->pipes.prep_pipe || mini->pipes.do_pipe || cmdblock->was_in_bracket)
-		return ;
-	home = get_env(mini, "HOME");
-	if (!cmdblock->cmd_argv[1] || (!ft_strcmp(cmdblock->cmd_argv[1], "~"))) // if only cd or cd ~
-	{
-		if (!home)
-			printf ("cd: HOME not set\n");
-		else
-		{
-			update_pwd(mini, "OLDPWD"); // will change oldpwd to cur path
-			chdir(home); // change pwd to home path
-			update_pwd(mini, "PWD"); // will change cur pwd to home path
-		}
-	}
-	else if (cmdblock->cmd_argv[1] != NULL) // if cd got args
-		ft_cd_args(mini, cmdblock->cmd_argv);
+	if (mini->pipes.prep_pipe || mini->pipes.do_pipe
+		|| cmdblock->was_in_bracket)
+		return (0);
+	if (ft_2darrlen((void **)cmdblock->cmd_argv) == 1)
+		return (ms_cd_home(mini, cmdblock));
+	return (ms_cd_dir(mini, cmdblock) != 0);
 }

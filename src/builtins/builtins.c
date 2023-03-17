@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/15 22:44:25 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 14:46:53 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int	check_builtins(t_mini *mini, char *cmds)
 //this function is to execute the builtins
 int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
+	int	errno;
+
+	errno = 0;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
 	if (check_redir_type(mini, cmdblock) != 0)
@@ -49,14 +52,12 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "export", 7) == 0)
 		ms_export(mini, cmdblock->cmd_argv, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "cd", 3) == 0)
-		ms_cd(mini, cmdblock);
+		errno = ms_cd(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "echo", 5) == 0)
-		ms_echo(cmdblock->cmd_argv);
-	else
-		g_errno = 1;
+		errno = ms_echo(cmdblock->cmd_argv);
 	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 	dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 	if (mini->pipes.prep_pipe)
 		finish_pipe(mini);
-	return (0);
+	return (errno);
 }

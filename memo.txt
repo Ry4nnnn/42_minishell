@@ -20,6 +20,8 @@ Done. cd | cd  (should not work)
 11. cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
 12. for "cat" (only cat), when press ctrl-c, the ^C should appear
 
+Done. ms_cd no errno, should return errno
+
 big goals:
 
 1. wildcards

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 00:31:56 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 14:49:47 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 		return (exec_program(mini, cmdblock));
 	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
-		ft_error(mini, cmdblock->cmd_argv, NSFD);
+		cmd_error(mini, cmdblock->cmd_argv, NSFD);
 		return (127);
 	}
 	else // non builtins
@@ -143,7 +143,7 @@ int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list)
 
 	temp = cmdblocks_list;
 	prev_cmdblock = NULL;
-	if (check_syntax(cmdblocks_list) == 0)
+	if (check_syntax(mini, cmdblocks_list) == 0)
 	{
 		ft_lstclear(&cmdblocks_list, free_cmdblock);
 		return (258);

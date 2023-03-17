@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/16 22:49:23 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 14:48:32 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@
 # define PERMISSION_DENIED "Permission denied\n"
 # define UNEXPECTED_TOKEN "syntax error near unexpected token"
 # define UNCLOSED_QUOTE "Unclosed quote"
+# define NOHOME "HOME not set\n"
+# define NOTDIR "Not a directory\n"
 
 // Special characters
 # define HARD_SPLITERS "(&|"
@@ -142,7 +144,7 @@ typedef struct s_mini
 
 //----------BUILTINS----------//
 //cd.c
-void	ms_cd(t_mini *mini, t_cmdblock *cmdblock);
+int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 void	update_pwd(t_mini *mini, char *key);
 void	update_oldpwd(t_mini *mini, char *old_path);
 
@@ -187,7 +189,7 @@ void	expand_input(t_mini *mini, char **pinput);
 void	ft_strremove(char **s, int start, int n);
 char	**tokenize_cmd(t_mini *mini, char *input);
 char	*get_next_token(char *input, int i, int quote);
-int		check_syntax(t_list *cmdblocks_list);
+int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
 char	*trim_input(char *input);
 void	expand_wildcard(t_mini *mini, char **ptoken);
 
@@ -201,8 +203,9 @@ void	wait_childs(t_list *cmdblocks);
 //----------MAIN_DIR----------//
 
 //error.c
-void	ft_error(t_mini *mini, char **cmds, char *msg);
-void	syntax_error(char *err_msg, char *token);
+void	cmd_error(t_mini *mini, char **cmds, char *msg);
+void	syntax_error(t_mini *mini, char *err_msg, char *token);
+void	cd_error(t_mini *mini, char **cmds, char *msg);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);
