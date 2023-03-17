@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:10:25 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:49:14 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,14 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)// it is a builtin!
+	{
+		// printf ("> test\n");
 		return (exec_builtins(mini, cmdblock));// redir
+	}
 	else if (ft_strchr(cmdblock->cmd_argv[0], '/') != NULL)// program
+	{
 		return (exec_program(mini, cmdblock));
+	}
 	else if (get_env(mini, "PATH") == NULL)// error for empty path
 	{
 		cmd_error(mini, cmdblock->cmd_argv, NSFD);
@@ -69,6 +74,7 @@ int		handle_commands(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	else // non builtins
 	{
+		printf ("> test\n"); // here
 		return (exec_non_builtins(mini, cmdblock));// execve //redir
 	}
 	return (0);

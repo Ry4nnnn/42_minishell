@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execve.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 14:51:05 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:35:52 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,17 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 
 static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 {
-	char **cmd_argv = cmdblock->cmd_argv;
-	char **redir = mini->redir;
-	int i = 0;
+	int i;
 	int j;
 
-	while (cmd_argv[i])
+	i = 0;
+	while (cmdblock->cmd_argv[i])
 	{
 		j = 0;
-		while (redir[j])
+		while (mini->redir[j])
 		{
-			// printf ("comparing argv: %s, redir: %s \n", cmd_argv[i], redir[j]);
-			if (ft_strcmp(cmd_argv[i], redir[j]) == 0)
-			{
-				// printf ("HEREcmd_argv: %s\n", cmd_argv[i]);
-				// printf ("HEREredir: %s\n", redir[j]);
+			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
 				return (i) ;
-			}
 			j++;
 		}
 		i++;
@@ -94,22 +88,21 @@ static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 //and remove the args after the redir including the redir
 void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 {
-	int i = get_exec_argv_sz(mini, cmdblock);
-	char **cmd_argv = cmdblock->cmd_argv;
-	char **res;
+	int i;
 	int j;
 	int k;
+	char **res;
 
 	k = 0;
+	i = get_exec_argv_sz(mini, cmdblock);
 	res = (char **)malloc(sizeof(char *) * (i + 1));
 	while (i--)
 	{
 		j = 0;
-		// printf("K:%d\n", k);
 		res[k] = malloc(sizeof(char) * (ft_strlen(cmdblock->cmd_argv[k]) + 1));
-		while (cmd_argv[k][j])
+		while (cmdblock->cmd_argv[k][j])
 		{
-			res[k][j] = cmd_argv[k][j];
+			res[k][j] = cmdblock->cmd_argv[k][j];
 			j++;
 		}
 		res[k][j] = '\0';
@@ -117,7 +110,6 @@ void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	res[k] = NULL;
 	cmdblock->redir_argv = res;
-	// free
 }
 
 // execute non-builtin inputs
@@ -144,9 +136,11 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			exit(127);
 		if (check_redir_type(mini, cmdblock) != 0) // checking if input has a redir type
 		{
+			// printf ("> TESTHERE\n");
 			call_redir(mini, cmdblock);
 			if (execve(exec_path, cmdblock->redir_argv, envp) == -1) // if execve fail means (its a invalid command)
 			{
+				// printf ("> teEQFEWFEWFst\n");
 				cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 				exit(127);
 			}

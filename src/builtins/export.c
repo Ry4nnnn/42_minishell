@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 16:44:40 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:43:50 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
  * export KEY : export the key with no value
  * export KEY= : export the key with no value but with =
  * export KEY=VALUE : like normal export
+ * export _ : ignore (should not change the env variable)
  * 
  * @param mini 
  * @param input 
@@ -136,6 +137,13 @@ int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 	while (cmdblock->cmd_argv[++i] != NULL)
 	{
 		get_key_value(cmdblock->cmd_argv[i], &key, &value);
+		if (!ft_strcmp(key, "_"))
+		{
+			free (key);
+			if (value)
+				free (value);
+			return (errnum);
+		}
 		if (valid_input(key))
 			edit_env_var(mini, key, value);
 		else

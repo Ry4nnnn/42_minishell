@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 17:05:24 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 18:40:17 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	rm_env_var(t_mini *ms, t_env *env)
 /**
  * @brief Builtin command unset
  * unset env var, if invalid identifier then output error
+ * unset _ : should do nothing
  * 
  * @param mini 
  * @param cmd_argv 
@@ -54,6 +55,11 @@ void	ms_unset(t_mini *mini, char **cmd_argv)
 		return ;
 	while (cmd_argv[++i] != NULL)
 	{
+		if (!ft_strcmp(cmd_argv[i], "_"))
+			return ;
+		if (valid_input(cmd_argv[i]) == 0)
+			printf("unset: `%s': not a valid identifier\n", cmd_argv[i]);
+		envp = check_env_var(mini->envp, cmd_argv[i]);
 		if (valid_input(cmd_argv[i]))
 		{
 			envp = check_env_var(mini->envp, cmd_argv[i]);
