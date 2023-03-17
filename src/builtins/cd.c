@@ -6,32 +6,43 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 15:01:35 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 15:16:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ms_chdir(t_mini *mini, char *path)
+void	update_dir(t_mini *mini, char *key, char *value)
 {
 	t_list	*envp;
+	t_env	*temp;
 
 	envp = mini->envp;
-	if (chdir(path) != 0)
-		return (-1);
 	while (envp != NULL)
 	{
-		if (ft_strcmp((char *)((t_env *)envp->content)->key, "PWD") == 0)
+		temp = (t_env *)envp->content;
+		if (ft_strcmp(temp->key, key) == 0)
 		{
-			if ((char *)((t_env *)envp->content)->value != NULL)
-				free(((t_env *)envp->content)->value);
-			((t_env *)envp->content)->value = getcwd(NULL, PATH_MAX);
+			if (temp->value != NULL)
+				free(temp->value);
+			temp->value = value;
 			break ;
 		}
 		envp = envp->next;
 	}
 	if (envp == NULL)
-		add_env_var(mini, "PWD", getcwd(NULL, PATH_MAX));
+		add_env_var(mini, key, value);
+}
+
+int	ms_chdir(t_mini *mini, char *path)
+{
+	char	*oldpwd;
+
+	oldpwd = getcwd(NULL, PATH_MAX);
+	if (chdir(path) != 0)
+		return (-1);
+	update_dir(mini, "PWD", getcwd(NULL, PATH_MAX));
+	update_dir(mini, "OLDPWD", oldpwd);
 	return (0);
 }
 
@@ -57,8 +68,16 @@ int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*home;
+	char	*oldpwd;
 
 	home = getenv("HOME");
+	oldpwd = get_env(mini, "OLDPWD");
+	if (oldpwd && ft_strcmp(cmdblock->cmd_argv[1], "-") == 0)
+	{
+		ms_chdir(mini, oldpwd);
+		ms_pwd();
+		return (0);
+	}
 	if (ft_strcmp(cmdblock->cmd_argv[1], "~") == 0)
 		ft_strexpand(&(cmdblock->cmd_argv[1]), home, 0, 1);
 	if (ft_strncmp(cmdblock->cmd_argv[1], "~/", 2) == 0)
