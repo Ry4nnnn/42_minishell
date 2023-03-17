@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 20:41:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/16 23:31:35 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:00:56 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char	*get_wildcard_expanded(t_mini *mini, t_list *names, char *wildcard)
 	return (expanded);
 }
 
-void	expand_wildcard(t_mini *mini, char **ptoken)
+void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i)
 {
 	char	*expanded;
 	t_list	*names;
@@ -114,6 +114,7 @@ void	expand_wildcard(t_mini *mini, char **ptoken)
 	ft_lstclear(&names, free);
 	if (expanded == NULL)
 		return ;
+	ft_strexpand(pinput, expanded, i, ft_strlen(*ptoken));
 	free(*ptoken);
 	*ptoken = expanded;
 }

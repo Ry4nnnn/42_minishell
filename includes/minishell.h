@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 14:48:32 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:01:18 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@
 # define UNCLOSED_QUOTE "Unclosed quote"
 # define NOHOME "HOME not set\n"
 # define NOTDIR "Not a directory\n"
+# define INVALID_IDENTIFIER "not a valid identifier\n"
 
 // Special characters
 # define HARD_SPLITERS "(&|"
@@ -160,7 +161,7 @@ void	ms_exit(t_mini *mini);
 
 //export.c
 // void	ms_export(t_mini *mini, char **key);
-void	ms_export(t_mini *mini, char **input, t_cmdblock *cmdblock);
+int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
@@ -191,7 +192,7 @@ char	**tokenize_cmd(t_mini *mini, char *input);
 char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
 char	*trim_input(char *input);
-void	expand_wildcard(t_mini *mini, char **ptoken);
+void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
 
 //----------SPLITERS----------//
 void	prepare_pipe(t_mini *mini);
@@ -206,6 +207,7 @@ void	wait_childs(t_list *cmdblocks);
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
 void	syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cd_error(t_mini *mini, char **cmds, char *msg);
+void	export_error(t_mini *mini, char **cmds, char *msg);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);

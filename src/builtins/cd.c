@@ -6,13 +6,21 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 15:16:15 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 15:23:38 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	update_dir(t_mini *mini, char *key, char *value)
+
+/**
+ * @brief Function used to update pwd or oldpwd
+ * 
+ * @param mini 
+ * @param key 
+ * @param value 
+ */
+static void	update_dir(t_mini *mini, char *key, char *value)
 {
 	t_list	*envp;
 	t_env	*temp;
@@ -34,7 +42,14 @@ void	update_dir(t_mini *mini, char *key, char *value)
 		add_env_var(mini, key, value);
 }
 
-int	ms_chdir(t_mini *mini, char *path)
+/**
+ * @brief chdir and update pwd and oldpwd at the same time
+ * 
+ * @param mini 
+ * @param path 
+ * @return int 
+ */
+static int	ms_chdir(t_mini *mini, char *path)
 {
 	char	*oldpwd;
 
@@ -46,7 +61,14 @@ int	ms_chdir(t_mini *mini, char *path)
 	return (0);
 }
 
-int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
+/**
+ * @brief handle cd
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int 
+ */
+static int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*home;
 
@@ -65,7 +87,14 @@ int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 	return (1);
 }
 
-int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
+/**
+ * @brief handle the cd general case
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int 
+ */
+static int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*home;
 	char	*oldpwd;
@@ -93,8 +122,18 @@ int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 	return (0);
 }
 
-// work like normal cd
-// (cd) will go to home path
+/**
+ * @brief builtin command cd
+ * cd : cd to home, if HOME not set, error
+ * cd ~: cd to home, get the global env HOME, so no error
+ * cd -: cd to the OLDPWD
+ * cd path: cd to path, if path doesn't exist or not a directory, error
+ * cd ~/path: cd to HOME/path, if path doesn't exist or not a directory, error
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int errno
+ */
 int	ms_cd(t_mini *mini, t_cmdblock *cmdblock)
 {
 	if (mini->pipes.prep_pipe || mini->pipes.do_pipe
