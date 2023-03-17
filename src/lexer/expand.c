@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 16:15:41 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:59:54 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	expand_wildcard(t_mini *mini, char **pinput)
 			is_export = 1;
 		if (quote != '\'' && quote != '"' && ft_strchr(token, '*') != NULL)
 		{
-			if (!(is_export && ft_strnstr(token, "=*", ft_strlen(token))))
+			if (!(is_export && ft_strchr(token, '=')))
 				wildcard(mini, pinput, &token, i);
 		}
 		i += ft_strlen(token);

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 15:53:11 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:44:40 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 			edit_env_var(mini, key, value);
 		else
 		{
-			export_error(mini, cmdblock->cmd_argv, INVALID_IDENTIFIER);
+			identifier_error(mini, cmdblock->cmd_argv, i, INVALID_IDENTIFIER);
 			errnum = 1;
 			free (key);
 			free (value);

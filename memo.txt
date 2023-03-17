@@ -17,7 +17,7 @@ Done. cd | cd  (should not work)
 8. echo hi | grep hi (leaks)
 9. > test (not working)
 10. echo < Makefile (should do nothing and print a newline)
-11. cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
+Done. cd ~/Desktop/42_minishell/ (~ need to expand in ms_cd.c)
 12. for "cat" (only cat), when press ctrl-c, the ^C should appear
 
 Done. ms_cd no errno, should return errno

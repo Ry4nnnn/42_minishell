@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:06:05 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 15:47:04 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:26:42 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ t_env	*check_env_var(t_list *env, char *key)
 	}
 	return (NULL);
 }
-

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 16:01:18 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:44:31 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,24 @@
 //----------COLOURS----------//
 /* Regular */
 # define RESET		"\033[0m"
-#define BLACK		"\033[0;30m"
-#define RED			"\033[0;31m"
-#define GREEN		"\033[0;32m"
-#define YELLOW		"\033[0;33m"
-#define BLUE		"\033[0;34m"
-#define MAGENTA		"\033[0;35m"
-#define CYAN		"\033[0;36m"
-#define WHITE		"\033[0;37m"
+# define BLACK		"\033[0;30m"
+# define RED		"\033[0;31m"
+# define GREEN		"\033[0;32m"
+# define YELLOW		"\033[0;33m"
+# define BLUE		"\033[0;34m"
+# define MAGENTA	"\033[0;35m"
+# define CYAN		"\033[0;36m"
+# define WHITE		"\033[0;37m"
 
 /* Bolded */
-#define BBLACK		"\033[1;30m"
-#define BRED		"\033[1;31m"
-#define BGREEN		"\033[1;32m"
-#define BYELLOW		"\033[1;33m"
-#define BBLUE		"\033[1;34m"
-#define BMAGEN		"\033[1;35m"
-#define BCYAN		"\033[1;36m"
-#define BWHITE		"\033[1;37m"
-
+# define BBLACK		"\033[1;30m"
+# define BRED		"\033[1;31m"
+# define BGREEN		"\033[1;32m"
+# define BYELLOW	"\033[1;33m"
+# define BBLUE		"\033[1;34m"
+# define BMAGEN		"\033[1;35m"
+# define BCYAN		"\033[1;36m"
+# define BWHITE		"\033[1;37m"
 
 // Error Messages
 # define CMD_NF "command not found\n"
@@ -78,10 +77,9 @@
 # define READ 0
 # define WRITE 1
 
-
 //----------GLOBAL-VARIABLE----------//
 
-int g_errno;
+int	g_errno;
 
 //----------STRUCTS----------//
 
@@ -133,7 +131,7 @@ typedef struct s_pipes
 
 typedef struct s_mini
 {
-	t_list	*envp;// call env
+	t_list	*envp;
 	char	*prompt;
 	char	*builtins[8];
 	char	*redir[5];
@@ -165,11 +163,11 @@ int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 
 //unset.c
-void	ms_unset(t_mini *mini, char **args);
+void	ms_unset(t_mini *mini, char **cmd_argv);
 void	rm_env_var(t_mini *ms, t_env *env);
 
 //pwd.c
-void 	ms_pwd(void);
+void	ms_pwd(void);
 
 //builtins.c
 int		check_builtins(t_mini *mini, char *cmds);
@@ -182,9 +180,10 @@ t_env	*check_env_var(t_list *env, char *key);
 //----------LEXER----------//
 
 t_list	*split_cmdblocks(char *input, int bracket);
-int	ft_incharset(char *charset, char c);
-int	handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
-int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
+int		ft_incharset(char *charset, char c);
+int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
+int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
+			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **pinput);
 void	ft_strremove(char **s, int start, int n);
@@ -207,7 +206,7 @@ void	wait_childs(t_list *cmdblocks);
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
 void	syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cd_error(t_mini *mini, char **cmds, char *msg);
-void	export_error(t_mini *mini, char **cmds, char *msg);
+void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 
 //free.c
 void	free_Llist(t_mini *mini, t_list *env_list);
@@ -239,7 +238,7 @@ int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 char	*env_to_str(void *arg);
 
 // redir.c
-int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
+int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 void	handle_io(int fd, int std_file_no);
 void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
 void	redir_in(t_cmdblock *cmdblock);

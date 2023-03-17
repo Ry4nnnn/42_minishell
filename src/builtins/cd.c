@@ -6,12 +6,11 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 15:23:38 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 16:26:53 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 /**
  * @brief Function used to update pwd or oldpwd
