@@ -107,7 +107,6 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 			i++;
 		quote = input[i];
 		result[++j] = get_next_token(input, i, quote);
-		// printf("token[%i]: %s\n", j, result[j]);
 		i += ft_strlen(result[j]);
 		if (quote == '\'' || quote == '"')
 			i += 2;

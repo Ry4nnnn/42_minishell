@@ -6,7 +6,7 @@
 #    By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/17 19:00:57 by wangxuerui       ###   ########.fr        #
+#    Updated: 2023/03/17 23:06:33 by wangxuerui       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,32 +59,35 @@ REDIR_PATH		:= redir
 
 LEXER_PATH		:= lexer
 
-SPLITERS_PATH	:= spliters
+EXEC_PATH		:= executor
 
 LIBFT_PATH		:= libft
 
 #------------------------FILES-------------------------#
 
-BUILTINS	= env exit unset export cd echo pwd builtins builtin_utils
+BUILTINS	= env env_utils exit unset export cd echo pwd builtins builtin_utils
 REDIR		= redir pipe
 LEXER		= lexer lexer_utils expand tokenize syntax wildcard wildcard_utils
-MAIN		= main free error signal execve prompt utils redir
+MAIN		= main free error signal prompt utils init
+EXEC		= executor handler
 
 #------------------------------------------------------#
 
 SRCS		:= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(BUILTINS_PATH)/, $(BUILTINS)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(REDIR_PATH)/, $(REDIR)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(LEXER_PATH)/, $(LEXER)))
+SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/$(EXEC_PATH)/, $(EXEC)))
 SRCS		+= $(addsuffix .c, $(addprefix $(SRCS_PATH)/, $(MAIN)))
 
 OBJS		:= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(BUILTINS)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(REDIR)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(LEXER)))
+OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(EXEC)))
 OBJS		+= $(addsuffix .o, $(addprefix $(OBJS_PATH)/, $(MAIN)))
 
 #------------------------------------------------------#
 
-vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(REDIR_PATH)/ $(SRCS_PATH)/$(LEXER_PATH)/ $(SRCS_PATH)/$(SPLITERS_PATH) $(SRCS_PATH)/
+vpath %.c $(SRCS_PATH)/$(BUILTINS_PATH) $(SRCS_PATH)/$(REDIR_PATH)/ $(SRCS_PATH)/$(LEXER_PATH)/ $(SRCS_PATH)/$(EXEC_PATH) $(SRCS_PATH)/
 
 $(OBJS_PATH)/%.o: %.c
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@

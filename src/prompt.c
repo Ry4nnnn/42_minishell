@@ -75,7 +75,7 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	prompt = ft_strjoin_free(prompt, temp);
 	prompt = ft_strjoin_free(prompt, dir);
 	free(dir);
-	temp = " ✘"BBLUE" ("BMAGEN" ";
+	temp = " ✘"BBLUE" ("BMAGEN;
 	prompt = ft_strjoin_free(prompt, temp);
 	prompt = ft_strjoin_free(prompt, cur_branch);
 	free(cur_branch);
