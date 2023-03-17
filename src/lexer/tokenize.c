@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: codespace <codespace@student.42.fr>        +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 14:10:46 by codespace        ###   ########.fr       */
+/*   Updated: 2023/03/17 22:27:01 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 			i++;
 		quote = input[i];
 		result[++j] = get_next_token(input, i, quote);
-		printf("token[%i]: %s\n", j, result[j]);
+		// printf("token[%i]: %s\n", j, result[j]);
 		i += ft_strlen(result[j]);
 		if (quote == '\'' || quote == '"')
 			i += 2;
