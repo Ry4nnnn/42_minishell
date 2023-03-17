@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:35:52 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 19:32:05 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,9 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*exec_path;
 	char	**envp;
+	int	i;
 
+	i = 0;
 	cmdblock->need_wait = 1;
 	if (mini->pipes.prep_pipe)
 		prepare_pipe(mini);
@@ -131,16 +133,21 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
+		call_redir(mini, cmdblock);
+		while (mini->redir[i])
+		{
+			if (ft_strcmp(cmdblock->cmd_argv[0], mini->redir[i]) == 0)
+				exit (0);
+			i++;
+		}
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);
 		if (check_redir_type(mini, cmdblock) != 0) // checking if input has a redir type
 		{
-			// printf ("> TESTHERE\n");
 			call_redir(mini, cmdblock);
 			if (execve(exec_path, cmdblock->redir_argv, envp) == -1) // if execve fail means (its a invalid command)
 			{
-				// printf ("> teEQFEWFEWFst\n");
 				cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
 				exit(127);
 			}

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 00:31:54 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 19:29:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,11 @@ void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 	pid_t  fd;
 	int flag;
 
-	printf ("redirOUT!\n");
 	if (check_redir_type(mini, cmdblock) == OUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
 	if (check_redir_type(mini, cmdblock) == APPEND)
 		flag = O_CREAT | O_APPEND | O_WRONLY;
 	fd = open(cmdblock->file_name, flag, 0644);
-	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{
 		handle_io(fd, STDOUT_FILENO);
@@ -95,8 +93,6 @@ void	redir_in(t_cmdblock *cmdblock)
 	pid_t fd;
 
 	fd = open(cmdblock->file_name, O_RDONLY);
-	printf ("redirIN!\n");
-	printf ("file->name: %s\n", cmdblock->file_name);
 	if (fd < 0)
 	{
 		handle_io(fd, STDIN_FILENO);
@@ -107,7 +103,6 @@ void	redir_in(t_cmdblock *cmdblock)
 
 void	call_redir(t_mini *mini, t_cmdblock *cmdblock)
 {
-	// if ()
 	if (check_redir_type(mini, cmdblock) == OUT || check_redir_type(mini, cmdblock) == APPEND)
 		redir_out(mini, cmdblock); // overwrite the standard output
 	if (check_redir_type(mini, cmdblock) == IN)
