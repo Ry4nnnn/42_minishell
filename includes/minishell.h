@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 16:44:31 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 23:31:30 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,15 +137,12 @@ typedef struct s_mini
 	char	*redir[5];
 	char	*input;
 	t_list	*cmdblock_list;
-	t_pipes	pipes;	
-	int		exit_status;
+	t_pipes	pipes;
 }		t_mini;
 
 //----------BUILTINS----------//
 //cd.c
 int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
-void	update_pwd(t_mini *mini, char *key);
-void	update_oldpwd(t_mini *mini, char *old_path);
 
 //echo.c
 int		ms_echo(char **input);
@@ -153,6 +150,10 @@ int		is_option(char *input);
 
 //env.c
 int		ms_env(t_mini *mini);
+
+// env_utils.c
+char	*get_env(t_mini *mini, char *key);
+void	add_env_var(t_mini *mini, char *key, char *value);
 
 //exit.c
 void	ms_exit(t_mini *mini);
@@ -180,10 +181,9 @@ t_env	*check_env_var(t_list *env, char *key);
 //----------LEXER----------//
 
 t_list	*split_cmdblocks(char *input, int bracket);
+char	*skip_spliter(char *input, int spliter_type);
+int		get_spliter_type(char *input);
 int		ft_incharset(char *charset, char c);
-int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
-int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
-			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
 void	ft_strexpand(char **s, char *insert, int start, int n);
 void	expand_input(t_mini *mini, char **pinput);
 void	ft_strremove(char **s, int start, int n);
@@ -192,37 +192,44 @@ char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
 char	*trim_input(char *input);
 void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
+int		name_pattern_match(char *wildcard, char *name, int pattern_len);
+int		get_pattern_len(char *str);
+t_list	*get_names_list(int *buf);
+void	store_names(int *buf);
 
-//----------SPLITERS----------//
+//----------REDIR----------//
 void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
-void	wait_childs(t_list *cmdblocks);
+int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
+void	handle_io(int fd, int std_file_no);
+void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
+void	redir_in(t_cmdblock *cmdblock);
+void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
+
+//----------EXECUTOR----------//
+
+int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
+int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
+			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
+int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------MAIN_DIR----------//
 
 //error.c
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
-void	syntax_error(t_mini *mini, char *err_msg, char *token);
+int		syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cd_error(t_mini *mini, char **cmds, char *msg);
 void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 
 //free.c
-void	free_Llist(t_mini *mini, t_list *env_list);
 void	clear_env_var(void *content);
-void	ft_free(t_mini *mini, int type);
-
-//main.c
-void	add_env_var(t_mini *mini, char *key, char *value);
-int		init_env(t_mini *mini, char **ev);
-char	*get_env(t_mini *mini, char *key);
-void	init_prompt(t_mini *mini);
-int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
+void	free_cmdblock(void *arg);
+void	ms_free(t_mini *mini);
 
 //utils.c
-int		valid_input(char *key);
-void	get_key_value(char *arg, char **key, char **value);
+void	wait_childs(t_list *cmdblocks);
 
 //signal.c
 void	signal_handler(int signo);
@@ -232,16 +239,11 @@ void	init_signal(void);
 void	init_prompt(t_mini *mini);
 
 //execve.c
-char	*get_exec_path(t_mini *mini, char **cmds);
 int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
-char	*env_to_str(void *arg);
 
-// redir.c
-int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
-void	handle_io(int fd, int std_file_no);
-void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
-void	redir_in(t_cmdblock *cmdblock);
-void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
+// init.c
+void	ms_init(t_mini *mini, char **envp);
+void	ms_loop_init(t_mini *mini);
 
 #endif

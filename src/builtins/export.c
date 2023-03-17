@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 18:43:50 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 23:29:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	print_export(t_mini *mini)
 }
 
 // extracting key and value from input
-void	get_key_value(char *arg, char **key, char **value)
+static void	get_key_value(char *arg, char **key, char **value)
 {
 	*value = ft_strchr(arg, '=');
 	if (*value == NULL)
@@ -93,10 +93,25 @@ void	get_key_value(char *arg, char **key, char **value)
 		*value = ft_strdup(*value + 1);
 }
 
+/**
+ * @brief Edit env var, if not exist then add to the envp list
+ * Notice that export _ will be ignored
+ * 
+ * @param mini 
+ * @param key 
+ * @param value 
+ */
 void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*envp;
 
+	if (ft_strcmp(key, "_") == 0)
+	{
+		free (key);
+		if (value)
+			free (value);
+		return ;
+	}
 	envp = check_env_var(mini->envp, key);
 	if (envp == NULL)
 		add_env_var(mini, key, value);
@@ -137,13 +152,6 @@ int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 	while (cmdblock->cmd_argv[++i] != NULL)
 	{
 		get_key_value(cmdblock->cmd_argv[i], &key, &value);
-		if (!ft_strcmp(key, "_"))
-		{
-			free (key);
-			if (value)
-				free (value);
-			return (errnum);
-		}
 		if (valid_input(key))
 			edit_env_var(mini, key, value);
 		else

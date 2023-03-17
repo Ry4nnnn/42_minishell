@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execve.c                                           :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 19:32:05 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/17 23:34:51 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*env_to_str(void *arg)
+static char	*env_to_str(void *arg)
 {
 	t_env	*env_t;
 	char	*temp;
@@ -33,7 +33,7 @@ char	*env_to_str(void *arg)
  * @param mini t_mini struct
  * @param cmds input command
 **/
-char	*get_exec_path(t_mini *mini, char **cmds)
+static char	*get_exec_path(t_mini *mini, char **cmds)
 {
 	char *plist;
 	char **path;
@@ -121,8 +121,6 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 
 	i = 0;
 	cmdblock->need_wait = 1;
-	if (mini->pipes.prep_pipe)
-		prepare_pipe(mini);
 	get_exec_argv(mini, cmdblock); // cmdblock->redir_argv
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0) //this code will only run on child process
@@ -160,10 +158,8 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		}
 		exit(0);
 	}
-	if (mini->pipes.prep_pipe == 0)
+	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-		finish_pipe(mini);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(cmdblock->estatus));
@@ -175,8 +171,6 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 	char	**envp;
 
 	cmdblock->need_wait = 1;
-	if (mini->pipes.prep_pipe)
-		prepare_pipe(mini);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0) //this code will only run on child process
 	{
@@ -201,10 +195,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 		}
 		exit(0);
 	}
-	if (mini->pipes.prep_pipe == 0)
+	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-		finish_pipe(mini);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128); // From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
 	return (WEXITSTATUS(cmdblock->estatus));
