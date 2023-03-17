@@ -6,13 +6,13 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 02:04:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 03:34:25 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_option(char *input)
+static int	is_option(char *input)
 {
 	int		i;
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:52:29 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 03:35:15 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,6 @@ int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 
 //echo.c
 int		ms_echo(char **input);
-int		is_option(char *input);
 
 //env.c
 int		ms_env(t_mini *mini);
@@ -159,7 +158,6 @@ void	add_env_var(t_mini *mini, char *key, char *value);
 void	ms_exit(t_mini *mini);
 
 //export.c
-// void	ms_export(t_mini *mini, char **key);
 int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
 void	edit_env_var(t_mini *mini, char *key, char *value);
 

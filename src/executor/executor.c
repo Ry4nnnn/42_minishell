@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:34:51 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 03:45:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,18 @@ static char	*env_to_str(void *arg)
  * @brief gets a list executable paths from envp and split it into a 2d array
  * then use access() function to check if input can be found in the list of executable paths
  * when found, this function returns the exec_path for execve() function to execute
+ * if (access (temp2, X_OK) == 0)// if input is found in the List Of Path (break out of the loop)
  * 
  * @param mini t_mini struct
  * @param cmds input command
 **/
 static char	*get_exec_path(t_mini *mini, char **cmds)
 {
-	char *plist;
-	char **path;
-	int j;
-	char *temp;
-	char *temp2;
+	char	*plist;
+	char	**path;
+	char	*temp;
+	char	*temp2;
+	int		j;
 
 	j = 0;
 	plist = get_env(mini, "PATH");
@@ -49,7 +50,7 @@ static char	*get_exec_path(t_mini *mini, char **cmds)
 		temp = ft_strjoin(path[j], "/");
 		temp2 = ft_strjoin(temp, cmds[0]);
 		free (temp);
-		if (access (temp2, X_OK) == 0)// if input is found in the List Of Path (break out of the loop)
+		if (access (temp2, X_OK) == 0)
 			break ;
 		free(temp2);
 		j++;
@@ -57,17 +58,17 @@ static char	*get_exec_path(t_mini *mini, char **cmds)
 	if (path[j] == NULL)
 	{
 		cmd_error(mini, cmds, CMD_NF);
-		ft_free2darr((void *)path); // free 2d array
+		ft_free2darr((void *)path);
 		return (NULL);
 	}
-	ft_free2darr((void *)path); // free 2d array
+	ft_free2darr((void *)path);
 	return (temp2);
 }
 
 static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
 	i = 0;
 	while (cmdblock->cmd_argv[i])
@@ -76,7 +77,7 @@ static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 		while (mini->redir[j])
 		{
 			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
-				return (i) ;
+				return (i);
 			j++;
 		}
 		i++;
@@ -86,12 +87,12 @@ static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 
 //get the input in 2d array and check if theres a redir
 //and remove the args after the redir including the redir
-void get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
+void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 {
-	int i;
-	int j;
-	int k;
-	char **res;
+	int		i;
+	int		j;
+	int		k;
+	char	**res;
 
 	k = 0;
 	i = get_exec_argv_sz(mini, cmdblock);
@@ -117,16 +118,16 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*exec_path;
 	char	**envp;
-	int	i;
+	int		i;
 
 	i = 0;
 	cmdblock->need_wait = 1;
-	get_exec_argv(mini, cmdblock); // cmdblock->redir_argv
+	get_exec_argv(mini, cmdblock);
 	cmdblock->pid = fork();
-	if (cmdblock->pid == 0) //this code will only run on child process
+	if (cmdblock->pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		envp = ft_llto2darr(mini->envp, env_to_str);// convert linked list env to a 2d array
+		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (mini->pipes.prep_pipe)
 			close(mini->pipes.pipe[READ]);
 		if (mini->pipes.do_pipe)
@@ -141,19 +142,19 @@ int	exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock)
 		exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 		if (!exec_path)
 			exit(127);
-		if (check_redir_type(mini, cmdblock) != 0) // checking if input has a redir type
+		if (check_redir_type(mini, cmdblock) != 0)
 		{
 			call_redir(mini, cmdblock);
-			if (execve(exec_path, cmdblock->redir_argv, envp) == -1) // if execve fail means (its a invalid command)
+			if (execve(exec_path, cmdblock->redir_argv, envp) == -1)
 			{
-				cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
+				cmd_error(mini, cmdblock->cmd_argv, CMD_NF);
 				exit(127);
 			}
 			exit(0);
 		}
-		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1) // if execve fail means (its a invalid command)
+		if (execve(exec_path, cmdblock->cmd_argv, envp) == -1)
 		{
-			cmd_error(mini, cmdblock->cmd_argv, CMD_NF); //prints error msg for invalid command
+			cmd_error(mini, cmdblock->cmd_argv, CMD_NF);
 			exit(127);
 		}
 		exit(0);
