@@ -6,13 +6,13 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 21:49:56 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/17 21:56:27 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_cmdblock	*get_new_cmdblock(int spliter_type, int in_bracket)
+static t_cmdblock	*create_new_cmdblock(int spliter_type, int in_bracket)
 {
 	t_cmdblock	*new_cmdblock;
 
@@ -42,7 +42,7 @@ t_list	*get_bracket_cmdblock(char *input, int spliter_type)
 			quote = input[len];
 		len++;
 	}
-	if (get_new_cmdblock(spliter_type, 1) == NULL)
+	if (create_new_cmdblock(spliter_type, 1) == NULL)
 		return (NULL);
 	if (input[len] != ')')
 		new_cmdblock->input = ft_strndup(input, len);
@@ -73,7 +73,7 @@ t_list	*get_new_cmdblock(char *input, int spliter_type)
 		else if (quote == 0 && (input[len] == '\"' || input[len] == '\''))
 			quote = input[len];
 	}
-	if (get_new_cmdblock(spliter_type, 0) == NULL)
+	if (create_new_cmdblock(spliter_type, 0) == NULL)
 		return (NULL);
 	new_cmdblock->input = ft_strndup(input, len);
 	return (ft_lstnew((void *)new_cmdblock));
