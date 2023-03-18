@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 00:33:58 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 14:08:04 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	get_input(t_mini *mini, int *commanded)
 	else
 		mini->input = readline(BBLUE" ↪ "RESET);
 	if (mini->input == NULL)
-		ms_exit(mini);
+		ms_exit(mini, NULL);
 	mini->input = trim_input(mini->input);
 	if (mini->input[0] == '\0')
 	{

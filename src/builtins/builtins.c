@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:52:42 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 11:10:38 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 
 	errnum = 0;
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
-		ms_exit(mini);
+		ms_exit(mini, cmdblock->cmd_argv);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
 		ms_env(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "pwd", 4) == 0)

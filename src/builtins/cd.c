@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 16:26:53 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 14:27:56 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,9 @@ static int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 	if (ms_chdir(mini, home) == 0)
 		return (0);
 	if (access(home, F_OK) == 0)
-		cd_error(mini, cmdblock->cmd_argv, NOTDIR);
+		cmd_arg_error(mini, cmdblock->cmd_argv, NOTDIR);
 	else
-		cd_error(mini, cmdblock->cmd_argv, NSFD);
+		cmd_arg_error(mini, cmdblock->cmd_argv, NSFD);
 	return (1);
 }
 
@@ -113,9 +113,9 @@ static int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 	if (ms_chdir(mini, cmdblock->cmd_argv[1]) != 0)
 	{
 		if (access(cmdblock->cmd_argv[1], F_OK) == 0)
-			cd_error(mini, cmdblock->cmd_argv, NOTDIR);
+			cmd_arg_error(mini, cmdblock->cmd_argv, NOTDIR);
 		else
-			cd_error(mini, cmdblock->cmd_argv, NSFD);
+			cmd_arg_error(mini, cmdblock->cmd_argv, NSFD);
 		return (1);
 	}
 	return (0);

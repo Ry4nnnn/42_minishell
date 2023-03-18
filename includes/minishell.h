@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 03:35:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 14:28:42 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@
 # define NOHOME "HOME not set\n"
 # define NOTDIR "Not a directory\n"
 # define INVALID_IDENTIFIER "not a valid identifier\n"
+# define TOOMANYARGS "too many arguments\n"
+# define NONNUMERICARG "numeric argument required\n"
 
 // Special characters
 # define HARD_SPLITERS "(&|"
@@ -155,7 +157,7 @@ char	*get_env(t_mini *mini, char *key);
 void	add_env_var(t_mini *mini, char *key, char *value);
 
 //exit.c
-void	ms_exit(t_mini *mini);
+void	ms_exit(t_mini *mini, char **cmd_argv);
 
 //export.c
 int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
@@ -219,7 +221,7 @@ int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 //error.c
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
 int		syntax_error(t_mini *mini, char *err_msg, char *token);
-void	cd_error(t_mini *mini, char **cmds, char *msg);
+void	cmd_arg_error(t_mini *mini, char **cmds, char *msg);
 void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 
 //free.c

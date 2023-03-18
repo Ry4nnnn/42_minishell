@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:31:52 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:24:13 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 14:26:36 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	identifier_error(t_mini *mini, char **cmds, int i, char *msg)
 	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 }
 
-void	cd_error(t_mini *mini, char **cmds, char *msg)
+void	cmd_arg_error(t_mini *mini, char **cmds, char *msg)
 {
 	char	*user;
 
