@@ -124,7 +124,7 @@ docker_run:
 	@docker rm -f minishell_container > /dev/null 2>&1
 	docker run -dit --name minishell_container -v $(shell pwd):/home/wxuerui/Desktop/minishell minishell_image
 	docker exec minishell_container make LK=1
-	docker exec -it minishell_container ./minishell
+	docker exec -it minishell_container bash
 	@docker rm -f minishell_container > /dev/null 2>&1
 
 docker_clean:
