@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 14:43:20 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 23:42:11 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,13 @@ static int	ms_chdir(t_mini *mini, t_cmdblock *cmdblock, char *path)
 	if (mini->pipes.prep_pipe || mini->pipes.do_pipe
 		|| cmdblock->was_in_bracket)
 		return (0);
-	oldpwd = getcwd(NULL, PATH_MAX);
+	oldpwd = getcwd(NULL, 0);
 	if (chdir(path) != 0)
 	{
 		free(oldpwd);
 		return (-1);
 	}
-	update_dir(mini, "PWD", getcwd(NULL, PATH_MAX));
+	update_dir(mini, "PWD", getcwd(NULL, 0));
 	update_dir(mini, "OLDPWD", oldpwd);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 16:53:37 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 23:41:58 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ void	init_prompt(t_mini *mini)
 	user = get_env(mini, "USER");
 	if (user == NULL)
 		user = "user";
-	pwd = getcwd(NULL, PATH_MAX);
+	pwd = getcwd(NULL, 0);
 	home = get_env(mini, "HOME");
 	if (ft_strnstr(pwd, home, ft_strlen(home)))
 		pwd = get_relative_path(home, pwd);
