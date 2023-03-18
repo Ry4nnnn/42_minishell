@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:31:52 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 14:26:36 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 14:35:00 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	identifier_error(t_mini *mini, char **cmds, int i, char *msg)
 	if (user == NULL)
 		user = "user";
 	printf(YELLOW"%s: \033[0m%s: `%s': %s", user, cmds[0], cmds[i], msg);
-	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 }
 
 void	cmd_arg_error(t_mini *mini, char **cmds, char *msg)
@@ -33,7 +36,10 @@ void	cmd_arg_error(t_mini *mini, char **cmds, char *msg)
 	if (user == NULL)
 		user = "user";
 	printf(YELLOW"%s: \033[0m%s: %s: %s", user, cmds[0], cmds[1], msg);
-	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 }
 
 void	cmd_error(t_mini *mini, char **cmds, char *msg)
@@ -48,7 +54,10 @@ void	cmd_error(t_mini *mini, char **cmds, char *msg)
 		printf(YELLOW"%s: \033[0m%s: %s", user, cmds[0], msg);
 	else
 		printf(YELLOW"%s: \033[0m: %s", user, msg);
-	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 }
 
 int	syntax_error(t_mini *mini, char *err_msg, char *token)
@@ -68,7 +77,10 @@ int	syntax_error(t_mini *mini, char *err_msg, char *token)
 	}
 	else
 		printf(YELLOW"%s:\033[0m %s\n", user, err_msg);
-	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+	if (mini->pipes.prep_pipe)
+		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+	else
+		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 	g_errno = 258;
 	return (0);
 }

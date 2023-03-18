@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 18:40:17 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/18 15:01:49 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	rm_env_var(t_mini *ms, t_env *env)
+void	rm_env_var(t_mini *mini, t_env *env)
 {
 	t_list	*curr;
 	t_list	*tmp;
 
-	curr = ms->envp;
+	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
+		return ;
+	curr = mini->envp;
 	if (curr->content == env)
 	{
-		ms->envp = curr->next;
+		mini->envp = curr->next;
 		ft_lstdelone(curr, clear_env_var);
 		return ;
 	}
@@ -51,15 +53,13 @@ void	ms_unset(t_mini *mini, char **cmd_argv)
 	int		i;
 
 	i = 0;
-	if (cmd_argv[1] == NULL || mini->pipes.do_pipe || mini->pipes.prep_pipe)
+	if (cmd_argv[1] == NULL)
 		return ;
 	while (cmd_argv[++i] != NULL)
 	{
-		if (!ft_strcmp(cmd_argv[i], "_"))
-			return ;
-		if (valid_input(cmd_argv[i]) == 0)
-			printf("unset: `%s': not a valid identifier\n", cmd_argv[i]);
 		envp = check_env_var(mini->envp, cmd_argv[i]);
+		if (ft_strcmp(cmd_argv[i], "_") == 0)
+			continue ;
 		if (valid_input(cmd_argv[i]))
 		{
 			envp = check_env_var(mini->envp, cmd_argv[i]);

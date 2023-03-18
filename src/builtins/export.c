@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 23:29:15 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:04:19 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,13 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*envp;
 
+	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
+	{
+		free(key);
+		if (value)
+			free(value);
+		return ;
+	}
 	if (ft_strcmp(key, "_") == 0)
 	{
 		free (key);
@@ -147,8 +154,6 @@ int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 	errnum = 0;
 	if (cmdblock->cmd_argv[1] == NULL || check_redir_type(mini, cmdblock) != 0)
 		return (print_export(mini));
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-		return (0);
 	while (cmdblock->cmd_argv[++i] != NULL)
 	{
 		get_key_value(cmdblock->cmd_argv[i], &key, &value);
