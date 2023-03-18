@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 20:41:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/18 15:57:26 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/19 00:15:56 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,30 @@ int	pattern_match(char *wildcard, char *name)
 }
 
 /**
- * @brief Get all the file and directory names in the current working directory
+ * @brief Get all the d_names in the current working directory
  * 
- * @return t_list* 
+ * @return t_list* names linked list
  */
 t_list	*get_cwd_names(void)
 {
-	int		buf[2];
+	DIR				*dir;
+	t_list			*names;
+	struct dirent	*dir_info;
 
-	pipe(buf);
-	store_names(buf);
-	return (get_names_list(buf));
+	names = NULL;
+	dir = opendir(".");
+	if (dir == NULL)
+		return (NULL);
+	dir_info = readdir(dir);
+	while (dir_info != NULL)
+	{
+		if (dir_info->d_name[0] != '.')
+			ft_lstadd_back(&names, ft_lstnew(ft_strdup(dir_info->d_name)));
+		dir_info = readdir(dir);
+	}
+	closedir(dir);
+	sort_names_list(&names);
+	return (names);
 }
 
 /**

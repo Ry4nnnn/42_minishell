@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 19:20:06 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/19 00:14:23 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <errno.h>
+# include <dirent.h>
 # ifdef __linux__
 #  include <linux/limits.h>
 # else
@@ -194,8 +195,7 @@ char	*trim_input(char *input);
 void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
 int		name_pattern_match(char *wildcard, char *name, int pattern_len);
 int		get_pattern_len(char *str);
-t_list	*get_names_list(int *buf);
-void	store_names(int *buf);
+void	sort_names_list(t_list **names);
 
 //----------REDIR----------//
 void	prepare_pipe(t_mini *mini);

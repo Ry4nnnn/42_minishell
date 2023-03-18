@@ -6,57 +6,35 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:00:41 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/18 15:59:23 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/19 00:16:41 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
- * @brief Use a pipe to store the names
+ * @brief Sort the d_names linked list in ascending order
  * 
- * @param buf 
+ * @param names d_names linked list ptr
  */
-void	store_names(int *buf)
+void	sort_names_list(t_list **names)
 {
-	char	*cmd_argv[2];
-	pid_t	getter;
+	t_list	*curr;
+	void	*temp;
 
-	cmd_argv[0] = "/bin/ls";
-	cmd_argv[1] = NULL;
-	getter = fork();
-	if (getter == 0)
+	curr = *names;
+	while (curr->next != NULL)
 	{
-		dup2(buf[WRITE], STDOUT_FILENO);
-		close(buf[READ]);
-		if (execve("/bin/ls", cmd_argv, NULL) != 0)
-			exit(EXIT_FAILURE);
+		if (ft_strcmp((char *)curr->content, (char *)curr->next->content) > 0)
+		{
+			temp = curr->content;
+			curr->content = curr->next->content;
+			curr->next->content = temp;
+			curr = *names;
+		}
+		else
+			curr = curr->next;
 	}
-	waitpid(getter, NULL, 0);
-}
-
-/**
- * @brief Get the file and directory names in the current working directory
- * 
- * @param buf 
- * @return t_list* 
- */
-t_list	*get_names_list(int *buf)
-{
-	t_list	*names_list;
-	char	*name;
-
-	names_list = NULL;
-	close(buf[WRITE]);
-	name = get_next_line(buf[READ]);
-	while (name != NULL)
-	{
-		name[ft_strlen(name) - 1] = 0;
-		ft_lstadd_back(&names_list, ft_lstnew((void *)name));
-		name = get_next_line(buf[READ]);
-	}
-	close(buf[READ]);
-	return (names_list);
 }
 
 /**
