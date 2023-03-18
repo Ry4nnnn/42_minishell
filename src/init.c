@@ -6,12 +6,17 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 22:40:50 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/18 00:10:32 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:13:38 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Init the builtin commands array
+ * 
+ * @param mini 
+ */
 static void	init_builtins(t_mini *mini)
 {
 	mini->builtins[0] = "pwd";
@@ -24,6 +29,11 @@ static void	init_builtins(t_mini *mini)
 	mini->builtins[7] = NULL;
 }
 
+/**
+ * @brief Init the redirection types array
+ * 
+ * @param mini 
+ */
 static void	init_redir(t_mini *mini)
 {
 	mini->redir[0] = ">";
@@ -33,6 +43,12 @@ static void	init_redir(t_mini *mini)
 	mini->redir[4] = NULL;
 }
 
+/**
+ * @brief Init the envp linked list
+ * 
+ * @param mini 
+ * @param envp 
+ */
 static void	init_env(t_mini *mini, char **envp)
 {
 	char	*key;
@@ -48,6 +64,12 @@ static void	init_env(t_mini *mini, char **envp)
 	}
 }
 
+/**
+ * @brief Init g_errno to 0, and call the 3 init functions above
+ * 
+ * @param mini 
+ * @param envp 
+ */
 void	ms_init(t_mini *mini, char **envp)
 {
 	g_errno = 0;
@@ -57,6 +79,12 @@ void	ms_init(t_mini *mini, char **envp)
 	init_redir(mini);
 }
 
+/**
+ * @brief
+ * Restore the signal handler, prompt string, and pipes before every command.
+ * 
+ * @param mini 
+ */
 void	ms_loop_init(t_mini *mini)
 {
 	init_signal();

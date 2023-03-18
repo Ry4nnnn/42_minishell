@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 23:01:14 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/17 23:02:03 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:36:39 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock, t_cmdblock *cmdbloc
 	// printf("expanded: %s\n", cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = handle_commands(mini, cmdblock);
+	g_errno = cmdblock->exit_status;
 	ft_free2darr((void **)cmdblock->redir_argv);
 	ft_free2darr((void **)cmdblock->cmd_argv);
 	return (cmdblock->exit_status);

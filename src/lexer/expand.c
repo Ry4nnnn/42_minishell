@@ -6,13 +6,20 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 16:59:54 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:54:40 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	expand_exit_status(t_mini *mini, char **pinput, int *i)
+/**
+ * @brief Handle the $? variable, expand to g_errno.
+ * 
+ * @param mini 
+ * @param pinput input string ptr
+ * @param i input string index ptr
+ */
+static void	expand_exit_status(t_mini *mini, char **pinput, int *i)
 {
 	char	*str_exit_status;
 
@@ -29,11 +36,11 @@ void	expand_exit_status(t_mini *mini, char **pinput, int *i)
  * either ' ', '"' or special characters
  * 
  * @param mini 
- * @param pinput 
- * @param quote 
- * @param i 
+ * @param pinput input string ptr
+ * @param quote type of quote
+ * @param i input string index ptr
  */
-void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
+static void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
 {
 	int		n;
 	char	*temp_key;
@@ -54,7 +61,17 @@ void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
 	*i += ft_strlen(env_var) - 1;
 }
 
-void	expand_wildcard(t_mini *mini, char **pinput)
+/**
+ * @brief Expand wildcard if not in single quote
+ * Special case:
+ * If the * character is a part of the argument in the export command,
+ * then check if the token is assigning * to an identifier, (e.g. A=*)
+ * If yes then ignore the token.
+ * 
+ * @param mini 
+ * @param pinput input string ptr
+ */
+static void	expand_wildcard(t_mini *mini, char **pinput)
 {
 	int		i;
 	int		quote;
@@ -81,7 +98,13 @@ void	expand_wildcard(t_mini *mini, char **pinput)
 	}
 }
 
-void	expand_input(t_mini *mini, char **pinput)
+/**
+ * @brief Expand env_var if not in single quotes
+ * 
+ * @param mini 
+ * @param pinput input string ptr
+ */
+static void	expand_variables(t_mini *mini, char **pinput)
 {
 	int		quote;
 	int		i;
@@ -97,7 +120,20 @@ void	expand_input(t_mini *mini, char **pinput)
 		else if (quote == (*pinput)[i])
 			quote = 0;
 		if ((*pinput)[i] == 0)
-			break ;
+			return ;
 	}
+}
+
+/**
+ * @brief Expand the variables and wildcards in the input
+ * 1. Expand variables if not in single quotes.
+ * 2. Expand wildcards if not in single quotes or the case like export A=*.
+ * 
+ * @param mini 
+ * @param pinput input string ptr
+ */
+void	expand_input(t_mini *mini, char **pinput)
+{
+	expand_variables(mini, pinput);
 	expand_wildcard(mini, pinput);
 }

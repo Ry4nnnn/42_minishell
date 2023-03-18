@@ -6,12 +6,18 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:41:45 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 23:36:40 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:53:37 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Execute the git branch --show-current command in a child process,
+ * and store the input result in a pipe.
+ * 
+ * @param buf pipe fds used to store branch name
+ */
 static void	exec_git_cmd(int *buf)
 {
 	pid_t	getter;
@@ -33,6 +39,11 @@ static void	exec_git_cmd(int *buf)
 	waitpid(getter, NULL, 0);
 }
 
+/**
+ * @brief Get the current branch name, if not in a git repo then return 🍆.
+ * 
+ * @return char* branch name
+ */
 static char	*get_branch_name(void)
 {
 	char	*branch;
@@ -84,6 +95,13 @@ static void	combine_prompt(t_mini *mini, char *user, char *dir)
 	mini->prompt = prompt;
 }
 
+/**
+ * @brief Get the relative path of the current working directory
+ * 
+ * @param home home path
+ * @param pwd current working directory
+ * @return char* relative path
+ */
 static char	*get_relative_path(char *home, char *pwd)
 {
 	char	*path;

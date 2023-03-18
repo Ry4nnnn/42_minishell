@@ -6,12 +6,21 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 14:08:04 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:40:28 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Get the input string, if input is NULL (ctrl-d) then exit.
+ * If the input is not command, then make the commanded variable 0,
+ * so the next prompt will be just an arrow, without the long annoying line.
+ * 
+ * @param mini 
+ * @param commanded 
+ * @return int 1 for valid line, 0 for empty input
+ */
 int	get_input(t_mini *mini, int *commanded)
 {
 	if (*commanded)
