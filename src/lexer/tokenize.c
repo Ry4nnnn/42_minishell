@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 22:27:01 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:37:15 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,13 @@ char	*get_next_token(char *input, int i, int quote)
 	return (result);
 }
 
+/**
+ * @brief 
+ * 
+ * @param mini 
+ * @param input 
+ * @return char** 
+ */
 char	**tokenize_cmd(t_mini *mini, char *input)
 {
 	int		i;

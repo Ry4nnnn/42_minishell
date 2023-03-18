@@ -6,12 +6,17 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 19:00:41 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/17 19:18:42 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:59:23 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Use a pipe to store the names
+ * 
+ * @param buf 
+ */
 void	store_names(int *buf)
 {
 	char	*cmd_argv[2];
@@ -30,6 +35,12 @@ void	store_names(int *buf)
 	waitpid(getter, NULL, 0);
 }
 
+/**
+ * @brief Get the file and directory names in the current working directory
+ * 
+ * @param buf 
+ * @return t_list* 
+ */
 t_list	*get_names_list(int *buf)
 {
 	t_list	*names_list;
@@ -48,6 +59,13 @@ t_list	*get_names_list(int *buf)
 	return (names_list);
 }
 
+/**
+ * @brief Get the pattern len,
+ * Aka the strlen before * or \0 character.
+ * 
+ * @param str 
+ * @return int 
+ */
 int	get_pattern_len(char *str)
 {
 	int	len;
@@ -60,6 +78,14 @@ int	get_pattern_len(char *str)
 	return (len);
 }
 
+/**
+ * @brief Return the index of matching, -1 for no match
+ * 
+ * @param wildcard 
+ * @param name 
+ * @param pattern_len 
+ * @return int 
+ */
 int	name_pattern_match(char *wildcard, char *name, int pattern_len)
 {
 	int	i;

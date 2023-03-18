@@ -6,12 +6,18 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 11:08:58 by codespace         #+#    #+#             */
-/*   Updated: 2023/03/17 18:23:12 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:37:02 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief trim the leading and tailing spaces from the input
+ * 
+ * @param input 
+ * @return char* 
+ */
 char	*trim_input(char *input)
 {
 	char	*result;
@@ -21,6 +27,13 @@ char	*trim_input(char *input)
 	return (result);
 }
 
+/**
+ * @brief Find the unexpected token in the brackets syntax error string.
+ * Token string will be freed in the syntax_error() function.
+ * 
+ * @param input 
+ * @return char* 
+ */
 static char	*find_unexpected_token(char *input)
 {
 	int	i;
@@ -41,6 +54,18 @@ static char	*find_unexpected_token(char *input)
 	return (ft_strndup(input, i));
 }
 
+/**
+ * @brief
+ * Types of checking:
+ * 1. If there is a bracket unquoted
+ * 		Before in split cmdblocks all () for priorities are trimed,
+ * 		a unquoted bracket here means there is unpaired or illegal brackets.
+ * 2. If there is unclosed quote
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int 
+ */
 int	check_cmdblock_syntax(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	i;
@@ -67,6 +92,13 @@ int	check_cmdblock_syntax(t_mini *mini, t_cmdblock *cmdblock)
 	return (1);
 }
 
+/**
+ * @brief Check if the syntax of all cmdblocks are correct
+ * 
+ * @param mini 
+ * @param cmdblocks_list 
+ * @return int 
+ */
 int	check_syntax(t_mini *mini, t_list *cmdblocks_list)
 {
 	t_cmdblock	*cmdblock;

@@ -6,12 +6,18 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:06:05 by welim             #+#    #+#             */
-/*   Updated: 2023/03/17 16:26:42 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:07:45 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Check if the input is a valid identifier
+ * 
+ * @param key 
+ * @return int 1 for true 0 for false
+ */
 int	valid_input(char *key)
 {
 	if (ft_isalpha(*key) == 0 && *key != '_')

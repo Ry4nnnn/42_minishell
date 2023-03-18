@@ -6,12 +6,20 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:08 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 14:53:36 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 16:02:48 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Get exit_num,
+ * rint error if the exit_num is non_numeric and return 255
+ * 
+ * @param mini 
+ * @param cmd_argv 
+ * @return int 
+ */
 static int	get_exit_num(t_mini *mini, char **cmd_argv)
 {
 	int	exit_num;
@@ -22,10 +30,9 @@ static int	get_exit_num(t_mini *mini, char **cmd_argv)
 		if (ft_isnumber(cmd_argv[1]) == 0)
 		{
 			cmd_arg_error(mini, cmd_argv, NONNUMERICARG);
-			exit_num = 255;
+			return (255);
 		}
-		else
-			exit_num = ft_atoi(cmd_argv[1]);
+		exit_num = ft_atoi(cmd_argv[1]);
 	}
 	return (exit_num);
 }

@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 11:10:38 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:08:49 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@ int	check_builtins(t_mini *mini, char *cmds)
 	return (0);
 }
 
+/**
+ * @brief Choose the corresponding command and execute
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int 
+ */
 static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	errnum;
@@ -55,8 +62,6 @@ static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 
 /**
  * @brief execute builtin functions
- * check pipe and redir first, then execute builtin and take errnum,
- * finally wrap up redir and pipe
  * 
  * @param mini 
  * @param cmdblock 

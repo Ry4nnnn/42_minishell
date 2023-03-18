@@ -6,12 +6,22 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:58:16 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/17 23:38:29 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 15:18:33 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Expand the string s by inserting the string 'insert' into
+ * the position start, and ignore the n characters from the string s.
+ * For example: ft_strexpand(&"1234567", "abcde", 2, 3) => "12abcde67"
+ * 
+ * @param s 
+ * @param insert 
+ * @param start 
+ * @param n 
+ */
 void	ft_strexpand(char **s, char *insert, int start, int n)
 {
 	char	*result;
@@ -39,6 +49,13 @@ void	ft_strexpand(char **s, char *insert, int start, int n)
 	*s = result;
 }
 
+/**
+ * @brief Ignore the spliter in the string
+ * 
+ * @param input 
+ * @param spliter_type 
+ * @return char* 
+ */
 char	*skip_spliter(char *input, int spliter_type)
 {
 	if (spliter_type == 0)
@@ -50,6 +67,12 @@ char	*skip_spliter(char *input, int spliter_type)
 	return (input);
 }
 
+/**
+ * @brief Get the spliter type
+ * 
+ * @param input 
+ * @return int 
+ */
 int	get_spliter_type(char *input)
 {
 	if (ft_strncmp(input, "&&", 2) == 0)
