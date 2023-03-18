@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 15:52:29 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 19:20:06 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stddef.h>
 # include <stdint.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <errno.h>
@@ -66,6 +67,7 @@
 # define UNCLOSED_QUOTE "Unclosed quote"
 # define NOHOME "HOME not set\n"
 # define NOTDIR "Not a directory\n"
+# define ISDIR "is a directory\n"
 # define INVALID_IDENTIFIER "not a valid identifier\n"
 # define TOOMANYARGS "too many arguments\n"
 # define NONNUMERICARG "numeric argument required\n"
@@ -210,11 +212,19 @@ void	done_redir(t_mini *mini);
 //----------EXECUTOR----------//
 
 int		handle_cmdblocks(t_mini *mini, t_list *cmdblocks_list);
-int		handle_cmdblock(t_mini *mini, t_cmdblock *prev_cmdblock,
-			t_cmdblock *cmdblock, t_cmdblock *next_cmdblock);
-int		handle_commands(t_mini *mini, t_cmdblock *cmdblock);
-int		exec_non_builtins(t_mini *mini, t_cmdblock *cmdblock);
+int		handle_cmdblock(t_mini *mini, t_cmdblock *cmdblock);
+int		executor(t_mini *mini, t_cmdblock *cmdblock);
+int		exec_commands(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
+//utils
+char	*env_to_str(void *arg);
+char	*get_exec_path(t_mini *mini, char **cmds);
+void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock);
+int		get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock);
+int		get_exit_status(t_list *cmdblock_list);
+void	prepare_handling(t_mini *mini, t_list *curr_node,
+			t_cmdblock *cmdblock);
+int		should_execute(t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock);
 
 //----------MAIN_DIR----------//
 

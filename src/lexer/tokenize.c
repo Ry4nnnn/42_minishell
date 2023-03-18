@@ -6,12 +6,18 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 15:37:15 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 17:04:31 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Detect the length of a normal (space separated) token.
+ * 
+ * @param input 
+ * @return int 
+ */
 static int	detect_normal_token(char *input)
 {
 	int	i;
@@ -27,6 +33,13 @@ static int	detect_normal_token(char *input)
 	return (i);
 }
 
+/**
+ * @brief Detect the length of a quote token
+ * 
+ * @param input 
+ * @param quote 
+ * @return int 
+ */
 static int	detect_quote_token(char *input, int quote)
 {
 	int	i;
@@ -40,6 +53,12 @@ static int	detect_quote_token(char *input, int quote)
 	return (i);
 }
 
+/**
+ * @brief Get the size of the token array for malloc use.
+ * 
+ * @param input 
+ * @return int 
+ */
 int	get_tokens_size(char *input)
 {
 	int	i;
@@ -65,6 +84,17 @@ int	get_tokens_size(char *input)
 	return (size);
 }
 
+/**
+ * @brief Get the next token.
+ * If quote is either ' or ", get the content inside the quotes.
+ * Otherwise, get until the next space appeared.
+ * During the loop if a quote appeared, change to target the quote.
+ * 
+ * @param input 
+ * @param i 
+ * @param quote 
+ * @return char* 
+ */
 char	*get_next_token(char *input, int i, int quote)
 {
 	int		len;
@@ -91,7 +121,7 @@ char	*get_next_token(char *input, int i, int quote)
 }
 
 /**
- * @brief 
+ * @brief Tokenize the command input, works kind of like ft_split
  * 
  * @param mini 
  * @param input 

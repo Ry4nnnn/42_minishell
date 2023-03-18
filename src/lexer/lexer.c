@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 15:30:00 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 18:55:56 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ static t_cmdblock	*create_new_cmdblock(int spliter_type, int in_bracket)
 	new_cmdblock->spliter_type = spliter_type;
 	new_cmdblock->in_bracket = in_bracket;
 	new_cmdblock->was_in_bracket = 0;
+	new_cmdblock->need_wait = 0;
+	new_cmdblock->cmd_argv = NULL;
+	new_cmdblock->redir_argv = NULL;
 	return (new_cmdblock);
 }
 

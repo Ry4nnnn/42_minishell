@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:18 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 16:02:09 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/18 17:09:39 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,5 @@ void	ms_free(t_mini *mini)
 {
 	free(mini->input);
 	free(mini->prompt);
+	ft_lstclear(&mini->cmdblock_list, free_cmdblock);
 }
