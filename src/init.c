@@ -74,6 +74,7 @@ void	ms_init(t_mini *mini, char **envp)
 {
 	g_errno = 0;
 	mini->envp = NULL;
+	mini->cmdblock_list = NULL;
 	init_env(mini, envp);
 	init_builtins(mini);
 	init_redir(mini);
