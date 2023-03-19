@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 19:21:53 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/20 00:30:14 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@
  * @param exec_path 
  * @return int 
  */
-int	execute(t_mini *mini, t_cmdblock *cmdblock, char *exec_path)
+int	execute(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	**envp;
 	int		i;
+	char *exec_path;
 
 	i = 0;
 	envp = ft_llto2darr(mini->envp, env_to_str);
@@ -39,6 +40,9 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock, char *exec_path)
 			exit (0);
 		i++;
 	}
+	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
+	if (exec_path == NULL)
+		return (127);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		call_redir(mini, cmdblock);
@@ -55,34 +59,6 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock, char *exec_path)
 		exit(127);
 	}
 	exit(0);	
-}
-
-/**
- * @brief Execute the commands in PATH
- * From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
- * 
- * @param mini 
- * @param cmdblock 
- * @return int 
- */
-int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
-{
-	char	*exec_path;
-
-	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
-	if (exec_path == NULL)
-		return (127);
-	cmdblock->need_wait = 1;
-	get_exec_argv(mini, cmdblock);
-	cmdblock->pid = fork();
-	if (cmdblock->pid == 0)
-		execute(mini, cmdblock, exec_path);
-	free(exec_path);
-	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
-		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-	if (WIFSIGNALED(cmdblock->estatus))
-		return (WTERMSIG(cmdblock->estatus) + 128);
-	return (WEXITSTATUS(cmdblock->estatus));
 }
 
 static int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
@@ -118,6 +94,7 @@ static int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
 int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		errnum;
+	char **envp;
 
 	cmdblock->need_wait = 1;
 	errnum = get_program_permission(mini, cmdblock);
@@ -125,7 +102,35 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 		return (errnum);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
-		execute(mini, cmdblock, cmdblock->cmd_argv[0]);
+	{
+		signal(SIGINT, SIG_DFL);
+		envp = ft_llto2darr(mini->envp, env_to_str);
+		if (mini->pipes.do_pipe)
+			do_pipe(mini);
+		execve(cmdblock->cmd_argv[0], cmdblock->cmd_argv, envp);
+	}
+	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
+		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
+	if (WIFSIGNALED(cmdblock->estatus))
+		return (WTERMSIG(cmdblock->estatus) + 128);
+	return (WEXITSTATUS(cmdblock->estatus));
+}
+
+/**
+ * @brief Execute the commands in PATH
+ * From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
+ * 
+ * @param mini 
+ * @param cmdblock 
+ * @return int 
+ */
+int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
+{
+	cmdblock->need_wait = 1;
+	get_exec_argv(mini, cmdblock);
+	cmdblock->pid = fork();
+	if (cmdblock->pid == 0)
+		execute(mini, cmdblock);
 	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))
