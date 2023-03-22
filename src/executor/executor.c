@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/20 00:30:14 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/22 13:22:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 	}
 	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (exec_path == NULL)
-		return (127);
+		exit (127);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		call_redir(mini, cmdblock);
@@ -153,6 +153,9 @@ int	executor(t_mini *mini, t_cmdblock *cmdblock)
 		return (127);
 	}
 	else
+	{
+		printf ("here\n");
 		return (exec_commands(mini, cmdblock));
+	}
 	return (0);
 }
