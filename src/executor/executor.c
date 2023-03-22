@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/22 13:22:58 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/22 16:23:04 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,9 +153,6 @@ int	executor(t_mini *mini, t_cmdblock *cmdblock)
 		return (127);
 	}
 	else
-	{
-		printf ("here\n");
 		return (exec_commands(mini, cmdblock));
-	}
 	return (0);
 }

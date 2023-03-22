@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 11:31:52 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 16:07:45 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/22 15:52:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,3 +119,30 @@ int	syntax_error(t_mini *mini, char *err_msg, char *token)
 	g_errno = 258;
 	return (0);
 }
+
+// /**
+//  * @brief Command error
+//  * Output just the command and the error message. 
+//  * All error messages are outputed to the STDERR stream.
+//  * 
+//  * @param mini 
+//  * @param cmds 
+//  * @param msg 
+//  */
+// void	env_error(t_mini *mini, char **cmds, char *msg)
+// {
+// 	char	*user;
+
+// 	dup2(STDERR_FILENO, STDOUT_FILENO);
+// 	user = get_env(mini, "USER");
+// 	if (user == NULL)
+// 		user = "user";
+// 	if (cmds != NULL)
+// 		printf(YELLOW"%s: \033[0menv: %s: %s", user, cmds[1], msg);
+// 	else
+// 		printf(YELLOW"%s: \033[0menv: %s", user, msg);
+// 	if (mini->pipes.prep_pipe)
+// 		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
+// 	else
+// 		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
+// }

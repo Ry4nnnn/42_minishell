@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 03:41:03 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/22 14:07:52 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 	pid_t	fd;
 	int		flag;
 
+	// if (cmd)
 	if (check_redir_type(mini, cmdblock) == OUT)
 		flag = O_CREAT | O_TRUNC | O_WRONLY;
 	if (check_redir_type(mini, cmdblock) == APPEND)
@@ -69,7 +70,6 @@ void	redir_out(t_mini *mini, t_cmdblock *cmdblock)
 	if (fd < 0)
 	{
 		handle_io(fd, STDOUT_FILENO);
-		printf ("ErrorOUT!\n");
 	}
 	handle_io(fd, STDOUT_FILENO);
 }
@@ -82,7 +82,6 @@ void	redir_in(t_cmdblock *cmdblock)
 	if (fd < 0)
 	{
 		handle_io(fd, STDIN_FILENO);
-		printf ("ErrorIN!\n");
 	}
 	handle_io(fd, STDIN_FILENO);
 }
@@ -106,4 +105,6 @@ void	call_redir(t_mini *mini, t_cmdblock *cmdblock)
 		redir_out(mini, cmdblock);
 	if (check_redir_type(mini, cmdblock) == IN)
 		redir_in(cmdblock);
+	if (check_redir_type(mini, cmdblock) == HEREDOC)
+		heredoc(mini, cmdblock);
 }

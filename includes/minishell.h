@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/19 00:14:23 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/22 14:21:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 int		ms_echo(char **input);
 
 //env.c
-int		ms_env(t_mini *mini);
+int		ms_env(t_mini *mini, t_cmdblock *cmdblock);
 
 // env_utils.c
 char	*get_env(t_mini *mini, char *key);
@@ -232,6 +232,7 @@ int		should_execute(t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock);
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
 int		syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cmd_arg_error(t_mini *mini, char **cmds, char *msg);
+void	env_error(t_mini *mini, char **cmds, char *msg);
 void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 
 //free.c
@@ -252,5 +253,8 @@ void	init_prompt(t_mini *mini);
 // init.c
 void	ms_init(t_mini *mini, char **envp);
 void	ms_loop_init(t_mini *mini);
+
+//heredoc
+void    heredoc(t_mini *mini, t_cmdblock *cmdblock);
 
 #endif
