@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 11:10:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 11:51:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ int	ms_open(char *filename, int flags, int mode)
 	return (fd);
 }
 
+// to check if input ends with a redir
+// if true it prints error msg
 int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;

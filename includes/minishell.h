@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 11:26:13 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 15:33:40 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,8 +204,6 @@ void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
-void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
-void	redir_in(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
 //redir_utils
@@ -259,6 +257,6 @@ void	ms_init(t_mini *mini, char **envp);
 void	ms_loop_init(t_mini *mini);
 
 //heredoc
-int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
+int    heredoc(t_mini *mini, t_cmdblock *cmdblock, int i);
 
 #endif
