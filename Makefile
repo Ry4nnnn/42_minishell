@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/22 13:50:58 by welim            ###   ########.fr        #
+#    Updated: 2023/03/23 11:11:48 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,7 +66,7 @@ LIBFT_PATH		:= libft
 #------------------------FILES-------------------------#
 
 BUILTINS	= env env_utils exit unset export cd echo pwd builtins builtin_utils
-REDIR		= redir pipe heredoc
+REDIR		= redir pipe heredoc redir_utils
 LEXER		= lexer lexer_utils expand tokenize syntax wildcard wildcard_utils
 MAIN		= main free error signal prompt utils init
 EXEC		= executor executor_utils handler handler_utils

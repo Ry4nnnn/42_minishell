@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/22 14:21:58 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 11:26:13 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,8 @@ typedef struct s_mini
 	char	*input;
 	t_list	*cmdblock_list;
 	t_pipes	pipes;
+	int fd_in;
+	int fd_out;
 }		t_mini;
 
 //----------BUILTINS----------//
@@ -202,12 +204,15 @@ void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
-int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
-void	handle_io(int fd, int std_file_no);
 void	redir_out(t_mini *mini, t_cmdblock *cmdblock);
-void	redir_in(t_cmdblock *cmdblock);
-void	call_redir(t_mini *mini, t_cmdblock *cmdblock);
+void	redir_in(t_mini *mini, t_cmdblock *cmdblock);
+int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
+//redir_utils
+int	ms_open(char *filename, int flags, int mode);
+void	handle_io(int fd, int std_file_no);
+int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
+int	redir_error(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------EXECUTOR----------//
 
@@ -232,7 +237,6 @@ int		should_execute(t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock);
 void	cmd_error(t_mini *mini, char **cmds, char *msg);
 int		syntax_error(t_mini *mini, char *err_msg, char *token);
 void	cmd_arg_error(t_mini *mini, char **cmds, char *msg);
-void	env_error(t_mini *mini, char **cmds, char *msg);
 void	identifier_error(t_mini *mini, char **cmds, int i, char *msg);
 
 //free.c
@@ -255,6 +259,6 @@ void	ms_init(t_mini *mini, char **envp);
 void	ms_loop_init(t_mini *mini);
 
 //heredoc
-void    heredoc(t_mini *mini, t_cmdblock *cmdblock);
+int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
 
 #endif
