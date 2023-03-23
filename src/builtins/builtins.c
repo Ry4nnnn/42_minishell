@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 11:26:13 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 16:34:51 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "cd", 3) == 0)
 		errnum = ms_cd(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "echo", 5) == 0)
-		errnum = ms_echo(cmdblock->cmd_argv);
+		errnum = ms_echo(mini, cmdblock->cmd_argv);
 	return (errnum);
 }
 

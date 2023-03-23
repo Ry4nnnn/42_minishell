@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 15:01:49 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/23 16:55:23 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	rm_env_var(t_mini *mini, t_env *env)
+static void	rm_env_var(t_mini *mini, t_env *env)
 {
 	t_list	*curr;
 	t_list	*tmp;

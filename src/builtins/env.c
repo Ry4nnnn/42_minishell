@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:06 by welim             #+#    #+#             */
-/*   Updated: 2023/03/22 17:04:03 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 16:54:31 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	handle_env(t_mini *mini, t_cmdblock *cmdblock)
 			temp[i - 1] = ft_strdup(cmdblock->cmd_argv[i]);
 			i++;
 		}
-		ms_echo(temp);
+		ms_echo(mini, temp);
 		ft_free2darr((void **)temp);
 	}
 	else if (ft_strncmp(cmdblock->cmd_argv[1], "pwd", 4) == 0)

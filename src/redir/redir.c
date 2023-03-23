@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 15:34:34 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 22:50:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,55 +37,36 @@ void	redir_out(t_mini *mini, char* file, int type)
 	handle_io(mini->fd_out, STDOUT_FILENO);
 }
 
-void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type, int i)
+void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type)
 {
 	if (type == IN)
 	{
-		if (mini->fd_out == -1)
+		if (mini->fd_in == -1)
 			close (mini->fd_in);
 		mini->fd_in = ms_open(file, O_RDONLY, 0644);
 	}
 	if (type == HEREDOC)
 	{
-		if (mini->fd_out == -1)
+		if (mini->fd_in == -1)
 			close (mini->fd_in);
-		mini->fd_in = heredoc(mini, cmdblock, i);
+		mini->fd_in = heredoc(mini, cmdblock);
 	}
 	handle_io(mini->fd_in, STDIN_FILENO);
 }
 
-//check in the str is a redir
-// return 0 if true 
-int check_for_redir(t_mini *mini, char *str)
-{
-	int i;
-
-	i = 0;
-	while (mini->redir[i])
-	{
-		if (ft_strcmp(str, mini->redir[i]) == 0)
-			return (SUCCESS);
-		i++;
-	}
-	return (ERROR);
-}
-
 int get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 {
-	char *err_token;
-
-	// printf ("argv:%s\n", cmdblock->cmd_argv[i]);
+	if (cmdblock->cmd_argv[i] == NULL)
+		return (ERROR);
 	if (check_for_redir(mini, cmdblock->cmd_argv[i]) == 0)
 	{
-		i += 1;
-		if (check_for_redir(mini, cmdblock->cmd_argv[i]) == 0) // theres a redir after a redir
+		i++;
+		cmdblock->file_name = cmdblock->cmd_argv[i];
+		while ((cmdblock->cmd_argv[i + 1]) && check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 1)// there a non redir after a filename
 		{
-			err_token = ft_strdup(cmdblock->cmd_argv[i]);
-			syntax_error(mini, UNEXPECTED_TOKEN, err_token);
-			return (ERROR);
+			cmdblock->file_name = cmdblock->cmd_argv[i + 1];
+			i++;
 		}
-		else
-			cmdblock->file_name = cmdblock->cmd_argv[i];
 	}
 	return (SUCCESS);
 }
@@ -102,37 +83,28 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	while (cmdblock->cmd_argv[i])
 	{
 		saved_fd = dup(STDIN_FILENO);
-		if (get_iofile(mini, cmdblock, i + 1) == ERROR) // to get the current file name
-			return (ERROR);
+		get_iofile(mini, cmdblock, i + 1); // to get the current file name
 		if (ft_strcmp(cmdblock->cmd_argv[i], ">") == 0)
-		{
 			redir_out(mini, cmdblock->file_name, OUT);
-		}
 		if (ft_strcmp(cmdblock->cmd_argv[i], ">>") == 0)
-		{
 			redir_out(mini,cmdblock->file_name, APPEND);
-		}
 		if (ft_strcmp(cmdblock->cmd_argv[i], "<") == 0)
-		{
-			redir_in(mini, cmdblock, cmdblock->file_name, IN, i);
-		}
+			redir_in(mini, cmdblock, cmdblock->file_name, IN);
 		if (ft_strcmp(cmdblock->cmd_argv[i], "<<") == 0)
 		{
 			dup2(saved_fd, STDIN_FILENO);
 			close(saved_fd);
-			write(2, "ABOUT TO LOOP HEREDOC\n", 22);
-			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC, i);
+			// write(2, "ABOUT TO LOOP HEREDOC\n", 22);
+			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
 		}
 		i++;
 	}
 	// write(2, "LOOP ENDED\n", 11);
-	if (mini->fd_out == -1 || mini->fd_in == -1)
-		return (ERROR);
 	if (mini->fd_out == -1)
-	{
 		handle_io(mini->fd_out, STDOUT_FILENO);
-	}
 	if (mini->fd_in == -1)
 		handle_io(mini->fd_in, STDIN_FILENO);
+	if (mini->fd_out == -1 || mini->fd_in == -1)
+		return (ERROR);
 	return (SUCCESS);
 }

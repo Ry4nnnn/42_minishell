@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 15:33:40 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 22:41:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,6 @@
 # else
 #  include <limits.h>
 # endif
-
-# define SUCCESS 0
-# define ERROR 1
 
 //----------COLOURS----------//
 /* Regular */
@@ -81,6 +78,9 @@
 // For pipe
 # define READ 0
 # define WRITE 1
+
+# define SUCCESS 0
+# define ERROR 1
 
 //----------GLOBAL-VARIABLE----------//
 
@@ -143,36 +143,17 @@ typedef struct s_mini
 	char	*input;
 	t_list	*cmdblock_list;
 	t_pipes	pipes;
-	int fd_in;
-	int fd_out;
+	int		fd_in;
+	int		fd_out;
 }		t_mini;
 
 //----------BUILTINS----------//
-//cd.c
 int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
-
-//echo.c
-int		ms_echo(char **input);
-
-//env.c
+int		ms_echo(t_mini *mini, char **input);
 int		ms_env(t_mini *mini, t_cmdblock *cmdblock);
-
-// env_utils.c
-char	*get_env(t_mini *mini, char *key);
-void	add_env_var(t_mini *mini, char *key, char *value);
-
-//exit.c
 void	ms_exit(t_mini *mini, char **cmd_argv);
-
-//export.c
 int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
-void	edit_env_var(t_mini *mini, char *key, char *value);
-
-//unset.c
 void	ms_unset(t_mini *mini, char **cmd_argv);
-void	rm_env_var(t_mini *ms, t_env *env);
-
-//pwd.c
 void	ms_pwd(void);
 
 //builtins.c
@@ -182,6 +163,10 @@ int		exec_builtins(t_mini *mini, t_cmdblock *cmdblock);
 //builtin_utils.c
 int		valid_input(char *key);
 t_env	*check_env_var(t_list *env, char *key);
+
+// env_utils.c
+char	*get_env(t_mini *mini, char *key);
+void	add_env_var(t_mini *mini, char *key, char *value);
 
 //----------LEXER----------//
 
@@ -206,11 +191,17 @@ void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
+void	redir_out(t_mini *mini, char* file, int type);
+void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type);
 //redir_utils
-int	ms_open(char *filename, int flags, int mode);
+int		ms_open(char *filename, int flags, int mode);
 void	handle_io(int fd, int std_file_no);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
-int	redir_error(t_mini *mini, t_cmdblock *cmdblock);
+int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
+int		check_for_redir(t_mini *mini, char *str);
+//heredoc
+// int    heredoc(t_mini *mini, t_cmdblock *cmdblock, int i);
+int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------EXECUTOR----------//
 
@@ -255,8 +246,5 @@ void	init_prompt(t_mini *mini);
 // init.c
 void	ms_init(t_mini *mini, char **envp);
 void	ms_loop_init(t_mini *mini);
-
-//heredoc
-int    heredoc(t_mini *mini, t_cmdblock *cmdblock, int i);
 
 #endif

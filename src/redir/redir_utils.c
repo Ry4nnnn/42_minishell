@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 11:51:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/23 22:19:59 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,17 @@ int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 		{
 			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
 			{
-				if (cmdblock->cmd_argv[i + 1] == NULL)
+				if (cmdblock->cmd_argv[i + 1] == NULL)// theres redir at the end of the token
 				{
 					token = ft_strdup("newline");
 					syntax_error(mini, UNEXPECTED_TOKEN, token);
 					return(ERROR);
+				}
+				if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0) // theres a redir after a redir
+				{
+					token = ft_strdup(cmdblock->cmd_argv[i + 1]);
+					syntax_error(mini, UNEXPECTED_TOKEN, token);
+					return (ERROR); //errno not set
 				}
 			}
 			j++;
@@ -97,4 +103,20 @@ int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 		i++;
 	}
 	return (SUCCESS);
+}
+
+//check in the str is a redir
+// return 0 if true 
+int check_for_redir(t_mini *mini, char *str)
+{
+	int i;
+
+	i = 0;
+	while (mini->redir[i])
+	{
+		if (ft_strcmp(str, mini->redir[i]) == 0)
+			return (SUCCESS);
+		i++;
+	}
+	return (ERROR);
 }
