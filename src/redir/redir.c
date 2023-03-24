@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 22:50:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/24 20:59:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,13 +76,13 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	mini->fd_in = 0;
 	mini->fd_out = 0;
 	int i = 0;
-	int	saved_fd;
+	// int	saved_fd;
 
 	if (redir_error(mini, cmdblock) == ERROR)
 		return (ERROR);
 	while (cmdblock->cmd_argv[i])
 	{
-		saved_fd = dup(STDIN_FILENO);
+		// saved_fd = dup(STDIN_FILENO);
 		get_iofile(mini, cmdblock, i + 1); // to get the current file name
 		if (ft_strcmp(cmdblock->cmd_argv[i], ">") == 0)
 			redir_out(mini, cmdblock->file_name, OUT);
@@ -92,9 +92,6 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 			redir_in(mini, cmdblock, cmdblock->file_name, IN);
 		if (ft_strcmp(cmdblock->cmd_argv[i], "<<") == 0)
 		{
-			dup2(saved_fd, STDIN_FILENO);
-			close(saved_fd);
-			// write(2, "ABOUT TO LOOP HEREDOC\n", 22);
 			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
 		}
 		i++;

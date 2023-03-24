@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 13:39:01 by welim             #+#    #+#             */
-/*   Updated: 2023/03/24 19:10:40 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/24 21:01:03 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,44 +30,45 @@ char    *get_keyword(t_cmdblock *cmdblock)
 int    heredoc(t_mini *mini, t_cmdblock *cmdblock)
 {
     (void)mini;
-    int     fd;
+    // int     fd;
     char    *rl;
-    char *keyword;
+    // char *keyword;
 
-    fd = open(".tmp", O_CREAT | O_APPEND | O_WRONLY, 0644);
+    pipe(mini->pipes.pipe);
+    // fd = open(".tmp", O_CREAT | O_APPEND | O_WRONLY, 0644);
     // write(2, "ONLY ONCE\n", 10);
     // write(2, cmdblock->cmd_argv[0], ft_strlen(cmdblock->cmd_argv[0]));
     // write(2, "\n", 1);
     // write(2, "keyword is ", 12);
     // write(2, get_keyword(cmdblock), ft_strlen(get_keyword(cmdblock)));
     // write(2, "\n", 1);
-    signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+    // signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_DFL);
     while (true)
     {
         rl = readline("> ");
-        keyword = get_keyword(cmdblock);
+        // keyword = get_keyword(cmdblock);
         // write(2, "rl: ", 3);
         // write(2, rl, ft_strlen(rl));
         // write(2, "\n", 1);
-        // write(2, "kw: ", 3);
-        // write(2, keyword, ft_strlen(keyword));
-        // write(2, "\n", 1);
-        if (ft_strcmp(keyword, rl) == 0)
+        write(2, "file_name: ", 12);
+        write(2, cmdblock->file_name, ft_strlen(cmdblock->file_name));
+        write(2, "\n", 1);
+        if (ft_strcmp(cmdblock->file_name, rl) == 0)
         {
-            // write(2, "BREAKED\n", 12);
-            break ;
+            free (rl); // free limiter
+            unlink(".tmp");
+            return (mini->pipes.pipe[READ]);
+            // // write(2, "BREAKED\n", 12);
+            // return(0) ;
         }
-        write(fd, rl, ft_strlen(rl));
-        write(fd, "\n", 1);
+        write(mini->pipes.pipe[WRITE], rl, ft_strlen(rl));
+        write(mini->pipes.pipe[WRITE], "\n", 1);
         free (rl);
     }
     free (rl); // free limiter
-    // write(2, "AFTER LOOP\n", 10);
-    close (fd);
-    fd = open(".tmp", O_RDONLY, 0644);
     unlink(".tmp");
-    return (fd);
+    return (mini->pipes.pipe[READ]);
 }
 
 // char	*tempfile_gen(int i)
