@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 23:01:37 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/24 19:00:47 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,17 @@
 int	execute(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	**envp;
-	int		i;
 	char *exec_path;
 
-	i = 0;
 	envp = ft_llto2darr(mini->envp, env_to_str);
 	signal(SIGINT, SIG_DFL);
 	if (mini->pipes.prep_pipe)
 		close(mini->pipes.pipe[READ]);
 	if (mini->pipes.do_pipe)
 		do_pipe(mini);
-	if (ft_strcmp(cmdblock->cmd_argv[i], ">") == 0)
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0)
 	{
-		cmdblock->file_name = cmdblock->cmd_argv[i + 1];
+		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_out(mini, cmdblock->file_name, OUT);
 		exit (0);
 	}

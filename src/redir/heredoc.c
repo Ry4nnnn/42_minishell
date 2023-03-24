@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 13:39:01 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 23:02:03 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/24 19:10:40 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int    heredoc(t_mini *mini, t_cmdblock *cmdblock)
         // write(2, "kw: ", 3);
         // write(2, keyword, ft_strlen(keyword));
         // write(2, "\n", 1);
-        if (ft_strcmp(keyword, rl) == 0 || rl == NULL)
+        if (ft_strcmp(keyword, rl) == 0)
         {
             // write(2, "BREAKED\n", 12);
             break ;
@@ -66,7 +66,7 @@ int    heredoc(t_mini *mini, t_cmdblock *cmdblock)
     // write(2, "AFTER LOOP\n", 10);
     close (fd);
     fd = open(".tmp", O_RDONLY, 0644);
-    // unlink(".tmp");
+    unlink(".tmp");
     return (fd);
 }
 

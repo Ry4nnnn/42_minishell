@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/23 16:35:39 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/24 19:35:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,12 @@ int	ms_echo(t_mini *mini, char **input)
 	{
 		if (check_for_redir(mini, input[i]) == 0)
 			break ;
-		printf("%s", input[i]);
+		write (1, input[i], ft_strlen(input[i]));
 		if (input[i] != NULL)
-			printf(" ");
+			write (1, " ", 1);
 		i++;
 	}
 	if (option == 0)
-		printf("\n");
+		write(1, "\n", 1);
 	return (0);
 }
