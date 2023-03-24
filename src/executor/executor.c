@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/25 07:44:21 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/25 07:50:04 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,13 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 		close(mini->pipes.pipe[READ]);
 	if (mini->pipes.do_pipe)
 		do_pipe(mini);
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0)
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1] != NULL)
 	{
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_out(mini, cmdblock->file_name, OUT);
 		exit (0);
 	}
 	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
-	if (mini->exec_path == NULL)
-		exit (127);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		if (exec_redir(mini, cmdblock) == ERROR)
