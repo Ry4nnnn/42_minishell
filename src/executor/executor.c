@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/24 19:00:47 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/25 07:44:21 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,6 @@
  */
 int	execute(t_mini *mini, t_cmdblock *cmdblock)
 {
-	char	**envp;
-	char *exec_path;
-
-	envp = ft_llto2darr(mini->envp, env_to_str);
 	signal(SIGINT, SIG_DFL);
 	if (mini->pipes.prep_pipe)
 		close(mini->pipes.pipe[READ]);
@@ -37,21 +33,21 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 		redir_out(mini, cmdblock->file_name, OUT);
 		exit (0);
 	}
-	exec_path = get_exec_path(mini, cmdblock->cmd_argv);
-	if (exec_path == NULL)
+	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
+	if (mini->exec_path == NULL)
 		exit (127);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		if (exec_redir(mini, cmdblock) == ERROR)
 			exit (258);// errno not working
-		if (execve(exec_path, cmdblock->redir_argv, envp) == -1)
+		if (execve(mini->exec_path, cmdblock->redir_argv, mini->env) == -1)
 		{
 			cmd_error(mini, cmdblock->cmd_argv, CMD_NF);
 			exit(127);
 		}
 		exit(0);
 	}
-	if (execve(exec_path, cmdblock->cmd_argv, envp) == -1)
+	if (execve(mini->exec_path, cmdblock->cmd_argv, mini->env) == -1)
 	{
 		cmd_error(mini, cmdblock->cmd_argv, CMD_NF);
 		exit(127);
@@ -92,20 +88,19 @@ static int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
 int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		errnum;
-	char **envp;
 
 	cmdblock->need_wait = 1;
 	errnum = get_program_permission(mini, cmdblock);
+	mini->exec_path = cmdblock->cmd_argv[0];
 	if (errnum != 0)
 		return (errnum);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		envp = ft_llto2darr(mini->envp, env_to_str);
 		if (mini->pipes.do_pipe)
 			do_pipe(mini);
-		execve(cmdblock->cmd_argv[0], cmdblock->cmd_argv, envp);
+		execve(mini->exec_path, cmdblock->cmd_argv, mini->env);
 	}
 	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
@@ -139,6 +134,7 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 int	executor(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
+	mini->env = ft_llto2darr(mini->envp, env_to_str);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)

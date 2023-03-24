@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 22:41:00 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/25 07:36:56 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ typedef struct s_pipes
 typedef struct s_mini
 {
 	t_list	*envp;
+	char	**env; // for execve
+	char	*exec_path; // for execve
 	char	*prompt;
 	char	*builtins[8];
 	char	*redir[5];
