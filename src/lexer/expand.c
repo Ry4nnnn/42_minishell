@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 16:54:40 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/27 15:36:23 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static void	expand_wildcard(t_mini *mini, char **pinput)
 		}
 		i += ft_strlen(token);
 		free(token);
-		if ((*pinput)[i] == 0)
+		if (i >= 0 && (*pinput)[i] == 0)
 			return ;
 	}
 }
@@ -119,7 +119,7 @@ static void	expand_variables(t_mini *mini, char **pinput)
 			quote = (*pinput)[i];
 		else if (quote == (*pinput)[i])
 			quote = 0;
-		if ((*pinput)[i] == 0)
+		if (i >= 0 && (*pinput)[i] == 0)
 			return ;
 	}
 }
@@ -136,4 +136,5 @@ void	expand_input(t_mini *mini, char **pinput)
 {
 	expand_variables(mini, pinput);
 	expand_wildcard(mini, pinput);
+	remove_extra_quotes(pinput, -1, 0);
 }

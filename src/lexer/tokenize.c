@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 17:04:31 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/27 15:54:22 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,25 @@
  */
 static int	detect_normal_token(char *input)
 {
-	int	i;
+	int		i;
+	char	*special_token;
 
+	special_token = ft_strchr("<>", input[0]);
 	i = -1;
 	while (input[++i] != 0)
 	{
-		if (input[i] != ' ')
+		if (!special_token && ft_strchr("<>", input[i]))
+		{
+			i--;
+			break ;
+		}
+		if (special_token && !ft_strchr("<>", input[i]))
+			break ;
+		if (input[i] == ' ')
 			break ;
 	}
-	if (input[i] == 0)
+	if (input[i] == 0 || special_token)
 		return (i - 1);
-	return (i);
-}
-
-/**
- * @brief Detect the length of a quote token
- * 
- * @param input 
- * @param quote 
- * @return int 
- */
-static int	detect_quote_token(char *input, int quote)
-{
-	int	i;
-
-	i = -1;
-	while (input[++i] != 0)
-	{
-		if (input[i] == quote)
-			break ;
-	}
 	return (i);
 }
 
@@ -65,23 +54,28 @@ int	get_tokens_size(char *input)
 	int	size;
 
 	i = -1;
-	size = 1;
+	size = 0;
 	while (input[++i] != 0)
 	{
-		if (input[i] == ' ')
+		if (input[i] != ' ')
 		{
 			i += detect_normal_token(input + i);
-			size++;
-		}
-		else if (input[i] == '\'' || input[i] == '"')
-		{
-			i += detect_quote_token(input + i, input[i]);
 			size++;
 		}
 		if (input[i] == 0)
 			break ;
 	}
 	return (size);
+}
+
+static char	*get_quote_token(char *input, int i, int quote)
+{
+	int	len;
+
+	len = 0;
+	while ((input + i)[++len] != quote && (input + i)[len] != 0)
+		;
+	return (ft_strndup(input + i + 1, len - 1));
 }
 
 /**
@@ -99,25 +93,26 @@ char	*get_next_token(char *input, int i, int quote)
 {
 	int		len;
 	int		target;
-	char	*result;
 
 	len = 0;
 	if (quote == '\'' || quote == '"')
-	{
-		while ((input + i)[++len] != quote && (input + i)[len] != 0)
-			;
-		result = ft_strndup(input + i + 1, len - 1);
-		return (result);
-	}
+		return (get_quote_token(input, i, quote));
 	target = ' ';
 	while ((input + i)[len] != 0 && (input + i)[len] != target)
 	{
-		if ((input + i)[len] == '"' || (input + i)[len] == '\'')
+		if (ft_strchr("<>", (input + i)[len]))
+		{
+			if (len != 0)
+				return (ft_strndup((input + i), len));
+			while (ft_strchr("<>", (input + i)[len]))
+				len++;
+			return (ft_strndup((input + i), len));
+		}
+		if ((input + i)[len] == '\'' || (input + i)[len] == '"')
 			target = (input + i)[len];
 		len++;
 	}
-	result = ft_strndup((input + i), len + (target != ' '));
-	return (result);
+	return (ft_strndup((input + i), len + (target != ' ')));
 }
 
 /**
@@ -131,22 +126,22 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 {
 	int		i;
 	int		j;
-	int		quote;
 	char	**result;
 
 	(void)mini;
 	i = -1;
 	j = -1;
+	printf("size: %i\n", get_tokens_size(input));
 	result = malloc((get_tokens_size(input) + 1) * sizeof(char *));
 	while (input[++i] != 0)
 	{
 		while (input[i] == ' ')
 			i++;
-		quote = input[i];
-		result[++j] = get_next_token(input, i, quote);
+		result[++j] = get_next_token(input, i, 0);
 		i += ft_strlen(result[j]);
-		if (quote == '\'' || quote == '"')
-			i += 2;
+		if (input[i] != ' ')
+			i--;
+		printf("token[%i]: %s\n", j, result[j]);
 		if (input[i] == 0)
 			break ;
 	}
