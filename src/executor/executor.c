@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/27 11:25:19 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/27 13:13:01 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,24 @@ int	executor(t_mini *mini, t_cmdblock *cmdblock)
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_out(mini, cmdblock->file_name, APPEND);
 		done_redir(mini);
+		return (0);// if i dont return 0 then it will continue and will show up command not found
+	}
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	{
+		if (redir_error(mini, cmdblock) == ERROR)
+			return (258);
+		cmdblock->file_name = cmdblock->cmd_argv[1];
+		redir_in(mini, cmdblock, cmdblock->file_name, IN);
+		finish_pipe(mini);
+		return (0);// if i dont return 0 then it will continue and will show up command not found
+	}
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	{
+		if (redir_error(mini, cmdblock) == ERROR)
+			return (258);
+		cmdblock->file_name = cmdblock->cmd_argv[1];
+		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+		finish_pipe(mini);
 		return (0);// if i dont return 0 then it will continue and will show up command not found
 	}
 	if (check_redir_type(mini, cmdblock) != 0) // check if redir exist in input
