@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:58:16 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 15:18:33 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/27 15:48:57 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,38 @@ int	get_spliter_type(char *input)
 	else if (ft_strncmp(input, "|", 1) == 0)
 		return (PIPE);
 	return (INVALID);
+}
+
+static void	remove_export_quotes(char **pinput)
+{
+	if ((*pinput)[0] == '\'' || (*pinput)[0] == '"')
+		ft_strexpand(pinput, NULL, 0, 1);
+	if ((*pinput)[6] == '\'' || (*pinput)[6] == '"')
+		ft_strexpand(pinput, NULL, 6, 1);
+}
+
+void	remove_extra_quotes(char **pinput, int i, int quote)
+{
+	char	*token;
+
+	token = get_next_token(*pinput, 0, (*pinput)[0]);
+	if (ft_strcmp(token, "export") == 0)
+	{
+		free(token);
+		return (remove_export_quotes(pinput));
+	}
+	free(token);
+	while ((*pinput)[++i] != 0)
+	{
+		if (quote == 0 && ((*pinput)[i] == '\'' || (*pinput)[i] == '"'))
+		{
+			quote = (*pinput)[i];
+			ft_strexpand(pinput, NULL, i--, 1);
+		}
+		else if (quote != 0 && (*pinput)[i] == quote)
+		{
+			quote = 0;
+			ft_strexpand(pinput, NULL, i--, 1);
+		}
+	}
 }
