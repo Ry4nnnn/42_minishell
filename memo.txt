@@ -7,8 +7,8 @@ Done. prompt use of forbidden functions
 Done. exit in pipes shouldn't execute
 Done. parser folder no need
 Done. rename spliter folder and combine pipes and redir files into one folder
-1. Multiple redirections
-2. Heredoc
+Done. Multiple redirections
+Done. Heredoc
 Done. Pipe and redirection combined got problem
 Done. redir operators should be removed from the cmd_argv
 Done. cd | cd  (should not work)
@@ -25,6 +25,6 @@ Done. ms_cd no errno, should return errno
 big goals:
 
 Done. wildcards
-2. redirections
+Done. redirections
 3. norminette :)
 4. Comments
