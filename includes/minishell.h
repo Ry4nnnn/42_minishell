@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 16:48:27 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 17:44:01 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@
 
 //----------GLOBAL-VARIABLE----------//
 
-int	g_errno;
+int		g_errno;
 
 //----------STRUCTS----------//
 
@@ -137,8 +137,8 @@ typedef struct s_pipes
 typedef struct s_mini
 {
 	t_list	*envp;
-	char	**env; // for execve
-	char	*exec_path; // for execve
+	char	**env;
+	char	*exec_path;
 	char	*prompt;
 	char	*builtins[8];
 	char	*redir[5];
@@ -194,9 +194,9 @@ void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
-void	redir_out(t_mini *mini, char* file, int type);
-void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type);
-int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
+void	redir_out(t_mini *mini, char *file, int type);
+void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
+int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
 int		ms_open(char *filename, int flags, int mode);
 void	handle_io(int fd, int std_file_no);
@@ -221,6 +221,7 @@ int		get_exit_status(t_list *cmdblock_list);
 void	prepare_handling(t_mini *mini, t_list *curr_node,
 			t_cmdblock *cmdblock);
 int		should_execute(t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock);
+int		get_program_permission(t_mini *mini, t_cmdblock *cmdblock);
 
 //----------MAIN_DIR----------//
 

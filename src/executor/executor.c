@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 15:37:13 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 17:41:27 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,28 +43,6 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 		exit(127);
 	}
 	exit(0);
-}
-
-static int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
-{
-	struct stat	file_stat;
-
-	if (stat(cmdblock->cmd_argv[0], &file_stat) != 0)
-	{
-		cmd_error(mini, cmdblock->cmd_argv, NSFD);
-		return (127);
-	}
-	if (S_ISDIR(file_stat.st_mode) != 0)
-	{
-		cmd_error(mini, cmdblock->cmd_argv, ISDIR);
-		return (126);
-	}
-	else if (access(cmdblock->cmd_argv[0], X_OK) != 0)
-	{
-		cmd_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
-		return (126);
-	}
-	return (0);
 }
 
 /**
@@ -124,47 +102,42 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 	return (WEXITSTATUS(cmdblock->estatus));
 }
 
+int	exec_first_redir(t_mini *mini, t_cmdblock *cmdblock)
+{
+	if (redir_error(mini, cmdblock) == ERROR)
+		return (258);
+	cmdblock->file_name = cmdblock->cmd_argv[1];
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1])
+	{
+		redir_out(mini, cmdblock->file_name, OUT);
+		done_redir(mini);
+	}
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1])
+	{
+		redir_out(mini, cmdblock->file_name, APPEND);
+		done_redir(mini);
+	}
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1])
+	{
+		redir_in(mini, cmdblock, cmdblock->file_name, IN);
+		done_redir(mini);
+	}
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
+	{
+		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+		finish_pipe(mini);
+	}
+	return (0);
+}
+
 int	executor(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1])
-	{
-		if (redir_error(mini, cmdblock) == ERROR)
-			return (258);
-		cmdblock->file_name = cmdblock->cmd_argv[1];
-		redir_out(mini, cmdblock->file_name, OUT);
-		done_redir(mini);
-		return (0);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1])
-	{
-		if (redir_error(mini, cmdblock) == ERROR)
-			return (258);
-		cmdblock->file_name = cmdblock->cmd_argv[1];
-		redir_out(mini, cmdblock->file_name, APPEND);
-		done_redir(mini);
-		return (0);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1])
-	{
-		if (redir_error(mini, cmdblock) == ERROR)
-			return (258);
-		cmdblock->file_name = cmdblock->cmd_argv[1];
-		redir_in(mini, cmdblock, cmdblock->file_name, IN);
-		done_redir(mini);
-		return (0);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
-	{
-		if (redir_error(mini, cmdblock) == ERROR)
-			return (258);
-		cmdblock->file_name = cmdblock->cmd_argv[1];
-		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
-		finish_pipe(mini);
-		return (0);
-	}
+	if (check_for_redir(mini, cmdblock->cmd_argv[0]) == 0
+		&& cmdblock->cmd_argv[1])
+		return (exec_first_redir(mini, cmdblock));
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		if (exec_redir(mini, cmdblock) == ERROR)

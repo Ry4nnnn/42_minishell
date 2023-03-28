@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/28 16:46:22 by welim            ###   ########.fr        #
+#    Updated: 2023/03/28 16:56:03 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ BUILTINS	= env env_utils exit unset export cd echo pwd builtins builtin_utils
 REDIR		= redir pipe heredoc redir_utils redir_utils2
 LEXER		= lexer lexer_utils expand tokenize syntax wildcard wildcard_utils
 MAIN		= main free error signal prompt utils init
-EXEC		= executor executor_utils handler handler_utils
+EXEC		= executor executor_utils executor_utils2 handler handler_utils
 
 #------------------------------------------------------#
 
