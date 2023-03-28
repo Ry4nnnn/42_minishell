@@ -6,12 +6,19 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:12 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 16:55:23 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 18:17:19 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Deletes variable from the (linked-list)envp
+ * 
+ * @param mini sturct
+ * @param env linked list
+ * @return void
+ */
 static void	rm_env_var(t_mini *mini, t_env *env)
 {
 	t_list	*curr;
@@ -46,6 +53,7 @@ static void	rm_env_var(t_mini *mini, t_env *env)
  * 
  * @param mini 
  * @param cmd_argv 
+ * @return void
  */
 void	ms_unset(t_mini *mini, char **cmd_argv)
 {

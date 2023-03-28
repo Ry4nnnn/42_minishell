@@ -6,12 +6,18 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/28 15:34:55 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 17:59:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief builtin command cd
+ * 
+ * @param input each token
+ * @return int
+ */
 static int	is_option(char *input)
 {
 	int		i;
@@ -26,6 +32,15 @@ static int	is_option(char *input)
 	return (0);
 }
 
+/**
+ * @brief builtin command echo
+ * echo with -n flag does not print a newline (`\n') character
+ * echo will stop printing on it sees a redir
+ *
+ * @param mini struct
+ * @param input 2d array of the command input
+ * @return int
+ */
 int	ms_echo(t_mini *mini, char **input)
 {
 	int		i;

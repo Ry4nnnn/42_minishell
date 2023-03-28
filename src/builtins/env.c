@@ -6,12 +6,20 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:06 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 16:54:31 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 18:12:31 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief Handles env with arguments
+ * for example "env pwd", "env env", "env cd", "env export"
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * @return int
+ */
 int	handle_env(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	**temp;
@@ -42,8 +50,8 @@ int	handle_env(t_mini *mini, t_cmdblock *cmdblock)
 /**
  * @brief Builtin command env
  * 
- * @param mini
- * @param cmdblock
+ * @param mini struct
+ * @param cmdblock struct
  * @return int
  */
 int	ms_env(t_mini *mini, t_cmdblock *cmdblock)

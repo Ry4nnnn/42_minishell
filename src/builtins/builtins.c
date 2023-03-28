@@ -6,15 +6,22 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 15:34:37 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 18:06:06 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// check if cmds is a builtin
-// returns 1 means its a builtin
-//returns 0 means its not a builtin
+/**
+ * @brief Check if param cmds is a builtin
+ * compares the string (cmds) with the redir in the struct
+ * returns 1 - cmds is a builtin
+ * returns 0 - cmds is not a builtin
+ * 
+ * @param mini struct
+ * @param cmds string
+ * @return int 
+ */
 int	check_builtins(t_mini *mini, char *cmds)
 {
 	char	**builtins;
@@ -34,8 +41,8 @@ int	check_builtins(t_mini *mini, char *cmds)
 /**
  * @brief Choose the corresponding command and execute
  * 
- * @param mini 
- * @param cmdblock 
+ * @param mini struct
+ * @param cmdblock struct
  * @return int 
  */
 static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)

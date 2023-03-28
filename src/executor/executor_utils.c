@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:06:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/25 07:50:07 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 18:21:58 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,16 @@ int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 
 //get the input in 2d array and check if theres a redir
 //and remove the args after the redir including the redir
+/**
+ * @brief gets the redir argument for execve
+ * gets the input in 2d array and check if theres a redir
+ * removes the args after the redir including the redir
+ * @attention **cmd_argv = "ls -la > test"
+ * @attention **redir_argv = "ls -la"
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ */
 void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;

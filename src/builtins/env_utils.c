@@ -3,17 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 22:47:41 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/17 22:47:50 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/28 18:11:09 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-//get env value by inputing key from envp
-// returns NULL if could find any
+/**
+ * @brief gets the env value from (linked-list)envp
+ * search through the (linked-list)envp using the key
+ * returns the value of the key
+ * return NULL if could find any
+ *
+ * @param mini struct
+ * @param key key of the env variable
+ * @return string
+ */
 char	*get_env(t_mini *mini, char *key)
 {
 	t_list	*envp;
@@ -30,7 +38,14 @@ char	*get_env(t_mini *mini, char *key)
 	return (NULL);
 }
 
-//adding variable to envp
+/**
+ * @brief add variable into (linked-list)envp
+ *
+ * @param mini struct
+ * @param key key of the env variable
+ * @param value value of the env variable
+ * @return void
+ */
 void	add_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*env_var;
