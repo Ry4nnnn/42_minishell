@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 09:39:33 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 15:09:44 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	done_redir(t_mini *mini)
 {
+	// DEV remove this
 	if (mini->pipes.prep_pipe)
 		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
 	else
@@ -44,15 +45,27 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type)
 		if (mini->fd_in == -1)
 			close (mini->fd_in);
 		mini->fd_in = ms_open(file, O_RDONLY, 0644);
+		handle_io(mini->fd_in, STDIN_FILENO);
 	}
 	if (type == HEREDOC)
 	{
 		if (mini->fd_in == -1)
 			close (mini->fd_in);
 		done_redir(mini);
-		mini->fd_in = heredoc(mini, cmdblock);
+		pipe(mini->pipes.pipe);
+		cmdblock->pid = fork();
+		if (cmdblock->pid == 0)
+		{
+			signal(SIGINT, SIG_DFL);
+    		signal(SIGQUIT, SIG_DFL);
+			mini->fd_in = heredoc(mini, cmdblock);
+			exit(0);
+		}
+		if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
+			waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
+		dup2(mini->pipes.pipe[READ], STDIN_FILENO);
+		close(mini->pipes.pipe[WRITE]);
 	}
-	handle_io(mini->fd_in, STDIN_FILENO);
 }
 
 int get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
@@ -93,6 +106,7 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
 		i++;
 	}
+	
 	if (mini->fd_out == -1)
 		handle_io(mini->fd_out, STDOUT_FILENO);
 	if (mini->fd_in == -1)

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/27 13:14:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 14:51:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,11 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	cmdblock->need_wait = 1;
 	get_exec_argv(mini, cmdblock);
+	
+	// char *buff = ft_calloc(1, 222);
+	// read(STDIN_FILENO, buff, 222);
+	// printf("before execve %s\n", buff);
+
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);

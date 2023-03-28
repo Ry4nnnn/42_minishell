@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/23 22:19:59 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 14:41:37 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 		while (redir[i] != 0)
 		{
 			if (ft_strcmp(redir[i], args[j]) == 0)
-			{
-				cmdblock->file_name = args[j + 1];
 				return (i + 1);
-			}
 			i++;
 		}
 		j++;
