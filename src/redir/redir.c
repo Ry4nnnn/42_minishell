@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/27 12:31:14 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 09:39:33 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type)
 	{
 		if (mini->fd_in == -1)
 			close (mini->fd_in);
+		done_redir(mini);
 		mini->fd_in = heredoc(mini, cmdblock);
 	}
 	handle_io(mini->fd_in, STDIN_FILENO);
@@ -89,10 +90,7 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 		if (ft_strcmp(cmdblock->cmd_argv[i], "<") == 0)
 			redir_in(mini, cmdblock, cmdblock->file_name, IN);
 		if (ft_strcmp(cmdblock->cmd_argv[i], "<<") == 0)
-		{
-    		// finish_pipe(mini);
 			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
-		}
 		i++;
 	}
 	if (mini->fd_out == -1)
