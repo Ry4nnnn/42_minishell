@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 15:47:09 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 16:53:39 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,23 +66,17 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 	}
 }
 
-// to get the current file name and error checking
-int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
+static int	select_and_exec(t_mini *mini, t_cmdblock *cmdblock, char *cmd_argv)
 {
-	if (cmdblock->cmd_argv[i] == NULL)
-		return (ERROR);
-	if (check_for_redir(mini, cmdblock->cmd_argv[i]) == 0)
-	{
-		i++;
-		cmdblock->file_name = cmdblock->cmd_argv[i];
-		while ((cmdblock->cmd_argv[i + 1])
-			&& check_for_redir(mini, cmdblock->cmd_argv[i + 1]))
-		{
-			cmdblock->file_name = cmdblock->cmd_argv[i + 1];
-			i++;
-		}
-	}
-	return (SUCCESS);
+	if (ft_strcmp(cmd_argv, ">") == 0)
+		redir_out(mini, cmdblock->file_name, OUT);
+	if (ft_strcmp(cmd_argv, ">>") == 0)
+		redir_out(mini, cmdblock->file_name, APPEND);
+	if (ft_strcmp(cmd_argv, "<") == 0)
+		redir_in(mini, cmdblock, cmdblock->file_name, IN);
+	if (ft_strcmp(cmd_argv, "<<") == 0)
+		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+	return (0);
 }
 
 int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
@@ -97,14 +91,7 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	while (cmdblock->cmd_argv[i])
 	{
 		get_iofile(mini, cmdblock, i + 1);
-		if (ft_strcmp(cmdblock->cmd_argv[i], ">") == 0)
-			redir_out(mini, cmdblock->file_name, OUT);
-		if (ft_strcmp(cmdblock->cmd_argv[i], ">>") == 0)
-			redir_out(mini, cmdblock->file_name, APPEND);
-		if (ft_strcmp(cmdblock->cmd_argv[i], "<") == 0)
-			redir_in(mini, cmdblock, cmdblock->file_name, IN);
-		if (ft_strcmp(cmdblock->cmd_argv[i], "<<") == 0)
-			redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+		select_and_exec(mini, cmdblock, cmdblock->cmd_argv[i]);
 		i++;
 	}
 	if (mini->fd_out == -1)

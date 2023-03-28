@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/27 15:58:00 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/28 16:48:27 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,15 +196,14 @@ int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
 void	redir_out(t_mini *mini, char* file, int type);
 void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char* file, int type);
+int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
 int		ms_open(char *filename, int flags, int mode);
 void	handle_io(int fd, int std_file_no);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
 int		check_for_redir(t_mini *mini, char *str);
-//heredoc
-// int    heredoc(t_mini *mini, t_cmdblock *cmdblock, int i);
-int    heredoc(t_mini *mini, t_cmdblock *cmdblock);
+int		get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i);
 
 //----------EXECUTOR----------//
 
