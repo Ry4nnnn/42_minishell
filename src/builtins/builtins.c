@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/27 10:32:54 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 15:34:37 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,6 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 	int	errnum;
 
 	errnum = 0;
-	// if (check_redir_type(mini, cmdblock) != 0)
-	// {
-	// 	if (exec_redir(mini, cmdblock) == ERROR)
-	// 	{
-	// 		errnum = 258;
-	// 		return (errnum);
-	// 	}
-	// }
 	errnum = choose_and_exec(mini, cmdblock);
 	done_redir(mini);
 	return (errnum);

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 19:49:06 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/24 19:35:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 15:34:55 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static int	is_option(char *input)
 		return (i);
 	return (0);
 }
-
 
 int	ms_echo(t_mini *mini, char **input)
 {

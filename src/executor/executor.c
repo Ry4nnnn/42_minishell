@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 14:51:00 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 15:37:13 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ static int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
 /**
  * @brief Execute the program with absolute path specified
  * 
- * From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
+ * From Bash manual, if a command exited by a fatal signal N
+ * Bash will use the exit status N + 128
  * @param mini 
  * @param cmdblock 
  * @return int 
@@ -101,7 +102,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 
 /**
  * @brief Execute the commands in PATH
- * From Bash manual, if a command exited by a fatal signal N, Bash will use the exit status N + 128
+ * From Bash manual, if a command exited by a fatal signal N
+ * Bash will use the exit status N + 128
  * 
  * @param mini 
  * @param cmdblock 
@@ -111,11 +113,6 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	cmdblock->need_wait = 1;
 	get_exec_argv(mini, cmdblock);
-	
-	// char *buff = ft_calloc(1, 222);
-	// read(STDIN_FILENO, buff, 222);
-	// printf("before execve %s\n", buff);
-
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
@@ -132,43 +129,43 @@ int	executor(t_mini *mini, t_cmdblock *cmdblock)
 	signal(SIGINT, SIG_IGN);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1])
 	{
 		if (redir_error(mini, cmdblock) == ERROR)
 			return (258);
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_out(mini, cmdblock->file_name, OUT);
 		done_redir(mini);
-		return (0);// if i dont return 0 then it will continue and will show up command not found
+		return (0);
 	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1])
 	{
 		if (redir_error(mini, cmdblock) == ERROR)
 			return (258);
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_out(mini, cmdblock->file_name, APPEND);
 		done_redir(mini);
-		return (0);// if i dont return 0 then it will continue and will show up command not found
+		return (0);
 	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1])
 	{
 		if (redir_error(mini, cmdblock) == ERROR)
 			return (258);
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_in(mini, cmdblock, cmdblock->file_name, IN);
 		done_redir(mini);
-		return (0);// if i dont return 0 then it will continue and will show up command not found
+		return (0);
 	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1] != NULL) //check if redir exist in input (special)
+	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
 	{
 		if (redir_error(mini, cmdblock) == ERROR)
 			return (258);
 		cmdblock->file_name = cmdblock->cmd_argv[1];
 		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
 		finish_pipe(mini);
-		return (0);// if i dont return 0 then it will continue and will show up command not found
+		return (0);
 	}
-	if (check_redir_type(mini, cmdblock) != 0) // check if redir exist in input
+	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		if (exec_redir(mini, cmdblock) == ERROR)
 			return (258);

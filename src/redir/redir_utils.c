@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 14:41:37 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/28 15:51:03 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ int	ms_open(char *filename, int flags, int mode)
 
 // to check if input ends with a redir
 // if true it prints error msg
+//
+// if (cmdblock->cmd_argv[i + 1] == NULL)
+// theres redir at the end of the token
+//
+// if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0)
+// theres a redir after a redir
 int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;
@@ -82,17 +88,17 @@ int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 		{
 			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
 			{
-				if (cmdblock->cmd_argv[i + 1] == NULL)// theres redir at the end of the token
+				if (cmdblock->cmd_argv[i + 1] == NULL)
 				{
 					token = ft_strdup("newline");
 					syntax_error(mini, UNEXPECTED_TOKEN, token);
-					return(ERROR);
+					return (ERROR);
 				}
-				if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0) // theres a redir after a redir
+				if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0)
 				{
 					token = ft_strdup(cmdblock->cmd_argv[i + 1]);
 					syntax_error(mini, UNEXPECTED_TOKEN, token);
-					return (ERROR); //errno not set
+					return (ERROR);
 				}
 			}
 			j++;
@@ -104,9 +110,9 @@ int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 
 //check in the str is a redir
 // return 0 if true 
-int check_for_redir(t_mini *mini, char *str)
+int	check_for_redir(t_mini *mini, char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (mini->redir[i])
