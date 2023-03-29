@@ -6,7 +6,7 @@
 #    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/03/28 16:56:03 by welim            ###   ########.fr        #
+#    Updated: 2023/03/29 15:15:24 by welim            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIB			:= -Llibft -lft
 
 INCLUDE		:= -I./includes -Ilibft/srcs -I./readline-8.1/include
 
-CFLAGS		:= $(INCLUDE) -fcommon -Wall -Wextra -Werror
+CFLAGS		:= $(INCLUDE) -fcommon #-Wall -Wextra -Werror
 
 ifeq ($(DB), 1)
 	CFLAGS	+= -fsanitize=address -g3
@@ -66,7 +66,7 @@ LIBFT_PATH		:= libft
 #------------------------FILES-------------------------#
 
 BUILTINS	= env env_utils exit unset export cd echo pwd builtins builtin_utils
-REDIR		= redir pipe heredoc redir_utils redir_utils2
+REDIR		= redir pipe heredoc redir_utils get_iofile
 LEXER		= lexer lexer_utils expand tokenize syntax wildcard wildcard_utils
 MAIN		= main free error signal prompt utils init
 EXEC		= executor executor_utils executor_utils2 handler handler_utils

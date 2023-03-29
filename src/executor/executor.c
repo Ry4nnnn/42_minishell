@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 17:41:27 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 16:51:23 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,25 +106,25 @@ int	exec_first_redir(t_mini *mini, t_cmdblock *cmdblock)
 {
 	if (redir_error(mini, cmdblock) == ERROR)
 		return (258);
-	cmdblock->file_name = cmdblock->cmd_argv[1];
+	get_iofile(mini, cmdblock, 1);
 	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1])
 	{
-		redir_out(mini, cmdblock->file_name, OUT);
+		redir_out(mini, cmdblock->outfile, OUT);
 		done_redir(mini);
 	}
 	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1])
 	{
-		redir_out(mini, cmdblock->file_name, APPEND);
+		redir_out(mini, cmdblock->outfile, APPEND);
 		done_redir(mini);
 	}
 	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1])
 	{
-		redir_in(mini, cmdblock, cmdblock->file_name, IN);
+		redir_in(mini, cmdblock, cmdblock->infile, IN);
 		done_redir(mini);
 	}
 	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
 	{
-		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+		redir_in(mini, cmdblock, cmdblock->infile, HEREDOC);
 		finish_pipe(mini);
 	}
 	return (0);

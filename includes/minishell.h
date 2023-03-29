@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 17:44:01 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 16:51:26 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
+# define S_IN "<"
+# define S_HEREDOC "<<"
+# define S_OUT ">"
+# define S_APPEND ">>"
+
 // For pipe
 # define READ 0
 # define WRITE 1
@@ -112,10 +117,11 @@ typedef struct s_cmdblock {
 	int		in_bracket;
 	int		was_in_bracket;
 	char	**cmd_argv;
+	char	**redir_argv;
 	int		estatus;
 	pid_t	pid;
-	char	*file_name;
-	char	**redir_argv;
+	char	*infile;
+	char	*outfile;
 }	t_cmdblock;
 
 typedef struct s_env

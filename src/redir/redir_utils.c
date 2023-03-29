@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 16:47:29 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 16:19:51 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,21 +82,57 @@ int	check_for_redir(t_mini *mini, char *str)
 	return (ERROR);
 }
 
-// to get the current file name and error checking
-int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
+// if (cmdblock->cmd_argv[i + 1] == NULL)
+// theres redir at the end of the token
+//
+// if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0)
+// theres a redir after a redir
+static int	check_redir_error(t_mini *mini, char *cmd_argv)
 {
-	if (cmdblock->cmd_argv[i] == NULL)
-		return (ERROR);
-	if (check_for_redir(mini, cmdblock->cmd_argv[i]) == 0)
+	char	*token;
+
+	if (cmd_argv == NULL)
 	{
-		i++;
-		cmdblock->file_name = cmdblock->cmd_argv[i];
-		while ((cmdblock->cmd_argv[i + 1])
-			&& check_for_redir(mini, cmdblock->cmd_argv[i + 1]))
+		token = ft_strdup("newline");
+		syntax_error(mini, UNEXPECTED_TOKEN, token);
+		return (ERROR);
+	}
+	if ((cmd_argv[0] == '>') || (cmd_argv[0] == '<'))
+	{
+		token = ft_strndup(cmd_argv, 1);
+		syntax_error(mini, UNEXPECTED_TOKEN, token);
+		return (ERROR);
+	}
+	// if (check_for_redir(mini, cmd_argv) == 0)
+	// {
+	// 	token = ft_strdup(cmd_argv);
+	// 	syntax_error(mini, UNEXPECTED_TOKEN, token);
+	// 	return (ERROR);
+	// }
+	return (SUCCESS);
+}
+
+// to check if input ends with a redir
+// if true it prints error msg
+int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	while (cmdblock->cmd_argv[i])
+	{
+		j = 0;
+		while (mini->redir[j])
 		{
-			cmdblock->file_name = cmdblock->cmd_argv[i + 1];
-			i++;
+			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
+			{
+				if (check_redir_error(mini, cmdblock->cmd_argv[i + 1]) == ERROR)
+					return (ERROR);
+			}
+			j++;
 		}
+		i++;
 	}
 	return (SUCCESS);
 }

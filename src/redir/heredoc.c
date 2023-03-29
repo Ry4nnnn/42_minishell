@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 13:39:01 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 15:41:11 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 16:51:23 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	heredoc(t_mini *mini, t_cmdblock *cmdblock)
 	char	*delimiter;
 
 	rl = readline("> ");
-	delimiter = cmdblock->file_name;
+	delimiter = cmdblock->infile;
 	while (rl && ft_strncmp(rl, delimiter, ft_strlen(delimiter) + 1))
 	{
 		write(mini->pipes.pipe[WRITE], rl, ft_strlen(rl));

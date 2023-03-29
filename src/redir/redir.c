@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 16:53:39 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 16:51:23 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 static int	select_and_exec(t_mini *mini, t_cmdblock *cmdblock, char *cmd_argv)
 {
 	if (ft_strcmp(cmd_argv, ">") == 0)
-		redir_out(mini, cmdblock->file_name, OUT);
+		redir_out(mini, cmdblock->outfile, OUT);
 	if (ft_strcmp(cmd_argv, ">>") == 0)
-		redir_out(mini, cmdblock->file_name, APPEND);
+		redir_out(mini, cmdblock->outfile, APPEND);
 	if (ft_strcmp(cmd_argv, "<") == 0)
-		redir_in(mini, cmdblock, cmdblock->file_name, IN);
+		redir_in(mini, cmdblock, cmdblock->infile, IN);
 	if (ft_strcmp(cmd_argv, "<<") == 0)
-		redir_in(mini, cmdblock, cmdblock->file_name, HEREDOC);
+		redir_in(mini, cmdblock, cmdblock->infile, HEREDOC);
 	return (0);
 }
 
@@ -86,9 +86,11 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	i = 0;
 	mini->fd_in = 0;
 	mini->fd_out = 0;
+	cmdblock->infile = NULL;
+	cmdblock->outfile = NULL;
 	if (redir_error(mini, cmdblock) == ERROR)
 		return (ERROR);
-	while (cmdblock->cmd_argv[i])
+	while (cmdblock->cmd_argv[i] != NULL)
 	{
 		get_iofile(mini, cmdblock, i + 1);
 		select_and_exec(mini, cmdblock, cmdblock->cmd_argv[i]);
