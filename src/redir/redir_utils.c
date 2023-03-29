@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 16:19:51 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 21:24:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,6 @@ static int	check_redir_error(t_mini *mini, char *cmd_argv)
 		syntax_error(mini, UNEXPECTED_TOKEN, token);
 		return (ERROR);
 	}
-	// if (check_for_redir(mini, cmd_argv) == 0)
-	// {
-	// 	token = ft_strdup(cmd_argv);
-	// 	syntax_error(mini, UNEXPECTED_TOKEN, token);
-	// 	return (ERROR);
-	// }
 	return (SUCCESS);
 }
 

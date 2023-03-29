@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 16:51:23 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 21:22:40 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ void	redir_out(t_mini *mini, char *file, int type)
 
 void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 {
-	if (mini->fd_in == -1)
-		close (mini->fd_in);
 	if (type == IN)
 	{
 		mini->fd_in = ms_open(file, O_RDONLY, 0644);
@@ -50,19 +48,18 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 	if (type == HEREDOC)
 	{
 		done_redir(mini);
-		pipe(mini->pipes.pipe);
-		cmdblock->pid = fork();
-		if (cmdblock->pid == 0)
+		pipe(mini->pipes.h_pipe);
+		cmdblock->h_pid = fork();
+		if (cmdblock->h_pid == 0)
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);
 			mini->fd_in = heredoc(mini, cmdblock);
 			exit(0);
 		}
-		if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
-			waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
-		dup2(mini->pipes.pipe[READ], STDIN_FILENO);
-		close(mini->pipes.pipe[WRITE]);
+		waitpid(cmdblock->h_pid, NULL, 0);
+		dup2(mini->pipes.h_pipe[READ], STDIN_FILENO);
+		close(mini->pipes.h_pipe[WRITE]);
 	}
 }
 
@@ -84,8 +81,6 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	int		i;
 
 	i = 0;
-	mini->fd_in = 0;
-	mini->fd_out = 0;
 	cmdblock->infile = NULL;
 	cmdblock->outfile = NULL;
 	if (redir_error(mini, cmdblock) == ERROR)
@@ -96,11 +91,5 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 		select_and_exec(mini, cmdblock, cmdblock->cmd_argv[i]);
 		i++;
 	}
-	if (mini->fd_out == -1)
-		handle_io(mini->fd_out, STDOUT_FILENO);
-	if (mini->fd_in == -1)
-		handle_io(mini->fd_in, STDIN_FILENO);
-	if (mini->fd_out == -1 || mini->fd_in == -1)
-		return (ERROR);
 	return (SUCCESS);
 }

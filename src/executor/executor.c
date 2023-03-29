@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 16:51:23 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 20:54:42 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int	exec_first_redir(t_mini *mini, t_cmdblock *cmdblock)
 	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
 	{
 		redir_in(mini, cmdblock, cmdblock->infile, HEREDOC);
-		finish_pipe(mini);
+		done_redir(mini);
 	}
 	return (0);
 }

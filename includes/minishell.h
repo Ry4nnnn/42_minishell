@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 16:51:26 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/29 21:03:51 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,7 @@ typedef struct s_cmdblock {
 	char	**redir_argv;
 	int		estatus;
 	pid_t	pid;
+	pid_t	h_pid;
 	char	*infile;
 	char	*outfile;
 }	t_cmdblock;
@@ -138,6 +139,7 @@ typedef struct s_pipes
 	int	saved_stdout;
 	int	saved_stdin;
 	int	temp_read_fd;
+	int h_pipe[2];
 }	t_pipes;
 
 typedef struct s_mini
