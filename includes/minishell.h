@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:17:57 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 08:33:40 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,13 +133,13 @@ typedef struct s_env
 
 typedef struct s_pipes
 {
-	int	pipe[2];
-	int	do_pipe;
-	int	prep_pipe;
-	int	saved_stdout;
-	int	saved_stdin;
-	int	temp_read_fd;
-	int	h_pipe[2];
+	int		pipe[2];
+	int		do_pipe;
+	int		prep_pipe;
+	int		saved_stdout;
+	int		saved_stdin;
+	int		temp_read_fd;
+	int		h_pipe[2];
 }	t_pipes;
 
 typedef struct s_mini

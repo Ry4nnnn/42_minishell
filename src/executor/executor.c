@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 07:58:56 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 08:38:15 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 		close(mini->pipes.pipe[READ]);
 	if (mini->pipes.do_pipe)
 		do_pipe(mini);
-	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
 		if (execve(mini->exec_path, cmdblock->redir_argv, mini->env) == -1)
@@ -65,12 +64,7 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 		return (errnum);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		if (mini->pipes.do_pipe)
-			do_pipe(mini);
-		execve(mini->exec_path, cmdblock->cmd_argv, mini->env);
-	}
+		execute(mini, cmdblock);
 	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))
@@ -91,6 +85,7 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
 	cmdblock->need_wait = 1;
 	get_exec_argv(mini, cmdblock);
+	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
