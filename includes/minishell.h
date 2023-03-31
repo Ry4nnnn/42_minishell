@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:33:40 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:57:51 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ typedef struct s_pipes
 	int		saved_stdin;
 	int		temp_read_fd;
 	int		h_pipe[2];
+	int		is_redir_in;
 }	t_pipes;
 
 typedef struct s_mini
@@ -202,7 +203,7 @@ void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
 void	handle_io(int fd, int std_file_no);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
-void	done_redir(t_mini *mini);
+void	done_redir(t_mini *mini, int heredoc);
 void	redir_out(t_mini *mini, char *file, int type);
 void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 int		heredoc(t_mini *mini, t_cmdblock *cmdblock);

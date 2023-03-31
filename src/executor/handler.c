@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 23:01:14 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/29 20:58:35 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:41:18 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *cmdblock)
 	expand_input(mini, &cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
 	cmdblock->exit_status = executor(mini, cmdblock);
-	done_redir(mini);
+	done_redir(mini, 0);
 	g_errno = cmdblock->exit_status;
 	ft_free2darr((void **)cmdblock->redir_argv);
 	ft_free2darr((void **)cmdblock->cmd_argv);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/03/28 18:06:06 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:26:39 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,6 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 
 	errnum = 0;
 	errnum = choose_and_exec(mini, cmdblock);
-	done_redir(mini);
+	done_redir(mini, 0);
 	return (errnum);
 }

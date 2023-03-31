@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:08:18 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:59:11 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	done_redir(t_mini *mini)
+void	done_redir(t_mini *mini, int heredoc)
 {
 	if (mini->pipes.prep_pipe)
 		dup2(mini->pipes.pipe[WRITE], STDOUT_FILENO);
 	else
 		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
-	if (mini->pipes.do_pipe)
-		dup2(mini->pipes.pipe[READ], STDIN_FILENO);
+	if (mini->pipes.do_pipe && !heredoc)
+		dup2(mini->pipes.temp_read_fd, STDIN_FILENO);
 	else
 		dup2(mini->pipes.saved_stdin, STDIN_FILENO);
 }
@@ -40,6 +40,7 @@ void	redir_out(t_mini *mini, char *file, int type)
 
 void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 {
+	mini->pipes.is_redir_in = 1;
 	if (type == IN)
 	{
 		mini->fd_in = ms_open(file, O_RDONLY, 0644);
@@ -47,7 +48,7 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 	}
 	if (type == HEREDOC)
 	{
-		done_redir(mini);
+		done_redir(mini, 1);
 		pipe(mini->pipes.h_pipe);
 		cmdblock->h_pid = fork();
 		if (cmdblock->h_pid == 0)
@@ -85,6 +86,7 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 	option = 0;
 	cmdblock->infile = NULL;
 	cmdblock->outfile = NULL;
+	mini->pipes.is_redir_in = 0;
 	if (check_for_redir(mini, cmdblock->cmd_argv[0]) == SUCCESS)
 		option = 1;
 	while (cmdblock->cmd_argv[i] != NULL)

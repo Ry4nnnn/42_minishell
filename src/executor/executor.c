@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 15:31:35 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:25:51 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
 	free (mini->exec_path);
-	done_redir(mini);
+	done_redir(mini, 0);
 	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 14:32:39 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/31 08:15:52 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 17:57:56 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	prepare_pipe(t_mini *mini)
 void	do_pipe(t_mini *mini)
 {
 	close(mini->pipes.pipe[WRITE]);
-	if (mini->pipes.temp_read_fd != -1)
+	if (mini->pipes.temp_read_fd != -1 && !mini->pipes.is_redir_in)
 		dup2(mini->pipes.temp_read_fd, STDIN_FILENO);
 }
 
