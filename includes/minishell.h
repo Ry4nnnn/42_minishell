@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 17:57:51 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/31 18:22:28 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ typedef struct s_cmdblock {
 	int		exit_status;
 	int		need_wait;
 	int		in_bracket;
-	int		was_in_bracket;
 	char	**cmd_argv;
 	char	**redir_argv;
 	int		estatus;

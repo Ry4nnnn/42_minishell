@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 23:42:11 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/31 18:13:13 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ static int	ms_chdir(t_mini *mini, t_cmdblock *cmdblock, char *path)
 
 	if (access(path, F_OK) != 0)
 		return (-1);
-	if (mini->pipes.prep_pipe || mini->pipes.do_pipe
-		|| cmdblock->was_in_bracket)
+	if (mini->pipes.prep_pipe || mini->pipes.do_pipe)
 		return (0);
 	oldpwd = getcwd(NULL, 0);
 	if (chdir(path) != 0)

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 23:01:14 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/31 17:41:18 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/31 18:47:10 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,15 @@
  */
 int	handle_bracket_cmdblock(t_mini *mini, t_list *cmdblocks_list)
 {
-	t_list		*temp;
-	t_cmdblock	*prev_cmdblock;
-	t_cmdblock	*cmdblock;
-	int			exit_status;
+	pid_t		pid;
+	int			estatus;
 
-	temp = cmdblocks_list;
-	prev_cmdblock = NULL;
-	while (temp != NULL)
-	{
-		cmdblock = (t_cmdblock *)temp->content;
-		if (should_execute(prev_cmdblock, cmdblock))
-			cmdblock->exit_status = handle_cmdblock(mini, cmdblock);
-		else
-			cmdblock->exit_status = 0;
-		prev_cmdblock = cmdblock;
-		temp = temp->next;
-	}
-	exit_status = get_exit_status(cmdblocks_list);
+	pid = fork();
+	if (pid == 0)
+		exit(handle_cmdblocks(mini, cmdblocks_list));
+	waitpid(pid, &estatus, 0);
 	ft_lstclear(&cmdblocks_list, free_cmdblock);
-	return (exit_status);
+	return (WEXITSTATUS(estatus));
 }
 
 /**

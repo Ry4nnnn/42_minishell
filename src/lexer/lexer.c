@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 18:55:56 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/31 18:22:55 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static t_cmdblock	*create_new_cmdblock(int spliter_type, int in_bracket)
 		return (NULL);
 	new_cmdblock->spliter_type = spliter_type;
 	new_cmdblock->in_bracket = in_bracket;
-	new_cmdblock->was_in_bracket = 0;
 	new_cmdblock->need_wait = 0;
 	new_cmdblock->cmd_argv = NULL;
 	new_cmdblock->redir_argv = NULL;
@@ -137,7 +136,6 @@ t_list	*split_cmdblocks(char *input, int bracket)
 	t_list	*new_cmdblock;
 
 	cmdblock_list = get_new_cmdblock(input, BEGINNING);
-	((t_cmdblock *)cmdblock_list->content)->was_in_bracket = bracket;
 	i = ft_strlen(((t_cmdblock *)cmdblock_list->content)->input) - 1;
 	while (input[++i] != 0)
 	{
@@ -145,7 +143,6 @@ t_list	*split_cmdblocks(char *input, int bracket)
 		{
 			new_cmdblock = get_new_cmdblock(input + i,
 					get_spliter_type(input + i));
-			((t_cmdblock *)new_cmdblock->content)->was_in_bracket = bracket;
 			ft_lstadd_back(&cmdblock_list, new_cmdblock);
 			i += ft_strlen(((t_cmdblock *)new_cmdblock->content)->input);
 		}

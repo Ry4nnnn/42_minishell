@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 17:25:51 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/03/31 18:46:47 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,17 +57,17 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		errnum;
 
-	cmdblock->need_wait = 1;
 	errnum = get_program_permission(mini, cmdblock);
 	if (errnum != 0)
 		return (errnum);
 	mini->exec_path = cmdblock->cmd_argv[0];
 	if (!mini->exec_path)
 		return (127);
+	cmdblock->need_wait = 1;
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
-	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
+	if (mini->pipes.prep_pipe == 0)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128);
@@ -85,17 +85,17 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
  */
 int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
-	cmdblock->need_wait = 1;
 	get_exec_argv(mini, cmdblock);
 	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!mini->exec_path)
 		return (127);
+	cmdblock->need_wait = 1;
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
 	free (mini->exec_path);
 	done_redir(mini, 0);
-	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
+	if (mini->pipes.prep_pipe == 0)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))
 		return (WTERMSIG(cmdblock->estatus) + 128);
