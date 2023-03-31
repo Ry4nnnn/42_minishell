@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 14:32:39 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 16:25:03 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/03/31 08:15:52 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,10 @@ void	finish_pipe(t_mini *mini)
 	mini->pipes.temp_read_fd = mini->pipes.pipe[READ];
 	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 	dup2(mini->pipes.saved_stdin, STDIN_FILENO);
+}
+
+void	handle_io(int fd, int std_file_no)
+{
+	dup2(fd, std_file_no);
+	close(fd);
 }

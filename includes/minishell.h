@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 21:03:51 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 08:17:57 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@
 
 //----------GLOBAL-VARIABLE----------//
 
-int		g_errno;
+int	g_errno;
 
 //----------STRUCTS----------//
 
@@ -139,7 +139,7 @@ typedef struct s_pipes
 	int	saved_stdout;
 	int	saved_stdin;
 	int	temp_read_fd;
-	int h_pipe[2];
+	int	h_pipe[2];
 }	t_pipes;
 
 typedef struct s_mini
@@ -200,6 +200,7 @@ void	prepare_pipe(t_mini *mini);
 void	do_pipe(t_mini *mini);
 void	finish_pipe(t_mini *mini);
 void	init_pipe(t_mini *mini);
+void	handle_io(int fd, int std_file_no);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini);
 void	redir_out(t_mini *mini, char *file, int type);
@@ -207,7 +208,6 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
 int		ms_open(char *filename, int flags, int mode);
-void	handle_io(int fd, int std_file_no);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
 int		check_for_redir(t_mini *mini, char *str);

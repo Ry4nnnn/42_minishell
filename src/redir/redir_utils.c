@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 21:24:00 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 08:15:44 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 		j++;
 	}
 	return (0);
-}
-
-void	handle_io(int fd, int std_file_no)
-{
-	dup2(fd, std_file_no);
-	close(fd);
 }
 
 int	ms_open(char *filename, int flags, int mode)

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 13:39:01 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 21:06:19 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 07:07:17 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	heredoc(t_mini *mini, t_cmdblock *cmdblock)
 
 	dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 	rl = readline("> ");
-	// ft_putstr_fd("> ", STDERR_FILENO);
-	// rl = get_next_line(STDIN_FILENO);
 	dup2(mini->pipes.h_pipe[WRITE], STDOUT_FILENO);
 	delimiter = cmdblock->infile;
 	while (rl && ft_strncmp(rl, delimiter, ft_strlen(delimiter) + 1))
@@ -30,8 +28,6 @@ int	heredoc(t_mini *mini, t_cmdblock *cmdblock)
 		free(rl);
 		dup2(mini->pipes.saved_stdout, STDOUT_FILENO);
 		rl = readline("> ");
-		// ft_putstr_fd("> ", STDERR_FILENO);
-		// rl = get_next_line(STDIN_FILENO);
 		dup2(mini->pipes.h_pipe[WRITE], STDOUT_FILENO);
 	}
 	free(rl);

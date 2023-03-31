@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 20:54:42 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 07:58:56 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,46 +102,17 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 	return (WEXITSTATUS(cmdblock->estatus));
 }
 
-int	exec_first_redir(t_mini *mini, t_cmdblock *cmdblock)
-{
-	if (redir_error(mini, cmdblock) == ERROR)
-		return (258);
-	get_iofile(mini, cmdblock, 1);
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">") == 0 && cmdblock->cmd_argv[1])
-	{
-		redir_out(mini, cmdblock->outfile, OUT);
-		done_redir(mini);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], ">>") == 0 && cmdblock->cmd_argv[1])
-	{
-		redir_out(mini, cmdblock->outfile, APPEND);
-		done_redir(mini);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<") == 0 && cmdblock->cmd_argv[1])
-	{
-		redir_in(mini, cmdblock, cmdblock->infile, IN);
-		done_redir(mini);
-	}
-	if (ft_strcmp(cmdblock->cmd_argv[0], "<<") == 0 && cmdblock->cmd_argv[1])
-	{
-		redir_in(mini, cmdblock, cmdblock->infile, HEREDOC);
-		done_redir(mini);
-	}
-	return (0);
-}
-
 int	executor(t_mini *mini, t_cmdblock *cmdblock)
 {
 	signal(SIGINT, SIG_IGN);
 	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
 		return (0);
-	if (check_for_redir(mini, cmdblock->cmd_argv[0]) == 0
-		&& cmdblock->cmd_argv[1])
-		return (exec_first_redir(mini, cmdblock));
+	if (redir_error(mini, cmdblock) == ERROR)
+		return (258);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
-		if (exec_redir(mini, cmdblock) == ERROR)
-			return (258);
+		if (exec_redir(mini, cmdblock) == 1)
+			return (0);
 	}
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)
 		return (exec_builtins(mini, cmdblock));

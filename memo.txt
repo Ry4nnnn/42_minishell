@@ -26,5 +26,5 @@ big goals:
 
 Done. wildcards
 Done. redirections
-3. norminette :)
+Done. norminette :)
 4. Comments
