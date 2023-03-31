@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:38:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 15:31:35 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 
 	cmdblock->need_wait = 1;
 	errnum = get_program_permission(mini, cmdblock);
-	mini->exec_path = cmdblock->cmd_argv[0];
 	if (errnum != 0)
 		return (errnum);
+	mini->exec_path = cmdblock->cmd_argv[0];
+	if (!mini->exec_path)
+		return (127);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
@@ -86,9 +88,12 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 	cmdblock->need_wait = 1;
 	get_exec_argv(mini, cmdblock);
 	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
+	if (!mini->exec_path)
+		return (127);
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
+	free (mini->exec_path);
 	done_redir(mini);
 	if (mini->pipes.prep_pipe == 0 || cmdblock->was_in_bracket)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);

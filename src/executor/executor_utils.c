@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:06:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/28 18:21:58 by welim            ###   ########.fr       */
+/*   Updated: 2023/03/31 15:29:46 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 		i++;
 	}
 	ft_free2darr((void *)paths);
+	if (cmd_path == NULL)
+		cmd_error(mini, cmds, CMD_NF);
 	return (cmd_path);
 }
 
