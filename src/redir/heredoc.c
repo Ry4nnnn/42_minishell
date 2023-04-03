@@ -6,12 +6,20 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 13:39:01 by welim             #+#    #+#             */
-/*   Updated: 2023/04/01 16:45:57 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 13:44:19 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/**
+ * @brief execute heredoc
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * 
+ * @return int
+ */
 int	heredoc(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	*rl;

@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:14:42 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:13:35 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 13:43:45 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,16 @@ static void	get_outfile(t_mini *mini, t_cmdblock *cmdblock, int i)
 	cmdblock->outfile = cmdblock->cmd_argv[i + 1];
 }
 
-// to get the current file name and error checking
+/**
+ * @brief to get the file name depending if its a in or out redirection
+ * it will also get the delimiters for heredoc
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * @param i
+ * 
+ * @return int
+ */
 int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 {
 	if (cmdblock->cmd_argv[i + 1] == NULL)

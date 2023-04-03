@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 17:59:11 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 13:54:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,14 @@ static int	select_and_exec(t_mini *mini, t_cmdblock *cmdblock, char *cmd_argv)
 	return (0);
 }
 
+/**
+ * @brief execute redirection
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * 
+ * @return int
+ */
 int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;

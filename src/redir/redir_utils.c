@@ -6,20 +6,26 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 08:41:13 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 13:53:06 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /**
-** @brief Find the redir type
-* return 0 if input does not contain any redir
-* return 1 if contain >
-* return 2 if contain >> (append)
-* return 3 if contain <
-* return 4 if contain << (heredoc)
-**/
+ * @brief goes through the user input in the struct
+ * 			finds the first redir in the input
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * 
+ * @return int
+ * return 0 if input does not contain any redir
+ * return 1 if is > (redir out)
+ * return 2 if is >> (append)
+ * return 3 if is < (redir in)
+ * return 4 if is << (heredoc)
+ */
 int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 {
 	char	**redir;
@@ -60,8 +66,16 @@ int	ms_open(char *filename, int flags, int mode)
 	return (fd);
 }
 
-//check in the str is a redir
-// return 0 if true 
+/**
+ * @brief goes through the str and search for redir
+ * 
+ * @param mini struct
+ * @param str string
+ * 
+ * @return int
+ * return 0 if true
+ * return 1 if false
+ */
 int	check_for_redir(t_mini *mini, char *str)
 {
 	int		i;
@@ -100,8 +114,18 @@ static int	check_redir_error(t_mini *mini, char *cmd_argv)
 	return (SUCCESS);
 }
 
-// to check if input ends with a redir
-// if true it prints error msg
+/**
+ * @brief goes through the input in the struct
+ * 			checks if input ends with a redirection
+ * 			checks if there a redirection after a redirction
+ * 			and prints the error msg accordingly
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * 
+ * @return int
+ * returns 0 if theres not error
+ */
 int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;
