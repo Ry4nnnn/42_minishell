@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:44 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 18:13:13 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 21:50:06 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static void	update_dir(t_mini *mini, char *key, char *value)
  * @param path 
  * @return int 
  */
-static int	ms_chdir(t_mini *mini, t_cmdblock *cmdblock, char *path)
+static int	ms_chdir(t_mini *mini, char *path)
 {
 	char	*oldpwd;
 
@@ -84,7 +84,7 @@ static int	ms_cd_home(t_mini *mini, t_cmdblock *cmdblock)
 		cmd_error(mini, cmdblock->cmd_argv, NOHOME);
 		return (1);
 	}
-	if (ms_chdir(mini, cmdblock, home) == 0)
+	if (ms_chdir(mini, home) == 0)
 		return (0);
 	if (access(home, F_OK) == 0)
 		cmd_arg_error(mini, cmdblock->cmd_argv, NOTDIR);
@@ -109,7 +109,7 @@ static int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 	oldpwd = get_env(mini, "OLDPWD");
 	if (oldpwd && ft_strcmp(cmdblock->cmd_argv[1], "-") == 0)
 	{
-		ms_chdir(mini, cmdblock, oldpwd);
+		ms_chdir(mini, oldpwd);
 		ms_pwd();
 		return (0);
 	}
@@ -117,7 +117,7 @@ static int	ms_cd_dir(t_mini *mini, t_cmdblock *cmdblock)
 		ft_strexpand(&(cmdblock->cmd_argv[1]), home, 0, 1);
 	if (ft_strncmp(cmdblock->cmd_argv[1], "~/", 2) == 0)
 		ft_strexpand(&(cmdblock->cmd_argv[1]), home, 0, 1);
-	if (ms_chdir(mini, cmdblock, cmdblock->cmd_argv[1]) != 0)
+	if (ms_chdir(mini, cmdblock->cmd_argv[1]) != 0)
 	{
 		if (access(cmdblock->cmd_argv[1], F_OK) == 0)
 			cmd_arg_error(mini, cmdblock->cmd_argv, NOTDIR);

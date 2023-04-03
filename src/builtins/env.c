@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:06 by welim             #+#    #+#             */
-/*   Updated: 2023/03/29 21:28:24 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 21:49:09 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @param cmdblock struct
  * @return int
  */
-int	ms_env(t_mini *mini, t_cmdblock *cmdblock)
+int	ms_env(t_mini *mini)
 {
 	t_list	*env_list;
 	t_env	*env_node;

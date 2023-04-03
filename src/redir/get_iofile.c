@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:14:42 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 13:43:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 22:18:30 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	get_infile(t_mini *mini, t_cmdblock *cmdblock, int i)
 
 static void	get_outfile(t_mini *mini, t_cmdblock *cmdblock, int i)
 {
+	(void)mini;
 	cmdblock->outfile = cmdblock->cmd_argv[i + 1];
 }
 
@@ -53,4 +54,17 @@ int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 		get_outfile(mini, cmdblock, i);
 	}
 	return (SUCCESS);
+}
+
+int	ms_open(char *filename, int flags, int mode)
+{
+	int	fd;
+
+	fd = open(filename, flags, mode);
+	if (fd == -1)
+	{
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
+	return (fd);
 }

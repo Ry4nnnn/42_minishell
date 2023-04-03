@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 13:53:06 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/03 22:18:27 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,6 @@ int	check_redir_type(t_mini *mini, t_cmdblock *cmdblock)
 	return (0);
 }
 
-int	ms_open(char *filename, int flags, int mode)
-{
-	int	fd;
-
-	fd = open(filename, flags, mode);
-	if (fd == -1)
-	{
-		ft_putstr_fd(filename, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
-	}
-	return (fd);
-}
-
 /**
  * @brief goes through the str and search for redir
  * 
@@ -90,25 +77,42 @@ int	check_for_redir(t_mini *mini, char *str)
 	return (ERROR);
 }
 
-// if (cmdblock->cmd_argv[i + 1] == NULL)
-// theres redir at the end of the token
-//
-// if (check_for_redir(mini, cmdblock->cmd_argv[i + 1]) == 0)
-// theres a redir after a redir
-static int	check_redir_error(t_mini *mini, char *cmd_argv)
+static int	check_is_redir(char *str)
 {
-	char	*token;
+	if (ft_strcmp(">", str) == 0)
+		return (1);
+	if (ft_strcmp(">>", str) == 0)
+		return (1);
+	if (ft_strcmp("<", str) == 0)
+		return (1);
+	if (ft_strcmp("<<", str) == 0)
+		return (1);
+	else
+		return (0);
+}
 
-	if (cmd_argv == NULL)
+static int	print_redir_error(t_mini *mini, t_cmdblock *cmdblock, int i)
+{
+	char	*err_token;
+
+	if (!check_is_redir(cmdblock->cmd_argv[i]))
 	{
-		token = ft_strdup("newline");
-		syntax_error(mini, UNEXPECTED_TOKEN, token);
+		err_token = ft_strndup(cmdblock->cmd_argv[i], 1);
+		syntax_error(mini, UNEXPECTED_TOKEN, err_token);
 		return (ERROR);
 	}
-	if ((cmd_argv[0] == '>') || (cmd_argv[0] == '<'))
+	if (cmdblock->cmd_argv[i + 1]
+		&& check_is_redir(cmdblock->cmd_argv[i + 1]))
 	{
-		token = ft_strndup(cmd_argv, 1);
-		syntax_error(mini, UNEXPECTED_TOKEN, token);
+		err_token = ft_strndup(cmdblock->cmd_argv[i + 1],
+				ft_strlen(cmdblock->cmd_argv[i + 1]));
+		syntax_error(mini, UNEXPECTED_TOKEN, err_token);
+		return (ERROR);
+	}
+	if (cmdblock->cmd_argv[i + 1] == NULL)
+	{
+		err_token = ft_strdup("newline");
+		syntax_error(mini, UNEXPECTED_TOKEN, err_token);
 		return (ERROR);
 	}
 	return (SUCCESS);
@@ -124,25 +128,19 @@ static int	check_redir_error(t_mini *mini, char *cmd_argv)
  * @param cmdblock struct
  * 
  * @return int
- * returns 0 if theres not error
+ * returns 0 if theres no error
  */
 int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;
-	int		j;
 
 	i = 0;
 	while (cmdblock->cmd_argv[i])
 	{
-		j = 0;
-		while (mini->redir[j])
+		if (cmdblock->cmd_argv[i][0] == '>' || cmdblock->cmd_argv[i][0] == '<')
 		{
-			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
-			{
-				if (check_redir_error(mini, cmdblock->cmd_argv[i + 1]) == ERROR)
-					return (ERROR);
-			}
-			j++;
+			if (print_redir_error(mini, cmdblock, i) == ERROR)
+				return (ERROR);
 		}
 		i++;
 	}

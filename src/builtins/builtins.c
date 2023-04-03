@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 19:43:17 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 21:49:18 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
 		ms_exit(mini, cmdblock->cmd_argv);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
-		ms_env(mini, cmdblock);
+		ms_env(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "pwd", 4) == 0)
 		ms_pwd();
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "unset", 6) == 0)

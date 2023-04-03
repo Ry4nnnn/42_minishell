@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 18:22:55 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 21:52:05 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ t_list	*split_cmdblocks(char *input, int bracket)
 	t_list	*cmdblock_list;
 	t_list	*new_cmdblock;
 
+	(void) bracket;
 	cmdblock_list = get_new_cmdblock(input, BEGINNING);
 	i = ft_strlen(((t_cmdblock *)cmdblock_list->content)->input) - 1;
 	while (input[++i] != 0)

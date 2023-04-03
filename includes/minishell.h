@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 19:43:33 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 21:49:24 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ typedef struct s_mini
 //----------BUILTINS----------//
 int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 int		ms_echo(t_mini *mini, char **input);
-int		ms_env(t_mini *mini, t_cmdblock *cmdblock);
+int		ms_env(t_mini *mini);
 void	ms_exit(t_mini *mini, char **cmd_argv);
 int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
 void	ms_unset(t_mini *mini, char **cmd_argv);
