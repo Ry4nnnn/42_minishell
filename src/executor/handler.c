@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 23:01:14 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/31 18:47:10 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 19:43:25 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	handle_cmdblock(t_mini *mini, t_cmdblock *cmdblock)
 	g_errno = cmdblock->exit_status;
 	ft_free2darr((void **)cmdblock->redir_argv);
 	ft_free2darr((void **)cmdblock->cmd_argv);
+	mini->pipes.is_redir_in = 0;
 	return (cmdblock->exit_status);
 }
 

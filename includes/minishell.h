@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/03/31 18:22:28 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 19:43:33 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,8 @@ void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
 int		name_pattern_match(char *wildcard, char *name, int pattern_len);
 int		get_pattern_len(char *str);
 void	sort_names_list(t_list **names);
-void	remove_extra_quotes(char **pinput, int i, int quote);
+int		detect_quote_token(char *input, int quote);
+int		detect_normal_token(char *input);
 
 //----------REDIR----------//
 void	prepare_pipe(t_mini *mini);

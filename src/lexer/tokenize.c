@@ -3,44 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/29 20:17:30 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/03 18:18:57 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * @brief Detect the length of a normal (space separated) token.
- * 
- * @param input 
- * @return int 
- */
-static int	detect_normal_token(char *input)
-{
-	int		i;
-	char	*special_token;
-
-	special_token = ft_strchr("<>", input[0]);
-	i = -1;
-	while (input[++i] != 0)
-	{
-		if (!special_token && ft_strchr("<>", input[i]))
-		{
-			i--;
-			break ;
-		}
-		if (special_token && !ft_strchr("<>", input[i]))
-			break ;
-		if (input[i] == ' ')
-			break ;
-	}
-	if (input[i] == 0 || special_token)
-		return (i - 1);
-	return (i);
-}
 
 /**
  * @brief Get the size of the token array for malloc use.
@@ -57,7 +27,12 @@ int	get_tokens_size(char *input)
 	size = 0;
 	while (input[++i] != 0)
 	{
-		if (input[i] != ' ')
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			i += detect_quote_token(input + i, input[i]);
+			size++;
+		}
+		else if (input[i] != ' ')
 		{
 			i += detect_normal_token(input + i);
 			size++;
@@ -127,6 +102,7 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 	int		i;
 	int		j;
 	char	**result;
+	int		quote;
 
 	(void)mini;
 	i = -1;
@@ -136,10 +112,13 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 	{
 		if (input[i] == ' ')
 			continue ;
-		result[++j] = get_next_token(input, i, 0);
+		quote = input[i];
+		result[++j] = get_next_token(input, i, quote);
 		i += ft_strlen(result[j]);
 		if (input[i] != ' ')
 			i--;
+		if (quote == '\'' || quote == '"')
+			i += 2;
 		if (input[i] == 0)
 			break ;
 	}

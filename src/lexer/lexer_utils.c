@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:58:16 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/27 15:48:57 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/03 18:19:09 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,36 +84,45 @@ int	get_spliter_type(char *input)
 	return (INVALID);
 }
 
-static void	remove_export_quotes(char **pinput)
+int	detect_quote_token(char *input, int quote)
 {
-	if ((*pinput)[0] == '\'' || (*pinput)[0] == '"')
-		ft_strexpand(pinput, NULL, 0, 1);
-	if ((*pinput)[6] == '\'' || (*pinput)[6] == '"')
-		ft_strexpand(pinput, NULL, 6, 1);
+	int	i;
+
+	i = 0;
+	while (input[++i] != 0)
+	{
+		if (input[i] == quote)
+			break ;
+	}
+	return (i);
 }
 
-void	remove_extra_quotes(char **pinput, int i, int quote)
+/**
+ * @brief Detect the length of a normal (space separated) token.
+ * 
+ * @param input 
+ * @return int 
+ */
+int	detect_normal_token(char *input)
 {
-	char	*token;
+	int		i;
+	char	*special_token;
 
-	token = get_next_token(*pinput, 0, (*pinput)[0]);
-	if (ft_strcmp(token, "export") == 0)
+	special_token = ft_strchr("<>", input[0]);
+	i = -1;
+	while (input[++i] != 0)
 	{
-		free(token);
-		return (remove_export_quotes(pinput));
-	}
-	free(token);
-	while ((*pinput)[++i] != 0)
-	{
-		if (quote == 0 && ((*pinput)[i] == '\'' || (*pinput)[i] == '"'))
+		if (!special_token && ft_strchr("<>", input[i]))
 		{
-			quote = (*pinput)[i];
-			ft_strexpand(pinput, NULL, i--, 1);
+			i--;
+			break ;
 		}
-		else if (quote != 0 && (*pinput)[i] == quote)
-		{
-			quote = 0;
-			ft_strexpand(pinput, NULL, i--, 1);
-		}
+		if (special_token && !ft_strchr("<>", input[i]))
+			break ;
+		if (input[i] == ' ')
+			break ;
 	}
+	if (input[i] == 0 || special_token)
+		return (i - 1);
+	return (i);
 }

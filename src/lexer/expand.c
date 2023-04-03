@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/27 15:36:23 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/03 18:14:04 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,5 +136,4 @@ void	expand_input(t_mini *mini, char **pinput)
 {
 	expand_variables(mini, pinput);
 	expand_wildcard(mini, pinput);
-	remove_extra_quotes(pinput, -1, 0);
 }

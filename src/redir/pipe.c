@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 14:32:39 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/31 17:57:56 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/03 19:40:41 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_pipe(t_mini *mini)
 	mini->pipes.saved_stdin = dup(STDIN_FILENO);
 	mini->pipes.saved_stdout = dup(STDOUT_FILENO);
 	mini->pipes.temp_read_fd = -1;
+	mini->pipes.is_redir_in = 0;
 }
 
 /**

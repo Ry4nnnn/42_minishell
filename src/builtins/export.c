@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 21:34:23 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/03/18 15:04:19 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/03 19:30:26 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,6 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 {
 	t_env	*envp;
 
-	if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
-	{
-		free(key);
-		if (value)
-			free(value);
-		return ;
-	}
 	if (ft_strcmp(key, "_") == 0)
 	{
 		free (key);
@@ -124,8 +117,11 @@ void	edit_env_var(t_mini *mini, char *key, char *value)
 		add_env_var(mini, key, value);
 	else
 	{
-		free(envp->value);
-		envp->value = value;
+		if (value != NULL)
+		{
+			free(envp->value);
+			envp->value = value;
+		}
 		free (key);
 	}
 }
@@ -156,6 +152,8 @@ int	ms_export(t_mini *mini, t_cmdblock *cmdblock)
 		return (print_export(mini));
 	while (cmdblock->cmd_argv[++i] != NULL)
 	{
+		if (mini->pipes.do_pipe || mini->pipes.prep_pipe)
+			continue ;
 		get_key_value(cmdblock->cmd_argv[i], &key, &value);
 		if (valid_input(key))
 			edit_env_var(mini, key, value);
