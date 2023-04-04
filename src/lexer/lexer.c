@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 21:52:05 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 15:24:39 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static t_cmdblock	*create_new_cmdblock(int spliter_type, int in_bracket)
 	new_cmdblock->in_bracket = in_bracket;
 	new_cmdblock->need_wait = 0;
 	new_cmdblock->cmd_argv = NULL;
-	new_cmdblock->redir_argv = NULL;
 	return (new_cmdblock);
 }
 

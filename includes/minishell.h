@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 21:49:24 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 17:21:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ typedef struct s_cmdblock {
 	int		need_wait;
 	int		in_bracket;
 	char	**cmd_argv;
-	char	**redir_argv;
 	int		estatus;
 	pid_t	pid;
 	pid_t	h_pid;
@@ -213,6 +212,7 @@ int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
 int		check_for_redir(t_mini *mini, char *str);
 int		get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i);
+int		check_is_redir(char *str);
 
 //----------EXECUTOR----------//
 
@@ -231,6 +231,7 @@ void	prepare_handling(t_mini *mini, t_list *curr_node,
 			t_cmdblock *cmdblock);
 int		should_execute(t_cmdblock *prev_cmdblock, t_cmdblock *cmdblock);
 int		get_program_permission(t_mini *mini, t_cmdblock *cmdblock);
+char	*try_cmd_path(char *path, char *cmd);
 
 //----------MAIN_DIR----------//
 

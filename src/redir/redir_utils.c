@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 22:18:27 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 14:03:32 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	check_for_redir(t_mini *mini, char *str)
 	return (ERROR);
 }
 
-static int	check_is_redir(char *str)
+int	check_is_redir(char *str)
 {
 	if (ft_strcmp(">", str) == 0)
 		return (1);
@@ -91,6 +91,16 @@ static int	check_is_redir(char *str)
 		return (0);
 }
 
+/**
+ * @brief printf error msg accordingly for redirections
+ * 
+ * @param mini struct
+ * @param cmdblock struct
+ * @param i
+ * 
+ * @return int
+ * returns 0 if theres no error
+ */
 static int	print_redir_error(t_mini *mini, t_cmdblock *cmdblock, int i)
 {
 	char	*err_token;

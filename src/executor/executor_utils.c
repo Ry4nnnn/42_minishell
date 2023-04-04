@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/18 17:06:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/31 15:29:46 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 17:21:37 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*env_to_str(void *arg)
  * @param cmd 
  * @return char* NULL for invalid and cmd_path if valid
  */
-static char	*try_cmd_path(char *path, char *cmd)
+char	*try_cmd_path(char *path, char *cmd)
 {
 	char	*cmd_path;
 	char	*temp;
@@ -53,92 +53,24 @@ static char	*try_cmd_path(char *path, char *cmd)
 	return (NULL);
 }
 
-/**
- * @brief Get the program path by joining the cmds[0] with the paths list
- * and try until got a valid one.
- * If has tried all paths and still no valid program path, return NULL.
- * 
- * @param mini
- * @param cmds
-**/
-char	*get_exec_path(t_mini *mini, char **cmds)
+int	get_program_permission(t_mini *mini, t_cmdblock *cmdblock)
 {
-	char	*plist;
-	char	**paths;
-	char	*cmd_path;
-	int		i;
+	struct stat	file_stat;
 
-	i = 0;
-	plist = get_env(mini, "PATH");
-	paths = ft_split(plist, ':');
-	cmd_path = NULL;
-	while (paths[i] != NULL)
+	if (stat(cmdblock->cmd_argv[0], &file_stat) != 0)
 	{
-		cmd_path = try_cmd_path(paths[i], cmds[0]);
-		if (cmd_path != NULL)
-			break ;
-		i++;
+		cmd_error(mini, cmdblock->cmd_argv, NSFD);
+		return (127);
 	}
-	ft_free2darr((void *)paths);
-	if (cmd_path == NULL)
-		cmd_error(mini, cmds, CMD_NF);
-	return (cmd_path);
-}
-
-int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	while (cmdblock->cmd_argv[i])
+	if (S_ISDIR(file_stat.st_mode) != 0)
 	{
-		j = 0;
-		while (mini->redir[j])
-		{
-			if (ft_strcmp(cmdblock->cmd_argv[i], mini->redir[j]) == 0)
-				return (i);
-			j++;
-		}
-		i++;
+		cmd_error(mini, cmdblock->cmd_argv, ISDIR);
+		return (126);
+	}
+	else if (access(cmdblock->cmd_argv[0], X_OK) != 0)
+	{
+		cmd_error(mini, cmdblock->cmd_argv, PERMISSION_DENIED);
+		return (126);
 	}
 	return (0);
-}
-
-//get the input in 2d array and check if theres a redir
-//and remove the args after the redir including the redir
-/**
- * @brief gets the redir argument for execve
- * gets the input in 2d array and check if theres a redir
- * removes the args after the redir including the redir
- * @attention **cmd_argv = "ls -la > test"
- * @attention **redir_argv = "ls -la"
- * 
- * @param mini struct
- * @param cmdblock struct
- */
-void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock)
-{
-	int		i;
-	int		j;
-	int		k;
-	char	**res;
-
-	k = 0;
-	i = get_exec_argv_sz(mini, cmdblock);
-	res = (char **)malloc(sizeof(char *) * (i + 1));
-	while (i--)
-	{
-		j = 0;
-		res[k] = malloc(sizeof(char) * (ft_strlen(cmdblock->cmd_argv[k]) + 1));
-		while (cmdblock->cmd_argv[k][j])
-		{
-			res[k][j] = cmdblock->cmd_argv[k][j];
-			j++;
-		}
-		res[k][j] = '\0';
-		k++;
-	}
-	res[k] = NULL;
-	cmdblock->redir_argv = res;
 }
