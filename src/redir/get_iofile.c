@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:14:42 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 17:45:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 18:15:50 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,18 @@ int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 	return (SUCCESS);
 }
 
-int	ms_open(char *filename, int flags, int mode)
+int	ms_open(t_mini *mini, char *filename, int flags, int mode)
 {
 	int	fd;
+	char 	*user;
 
 	fd = open(filename, flags, mode);
 	if (fd == -1)
 	{
-		ft_putstr_fd(filename, 2);
-		ft_putstr_fd(": No such file or directory\n", 2);
+		user = get_env(mini, "USER");
+		if (user == NULL)
+			user = "user";
+		printf(YELLOW"%s: \033[0m%s: %s", user, filename, NSFD);
 	}
 	return (fd);
 }

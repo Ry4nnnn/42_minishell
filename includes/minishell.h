@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 17:21:48 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 18:12:08 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ void	redir_out(t_mini *mini, char *file, int type);
 void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
-int		ms_open(char *filename, int flags, int mode);
+int		ms_open(t_mini *mini, char *filename, int flags, int mode);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
 int		check_for_redir(t_mini *mini, char *str);

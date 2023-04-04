@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 17:45:19 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 18:11:41 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	redir_out(t_mini *mini, char *file, int type)
 		flags = O_CREAT | O_APPEND | O_WRONLY;
 	if (mini->fd_out == -1)
 		close (mini->fd_out);
-	mini->fd_out = ms_open(file, flags, 0644);
+	mini->fd_out = ms_open(mini, file, flags, 0644);
 	handle_io(mini->fd_out, STDOUT_FILENO);
 }
 
@@ -43,7 +43,7 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 	mini->pipes.is_redir_in = 1;
 	if (type == IN)
 	{
-		mini->fd_in = ms_open(file, O_RDONLY, 0644);
+		mini->fd_in = ms_open(mini, file, O_RDONLY, 0644);
 		handle_io(mini->fd_in, STDIN_FILENO);
 	}
 	if (type == HEREDOC)
