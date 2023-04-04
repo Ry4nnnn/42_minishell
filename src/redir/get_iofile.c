@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_iofile.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:14:42 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 18:15:50 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 21:48:12 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,13 @@ int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 int	ms_open(t_mini *mini, char *filename, int flags, int mode)
 {
 	int	fd;
-	char 	*user;
 
 	fd = open(filename, flags, mode);
 	if (fd == -1)
 	{
-		user = get_env(mini, "USER");
-		if (user == NULL)
-			user = "user";
-		printf(YELLOW"%s: \033[0m%s: %s", user, filename, NSFD);
+		cmd_error(mini, &filename, NSFD);
+		g_errno = 1;
+		return (-1);
 	}
 	return (fd);
 }

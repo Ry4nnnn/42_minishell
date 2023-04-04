@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:23:41 by welim             #+#    #+#             */
-/*   Updated: 2023/04/03 21:49:18 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 22:48:32 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	choose_and_exec(t_mini *mini, t_cmdblock *cmdblock)
 
 	errnum = 0;
 	if (ft_strncmp(cmdblock->cmd_argv[0], "exit", 5) == 0)
-		ms_exit(mini, cmdblock->cmd_argv);
+		errnum = ms_exit(mini, cmdblock);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "env", 4) == 0)
 		ms_env(mini);
 	else if (ft_strncmp(cmdblock->cmd_argv[0], "pwd", 4) == 0)
@@ -78,7 +78,6 @@ int	exec_builtins(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	errnum;
 
-	errnum = 0;
 	errnum = choose_and_exec(mini, cmdblock);
 	done_redir(mini, 0);
 	return (errnum);

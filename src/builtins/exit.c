@@ -6,7 +6,7 @@
 /*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:08 by welim             #+#    #+#             */
-/*   Updated: 2023/03/18 16:02:48 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/04 22:53:46 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@
  * @param cmd_argv 
  * @return int 
  */
-static int	get_exit_num(t_mini *mini, char **cmd_argv)
+static int	get_exit_num(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	exit_num;
 
 	exit_num = 0;
-	if (cmd_argv != NULL && cmd_argv[1] != NULL)
+	if (cmdblock && cmdblock->cmd_argv && cmdblock->cmd_argv[1])
 	{
-		if (ft_isnumber(cmd_argv[1]) == 0)
+		if (ft_isnumber(cmdblock->cmd_argv[1]) == 0)
 		{
-			cmd_arg_error(mini, cmd_argv, NONNUMERICARG);
+			cmd_arg_error(mini, cmdblock->cmd_argv, NONNUMERICARG);
 			return (255);
 		}
-		exit_num = ft_atoi(cmd_argv[1]);
+		exit_num = ft_atoi(cmdblock->cmd_argv[1]);
 	}
 	return (exit_num);
 }
@@ -45,21 +45,22 @@ static int	get_exit_num(t_mini *mini, char **cmd_argv)
  * @param mini 
  * @param cmd_argv 
  */
-void	ms_exit(t_mini *mini, char **cmd_argv)
+int	ms_exit(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int	exit_num;
 
-	if (ft_2darrlen((void **)cmd_argv) > 2)
-		return (cmd_error(mini, cmd_argv, TOOMANYARGS));
 	if (!mini->pipes.do_pipe && !mini->pipes.prep_pipe)
-	{
-		rl_clear_history();
 		printf("exit 🤍\n");
+	if (cmdblock && ft_2darrlen((void **)cmdblock->cmd_argv) > 2)
+	{
+		cmd_error(mini, cmdblock->cmd_argv, TOOMANYARGS);
+		return (1);
 	}
-	exit_num = get_exit_num(mini, cmd_argv);
+	rl_clear_history();
+	exit_num = get_exit_num(mini, cmdblock);
 	g_errno = ((exit_num % 256) + 256) % 256;
 	if (mini->pipes.do_pipe == 1 || mini->pipes.prep_pipe == 1)
-		return ;
+		return (exit_num);
 	system("leaks minishell");
 	exit(exit_num);
 }

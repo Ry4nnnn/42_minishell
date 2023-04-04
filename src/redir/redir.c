@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 18:11:41 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 22:54:10 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,14 @@ void	redir_out(t_mini *mini, char *file, int type)
 	handle_io(mini->fd_out, STDOUT_FILENO);
 }
 
-void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
+int	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 {
 	mini->pipes.is_redir_in = 1;
 	if (type == IN)
 	{
 		mini->fd_in = ms_open(mini, file, O_RDONLY, 0644);
+		if (mini->fd_in == -1)
+			return (-1);
 		handle_io(mini->fd_in, STDIN_FILENO);
 	}
 	if (type == HEREDOC)
@@ -62,6 +64,7 @@ void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 		dup2(mini->pipes.h_pipe[READ], STDIN_FILENO);
 		close(mini->pipes.h_pipe[WRITE]);
 	}
+	return (0);
 }
 
 static int	select_and_exec(t_mini *mini, t_cmdblock *cmdblock, char *cmd_argv)
@@ -71,9 +74,9 @@ static int	select_and_exec(t_mini *mini, t_cmdblock *cmdblock, char *cmd_argv)
 	if (ft_strcmp(cmd_argv, S_APPEND) == 0)
 		redir_out(mini, cmdblock->outfile, APPEND);
 	if (ft_strcmp(cmd_argv, S_IN) == 0)
-		redir_in(mini, cmdblock, cmdblock->infile, IN);
+		return (redir_in(mini, cmdblock, cmdblock->infile, IN));
 	if (ft_strcmp(cmd_argv, S_HEREDOC) == 0)
-		redir_in(mini, cmdblock, cmdblock->infile, HEREDOC);
+		return (redir_in(mini, cmdblock, cmdblock->infile, HEREDOC));
 	return (0);
 }
 
@@ -103,10 +106,9 @@ int	exec_redir(t_mini *mini, t_cmdblock *cmdblock)
 			get_iofile(mini, cmdblock, i);
 		else
 			get_iofile(mini, cmdblock, i + 1);
-		select_and_exec(mini, cmdblock, cmdblock->cmd_argv[i]);
+		if (select_and_exec(mini, cmdblock, cmdblock->cmd_argv[i]) == -1)
+			return (-1);
 		i++;
 	}
-	if (option == 1)
-		return (1);
 	return (SUCCESS);
 }

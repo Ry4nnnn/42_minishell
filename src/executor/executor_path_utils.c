@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_path_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 17:25:29 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 17:51:58 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 22:00:08 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	*get_exec_path(t_mini *mini, char **cmds)
 	return (cmd_path);
 }
 
-int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
+static int	get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock)
 {
 	int		i;
 	int		j;
@@ -77,7 +77,8 @@ static void	get_redir_argv(t_cmdblock *cmdblock)
 		while (cmdblock->cmd_argv[i] != NULL
 			&& check_is_redir(cmdblock->cmd_argv[i]))
 			i += 2;
-		res = (char **)malloc(sizeof(char *) * (i + 1));
+		res = (char **)malloc(sizeof(char *)
+				* (ft_2darrlen((void **)cmdblock->cmd_argv) - i + 1));
 		while (cmdblock->cmd_argv[i])
 		{
 			res[k++] = ft_strdup(cmdblock->cmd_argv[i]);

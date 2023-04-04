@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 18:12:08 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 22:48:21 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ typedef struct s_mini
 int		ms_cd(t_mini *mini, t_cmdblock *cmdblock);
 int		ms_echo(t_mini *mini, char **input);
 int		ms_env(t_mini *mini);
-void	ms_exit(t_mini *mini, char **cmd_argv);
+int		ms_exit(t_mini *mini, t_cmdblock *cmdblock);
 int		ms_export(t_mini *mini, t_cmdblock *cmdblock);
 void	ms_unset(t_mini *mini, char **cmd_argv);
 void	ms_pwd(void);
@@ -204,7 +204,7 @@ void	handle_io(int fd, int std_file_no);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini, int heredoc);
 void	redir_out(t_mini *mini, char *file, int type);
-void	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
+int		redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
 int		ms_open(t_mini *mini, char *filename, int flags, int mode);
@@ -225,7 +225,6 @@ int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
 char	*env_to_str(void *arg);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock);
-int		get_exec_argv_sz(t_mini *mini, t_cmdblock *cmdblock);
 int		get_exit_status(t_list *cmdblock_list);
 void	prepare_handling(t_mini *mini, t_list *curr_node,
 			t_cmdblock *cmdblock);

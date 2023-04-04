@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: welim <welim@student.42.fr>                +#+  +:+       +#+         #
+#    By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/15 21:58:29 by welim             #+#    #+#              #
-#    Updated: 2023/04/04 17:20:45 by welim            ###   ########.fr        #
+#    Updated: 2023/04/04 21:47:22 by wangxuerui       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -113,6 +113,11 @@ fclean : clean
 	@echo "$(BLUE)$(NAME): $(H_RED) $(NAME) was deleted $(RESET)"
 
 re : fclean all
+
+ms_re:
+	rm -rf $(OBJS_PATH)
+	rm -rf ${NAME}
+	make all
 
 norm :
 	norminette libft/ includes/ src/

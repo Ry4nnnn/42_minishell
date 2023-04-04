@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 17:40:15 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/04 22:53:54 by wangxuerui       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,8 @@ int	execute(t_mini *mini, t_cmdblock *cmdblock)
 	if (execve(mini->exec_path, cmdblock->cmd_argv, mini->env) == -1)
 	{
 		cmd_error(mini, cmdblock->cmd_argv, CMD_NF);
-		fprintf (stderr, "IN EXEC\n");
 		exit(127);
 	}
-	fprintf (stderr, "AFTER EXEC\n");
 	exit(0);
 }
 
@@ -53,6 +51,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 	errnum = get_program_permission(mini, cmdblock);
 	if (errnum != 0)
 		return (errnum);
+	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
+		return (0);
 	mini->exec_path = cmdblock->cmd_argv[0];
 	if (!mini->exec_path)
 		return (127);
@@ -78,6 +78,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
  */
 int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 {
+	if (cmdblock->cmd_argv == NULL || cmdblock->cmd_argv[0] == NULL)
+		return (0);
 	mini->exec_path = get_exec_path(mini, cmdblock->cmd_argv);
 	if (!mini->exec_path)
 		return (127);
@@ -103,7 +105,8 @@ int	executor(t_mini *mini, t_cmdblock *cmdblock)
 		return (258);
 	if (check_redir_type(mini, cmdblock) != 0)
 	{
-		exec_redir(mini, cmdblock);
+		if (exec_redir(mini, cmdblock) == -1)
+			return (0);
 		get_exec_argv(mini, cmdblock);
 	}
 	if (check_builtins(mini, cmdblock->cmd_argv[0]) == 1)
