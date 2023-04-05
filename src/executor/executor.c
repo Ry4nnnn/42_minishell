@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 14:28:26 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 22:53:54 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 19:04:24 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
  */
 int	execute(t_mini *mini, t_cmdblock *cmdblock)
 {
-	mini->env = ft_llto2darr(mini->envp, env_to_str);
 	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	mini->env = ft_llto2darr(mini->envp, env_to_str);
 	if (mini->pipes.prep_pipe)
 		close(mini->pipes.pipe[READ]);
 	if (mini->pipes.do_pipe)
@@ -60,6 +61,8 @@ int	exec_program(t_mini *mini, t_cmdblock *cmdblock)
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
+	signal(SIGINT, signal_handler_exec);
+	signal(SIGQUIT, signal_handler_exec);
 	if (mini->pipes.prep_pipe == 0)
 		waitpid(cmdblock->pid, &(cmdblock->estatus), 0);
 	if (WIFSIGNALED(cmdblock->estatus))
@@ -87,6 +90,8 @@ int	exec_commands(t_mini *mini, t_cmdblock *cmdblock)
 	cmdblock->pid = fork();
 	if (cmdblock->pid == 0)
 		execute(mini, cmdblock);
+	signal(SIGINT, signal_handler_exec);
+	signal(SIGQUIT, signal_handler_exec);
 	free (mini->exec_path);
 	done_redir(mini, 0);
 	if (mini->pipes.prep_pipe == 0)

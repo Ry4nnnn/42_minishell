@@ -6,7 +6,7 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:19 by welim             #+#    #+#             */
-/*   Updated: 2023/04/05 12:16:00 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/05 15:38:10 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,14 @@ int	get_input(t_mini *mini, int *commanded)
 	return (1);
 }
 
+/**
+ * @brief print welcome banner when launch ./minishell
+ * 
+ * @param void 
+ */
 static void	print_banner(void)
 {
-	printf (GREEN);
+	printf (BGREEN);
 	printf(" _____ ______   ___  ________   ___  ___");
 	printf("_____  ___  ___  _______   ___       ___\n");
 	printf("|\\   _ \\  _   \\|\\  \\|\\   ___  \\|\\  \\|\\   ");
@@ -56,6 +61,8 @@ static void	print_banner(void)
 	printf ("\\\\________\\ \\__\\ \\__\\ \\______\\\\ \\_______\\ \\_______\\\n");
 	printf("    \\|__|     \\|__|\\|__|\\|__| \\|__|\\|__|");
 	printf (" |_______| |__|\\|__|\\|_______|\\|_______|\\|_______|\n");
+	printf (BCYAN);
+	printf ("						created by: Ryan | welim & Ray | wxuerui\n");
 	printf (RESET);
 }
 

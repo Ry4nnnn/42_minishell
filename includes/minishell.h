@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/05 15:12:26 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/05 20:34:22 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
+// Redir Secret Code 😏
 # define S_IN "\1"
 # define S_HEREDOC "\1\1"
 # define S_OUT "\3"
@@ -250,6 +251,7 @@ void	wait_childs(t_list *cmdblocks);
 
 //signal.c
 void	signal_handler(int signo);
+void	signal_handler_exec(int signo);
 void	init_signal(void);
 
 //prompt.c

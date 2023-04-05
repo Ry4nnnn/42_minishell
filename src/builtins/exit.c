@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:08 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 22:53:46 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 20:33:13 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,12 @@ int	ms_exit(t_mini *mini, t_cmdblock *cmdblock)
 	if (cmdblock && ft_2darrlen((void **)cmdblock->cmd_argv) > 2)
 	{
 		cmd_error(mini, cmdblock->cmd_argv, TOOMANYARGS);
-		return (1);
+		return (ERROR);
 	}
 	rl_clear_history();
 	exit_num = get_exit_num(mini, cmdblock);
 	g_errno = ((exit_num % 256) + 256) % 256;
 	if (mini->pipes.do_pipe == 1 || mini->pipes.prep_pipe == 1)
-		return (exit_num);
-	system("leaks minishell");
+		return (((exit_num % 256) + 256) % 256);
 	exit(exit_num);
 }

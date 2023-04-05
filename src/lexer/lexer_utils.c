@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:58:16 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/04 22:15:27 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 20:22:03 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,18 +108,18 @@ int	detect_normal_token(char *input)
 	int		i;
 	char	*special_token;
 
-	special_token = ft_strchr("<>", input[0]);
+	special_token = ft_strchr("\1\3", input[0]);
 	i = -1;
 	while (input[++i] != 0)
 	{
 		if (input[i] == '\'' || input[i] == '"')
 			i += detect_quote_token(input + i, input[i]);
-		if (!special_token && ft_strchr("<>", input[i]))
+		if (!special_token && ft_strchr("\1\3", input[i]))
 		{
 			i--;
 			break ;
 		}
-		if ((special_token && !ft_strchr("<>", input[i]))
+		if ((special_token && !ft_strchr("\1\3", input[i]))
 			|| input[i] == ' ' || input[i] == 0)
 			break ;
 	}

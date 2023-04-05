@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/05 15:01:30 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/05 20:25:14 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,11 @@ char	*get_next_token(char *input, int i, int quote)
 	target = ' ';
 	while ((input + i)[len] != 0 && (input + i)[len] != target)
 	{
-		if (target == ' ' && ft_strchr("<>", (input + i)[len]))
+		if (target == ' ' && ft_strchr("\1\3", (input + i)[len]))
 		{
 			if (len != 0)
 				return (ft_strndup((input + i), len));
-			while (ft_strchr("<>", (input + i)[len]))
+			while (ft_strchr("\1\3", (input + i)[len]))
 				len++;
 			return (ft_strndup((input + i), len));
 		}

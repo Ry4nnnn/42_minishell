@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_iofile.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/29 15:14:42 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 21:48:12 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 15:52:12 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,18 +54,4 @@ int	get_iofile(t_mini *mini, t_cmdblock *cmdblock, int i)
 		get_outfile(mini, cmdblock, i);
 	}
 	return (SUCCESS);
-}
-
-int	ms_open(t_mini *mini, char *filename, int flags, int mode)
-{
-	int	fd;
-
-	fd = open(filename, flags, mode);
-	if (fd == -1)
-	{
-		cmd_error(mini, &filename, NSFD);
-		g_errno = 1;
-		return (-1);
-	}
-	return (fd);
 }

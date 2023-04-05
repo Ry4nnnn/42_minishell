@@ -6,11 +6,23 @@
 /*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:28:00 by welim             #+#    #+#             */
-/*   Updated: 2023/03/10 17:17:42 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/05 18:52:00 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	signal_handler_exec(int signo)
+{
+	if (signo == SIGINT)
+		ft_putstr_fd("^C\n", STDERR_FILENO);
+	else
+	{
+		ft_putstr_fd("^\\Quit: ", STDERR_FILENO);
+		ft_putnbr_fd(signo, STDERR_FILENO);
+		ft_putchar_fd('\n', STDERR_FILENO);
+	}
+}
 
 void	signal_handler(int signo)
 {

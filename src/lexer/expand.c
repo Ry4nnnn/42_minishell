@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/05 15:10:41 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/05 15:26:48 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ static void	expand_variables(t_mini *mini, char **pinput)
 	{
 		if (quote != '\'' && (*pinput)[i] == '$')
 			expand_var(mini, pinput, quote, &i);
-		else if (quote != '\'' && quote != '"' && ((*pinput)[i] == '<' || (*pinput)[i] == '>'))
+		else if (quote != '\'' && quote != '"' && ((*pinput)[i] == '<'
+			|| (*pinput)[i] == '>'))
 		{
 			if ((*pinput)[i] == '<')
 				(*pinput)[i] = 1;
