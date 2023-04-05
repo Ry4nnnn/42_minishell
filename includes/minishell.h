@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 22:48:21 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 15:12:26 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@
 # define SOFT_SPLITERS " $'\""
 # define IGNORE_CHARS "\\;"
 
-# define S_IN "<"
-# define S_HEREDOC "<<"
-# define S_OUT ">"
-# define S_APPEND ">>"
+# define S_IN "\1"
+# define S_HEREDOC "\1\1"
+# define S_OUT "\3"
+# define S_APPEND "\3\3"
 
 // For pipe
 # define READ 0
@@ -203,7 +203,7 @@ void	init_pipe(t_mini *mini);
 void	handle_io(int fd, int std_file_no);
 int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini, int heredoc);
-void	redir_out(t_mini *mini, char *file, int type);
+int		redir_out(t_mini *mini, char *file, int type);
 int		redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils

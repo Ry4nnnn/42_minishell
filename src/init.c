@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 22:40:50 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/18 16:13:38 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/05 15:03:48 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ static void	init_builtins(t_mini *mini)
  */
 static void	init_redir(t_mini *mini)
 {
-	mini->redir[0] = ">";
-	mini->redir[1] = ">>";
-	mini->redir[2] = "<";
-	mini->redir[3] = "<<";
+	mini->redir[0] = "\3";
+	mini->redir[1] = "\3\3";
+	mini->redir[2] = "\1";
+	mini->redir[3] = "\1\1";
 	mini->redir[4] = NULL;
 }
 

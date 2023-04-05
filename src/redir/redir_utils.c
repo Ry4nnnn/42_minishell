@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 11:10:02 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 14:03:32 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/05 15:19:42 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,25 @@ int	check_for_redir(t_mini *mini, char *str)
 
 int	check_is_redir(char *str)
 {
-	if (ft_strcmp(">", str) == 0)
+	if (ft_strcmp("\3", str) == 0)
 		return (1);
-	if (ft_strcmp(">>", str) == 0)
+	if (ft_strcmp("\3\3", str) == 0)
 		return (1);
-	if (ft_strcmp("<", str) == 0)
+	if (ft_strcmp("\1", str) == 0)
 		return (1);
-	if (ft_strcmp("<<", str) == 0)
+	if (ft_strcmp("\1\1", str) == 0)
 		return (1);
 	else
 		return (0);
+}
+
+void	convert_redir_token(char *orig)
+{
+	int i;
+
+	i = -1;
+	while (orig[++i] != 0)
+		orig[i] += 59;
 }
 
 /**
@@ -108,6 +117,7 @@ static int	print_redir_error(t_mini *mini, t_cmdblock *cmdblock, int i)
 	if (!check_is_redir(cmdblock->cmd_argv[i]))
 	{
 		err_token = ft_strndup(cmdblock->cmd_argv[i], 1);
+		convert_redir_token(err_token);
 		syntax_error(mini, UNEXPECTED_TOKEN, err_token);
 		return (ERROR);
 	}
@@ -116,6 +126,7 @@ static int	print_redir_error(t_mini *mini, t_cmdblock *cmdblock, int i)
 	{
 		err_token = ft_strndup(cmdblock->cmd_argv[i + 1],
 				ft_strlen(cmdblock->cmd_argv[i + 1]));
+		convert_redir_token(err_token);
 		syntax_error(mini, UNEXPECTED_TOKEN, err_token);
 		return (ERROR);
 	}
@@ -147,7 +158,7 @@ int	redir_error(t_mini *mini, t_cmdblock *cmdblock)
 	i = 0;
 	while (cmdblock->cmd_argv[i])
 	{
-		if (cmdblock->cmd_argv[i][0] == '>' || cmdblock->cmd_argv[i][0] == '<')
+		if (cmdblock->cmd_argv[i][0] == '\3' || cmdblock->cmd_argv[i][0] == '\1')
 		{
 			if (print_redir_error(mini, cmdblock, i) == ERROR)
 				return (ERROR);

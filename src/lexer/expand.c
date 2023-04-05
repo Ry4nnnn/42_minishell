@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/03 18:14:04 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/05 15:10:41 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,13 @@ static void	expand_variables(t_mini *mini, char **pinput)
 	{
 		if (quote != '\'' && (*pinput)[i] == '$')
 			expand_var(mini, pinput, quote, &i);
+		else if (quote != '\'' && quote != '"' && ((*pinput)[i] == '<' || (*pinput)[i] == '>'))
+		{
+			if ((*pinput)[i] == '<')
+				(*pinput)[i] = 1;
+			else
+				(*pinput)[i] = 3;
+		}
 		else if (quote == 0 && ((*pinput)[i] == '\'' || (*pinput)[i] == '"'))
 			quote = (*pinput)[i];
 		else if (quote == (*pinput)[i])
