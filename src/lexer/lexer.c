@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:14 by welim             #+#    #+#             */
-/*   Updated: 2023/04/04 15:24:39 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/06 21:30:58 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_list	*get_new_cmdblock(char *input, int spliter_type)
 	t_cmdblock	*new_cmdblock;
 
 	quote = 0;
-	len = 0;
+	len = -1;
 	input = skip_spliter(input, spliter_type);
 	while (*input == ' ')
 		input++;
@@ -133,12 +133,18 @@ t_list	*split_cmdblocks(char *input, int bracket)
 	int		i;
 	t_list	*cmdblock_list;
 	t_list	*new_cmdblock;
+	int		quote;
 
 	(void) bracket;
+	quote = 0;
 	cmdblock_list = get_new_cmdblock(input, BEGINNING);
 	i = ft_strlen(((t_cmdblock *)cmdblock_list->content)->input) - 1;
 	while (input[++i] != 0)
 	{
+		if (quote == 0 && (input[i] == '\'' || input[i] == '"'))
+			quote = input[i++];
+		if (quote && input[i] != quote)
+			continue ;
 		if (get_spliter_type(input + i) != INVALID)
 		{
 			new_cmdblock = get_new_cmdblock(input + i,

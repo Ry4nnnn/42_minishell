@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 06:25:51 by welim             #+#    #+#             */
-/*   Updated: 2023/04/05 18:53:45 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/06 22:18:44 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ int	redir_out(t_mini *mini, char *file, int type)
 
 int	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 {
+	int	hd_estatus;
+
 	mini->pipes.is_redir_in = 1;
 	if (type == IN)
 	{
@@ -59,14 +61,17 @@ int	redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type)
 		cmdblock->h_pid = fork();
 		if (cmdblock->h_pid == 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
 			mini->fd_in = heredoc(mini, cmdblock);
 			exit(0);
 		}
-		waitpid(cmdblock->h_pid, NULL, 0);
-		dup2(mini->pipes.h_pipe[READ], STDIN_FILENO);
+		waitpid(cmdblock->h_pid, &hd_estatus, 0);
 		close(mini->pipes.h_pipe[WRITE]);
+		if (WEXITSTATUS(hd_estatus) == SIGINT)
+		{
+			close(mini->pipes.h_pipe[READ]);
+			return (-1);
+		}
+		dup2(mini->pipes.h_pipe[READ], STDIN_FILENO);
 	}
 	return (0);
 }

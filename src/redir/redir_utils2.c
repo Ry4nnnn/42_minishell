@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_utils2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 15:51:11 by welim             #+#    #+#             */
-/*   Updated: 2023/04/05 15:52:18 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/06 21:47:42 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ int	check_for_redir(t_mini *mini, char *str)
 
 int	check_is_redir(char *str)
 {
-	if (ft_strcmp("\3", str) == 0)
-		return (1);
-	if (ft_strcmp("\3\3", str) == 0)
-		return (1);
 	if (ft_strcmp("\1", str) == 0)
 		return (1);
 	if (ft_strcmp("\1\1", str) == 0)
+		return (1);
+	if (ft_strcmp("\3", str) == 0)
+		return (1);
+	if (ft_strcmp("\3\3", str) == 0)
 		return (1);
 	else
 		return (0);

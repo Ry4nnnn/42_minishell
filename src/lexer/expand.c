@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/05 15:26:48 by welim            ###   ########.fr       */
+/*   Updated: 2023/04/06 21:46:13 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ static void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
 		|| (*pinput + *i)[n] == '_')
 		&& (*pinput + *i)[n] != quote)
 		n++;
+	if (n == 1)
+		return ;
 	temp_key = ft_strndup((*pinput + *i + 1), n - 1);
 	env_var = get_env(mini, temp_key);
 	free(temp_key);
