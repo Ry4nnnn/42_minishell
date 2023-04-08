@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 20:41:46 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/03/19 00:15:56 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/08 15:36:37 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ char	*get_wildcard_expanded(t_mini *mini, t_list *names, char *wildcard)
  * @param ptoken token string ptr
  * @param i 
  */
-void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i)
+int	wildcard(t_mini *mini, char **pinput, char **ptoken, int i)
 {
 	char	*expanded;
 	t_list	*names;
@@ -123,8 +123,9 @@ void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i)
 	expanded = get_wildcard_expanded(mini, names, *ptoken);
 	ft_lstclear(&names, free);
 	if (expanded == NULL)
-		return ;
+		return (0);
 	ft_strexpand(pinput, expanded, i, ft_strlen(*ptoken));
 	free(*ptoken);
 	*ptoken = expanded;
+	return (1);
 }

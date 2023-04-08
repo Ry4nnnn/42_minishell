@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:23:08 by welim             #+#    #+#             */
-/*   Updated: 2023/04/06 22:05:15 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/08 15:52:38 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,5 +61,6 @@ int	ms_exit(t_mini *mini, t_cmdblock *cmdblock)
 	g_errno = ((exit_num % 256) + 256) % 256;
 	if (mini->pipes.do_pipe == 1 || mini->pipes.prep_pipe == 1)
 		return (((exit_num % 256) + 256) % 256);
+	system("leaks -q minishell");
 	exit(exit_num);
 }

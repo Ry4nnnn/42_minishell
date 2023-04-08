@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 13:15:44 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/06 21:48:23 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/08 16:40:26 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*get_quote_token(char *input, int i, int quote)
 	len = 0;
 	while ((input + i)[++len] != quote && (input + i)[len] != 0)
 		;
-	return (ft_strndup(input + i + 1, len - 1));
+	return (ft_strndup(input + i, len + 1));
 }
 
 /**
@@ -114,12 +114,9 @@ char	**tokenize_cmd(t_mini *mini, char *input)
 			continue ;
 		quote = input[i];
 		result[++j] = get_next_token(input, i, quote);
-		// fprintf(stderr, "token: [%s]\n", result[j]);
 		i += ft_strlen(result[j]);
 		if (input[i] != ' ')
 			i--;
-		if (quote == '\'' || quote == '"')
-			i += 2;
 		if (input[i] == 0)
 			break ;
 	}

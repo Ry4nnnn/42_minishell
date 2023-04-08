@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/06 10:49:25 by wxuerui           #+#    #+#             */
-/*   Updated: 2023/04/06 21:46:13 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/08 17:00:41 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
  * @param pinput input string ptr
  * @param i input string index ptr
  */
-static void	expand_exit_status(t_mini *mini, char **pinput, int *i)
+static int	expand_exit_status(t_mini *mini, char **pinput, int *i)
 {
 	char	*str_exit_status;
 
@@ -28,6 +28,7 @@ static void	expand_exit_status(t_mini *mini, char **pinput, int *i)
 	ft_strexpand(pinput, str_exit_status, *i, 2);
 	*i += ft_strlen(str_exit_status) - 1;
 	free(str_exit_status);
+	return (1);
 }
 
 /**
@@ -40,7 +41,7 @@ static void	expand_exit_status(t_mini *mini, char **pinput, int *i)
  * @param quote type of quote
  * @param i input string index ptr
  */
-static void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
+static int	expand_var(t_mini *mini, char **pinput, int quote, int *i)
 {
 	int		n;
 	char	*temp_key;
@@ -55,12 +56,13 @@ static void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
 		&& (*pinput + *i)[n] != quote)
 		n++;
 	if (n == 1)
-		return ;
+		return (0);
 	temp_key = ft_strndup((*pinput + *i + 1), n - 1);
 	env_var = get_env(mini, temp_key);
 	free(temp_key);
 	ft_strexpand(pinput, env_var, *i, n);
 	*i += ft_strlen(env_var) - 1;
+	return (1);
 }
 
 /**
@@ -73,15 +75,17 @@ static void	expand_var(t_mini *mini, char **pinput, int quote, int *i)
  * @param mini 
  * @param pinput input string ptr
  */
-static void	expand_wildcard(t_mini *mini, char **pinput)
+static int	expand_wildcard(t_mini *mini, char **pinput)
 {
 	int		i;
 	int		quote;
 	char	*token;
 	int		is_export;
+	int		expanded;
 
 	i = -1;
 	is_export = 0;
+	expanded = 0;
 	while ((*pinput)[++i] != 0)
 	{
 		quote = (*pinput)[i];
@@ -89,15 +93,14 @@ static void	expand_wildcard(t_mini *mini, char **pinput)
 		if (i == 0 && ft_strcmp(token, "export") == 0)
 			is_export = 1;
 		if (quote != '\'' && quote != '"' && ft_strchr(token, '*') != NULL)
-		{
 			if (!(is_export && ft_strchr(token, '=')))
-				wildcard(mini, pinput, &token, i);
-		}
+				expanded += wildcard(mini, pinput, &token, i);
 		i += ft_strlen(token);
 		free(token);
 		if (i >= 0 && (*pinput)[i] == 0)
-			return ;
+			return (expanded);
 	}
+	return (expanded);
 }
 
 /**
@@ -106,32 +109,32 @@ static void	expand_wildcard(t_mini *mini, char **pinput)
  * @param mini 
  * @param pinput input string ptr
  */
-static void	expand_variables(t_mini *mini, char **pinput)
+static int	expand_variables(t_mini *mini, char **pinput)
 {
 	int		quote;
 	int		i;
+	int		expanded;
 
 	quote = 0;
 	i = -1;
+	expanded = 0;
 	while ((*pinput)[++i] != 0)
 	{
 		if (quote != '\'' && (*pinput)[i] == '$')
-			expand_var(mini, pinput, quote, &i);
-		else if (quote != '\'' && quote != '"' && ((*pinput)[i] == '<'
-			|| (*pinput)[i] == '>'))
+			expanded += expand_var(mini, pinput, quote, &i);
+		else if (quote == 0 && ((*pinput)[i] == '<' || (*pinput)[i] == '>'))
 		{
-			if ((*pinput)[i] == '<')
-				(*pinput)[i] = 1;
-			else
-				(*pinput)[i] = 3;
+			(*pinput)[i] = 1 + ((*pinput)[i] == '>') * 2;
+			expanded++;
 		}
 		else if (quote == 0 && ((*pinput)[i] == '\'' || (*pinput)[i] == '"'))
 			quote = (*pinput)[i];
 		else if (quote == (*pinput)[i])
 			quote = 0;
 		if (i >= 0 && (*pinput)[i] == 0)
-			return ;
+			return (expanded);
 	}
+	return (expanded);
 }
 
 /**
@@ -142,8 +145,20 @@ static void	expand_variables(t_mini *mini, char **pinput)
  * @param mini 
  * @param pinput input string ptr
  */
-void	expand_input(t_mini *mini, char **pinput)
+int	expand_input(t_mini *mini, char **pinput)
 {
-	expand_variables(mini, pinput);
-	expand_wildcard(mini, pinput);
+	int		expanded;
+	char	*temp;
+
+	expanded = 0;
+	expanded += expand_variables(mini, pinput);
+	expanded += expand_wildcard(mini, pinput);
+	if (((*pinput)[0] == '\'' && (*pinput)[ft_strlen(*pinput) - 1] == '\'')
+		|| ((*pinput)[0] == '"' && (*pinput)[ft_strlen(*pinput) - 1] == '"'))
+	{
+		temp = *pinput;
+		*pinput = ft_strndup(temp + 1, ft_strlen(temp) - 2);
+		free(temp);
+	}
+	return (expanded);
 }

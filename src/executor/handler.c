@@ -3,14 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wangxuerui <wangxuerui@student.42.fr>      +#+  +:+       +#+        */
+/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 23:01:14 by wangxuerui        #+#    #+#             */
-/*   Updated: 2023/04/04 22:53:59 by wangxuerui       ###   ########.fr       */
+/*   Updated: 2023/04/08 17:01:33 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**insert_arr_to_2darr(char **insert, char **arr, int *index)
+{
+	char	**new;
+	int		i;
+
+	if (ft_2darrlen((void *)insert) == 1)
+	{
+		ft_free2darr((void **)insert);
+		return (arr);
+	}
+	new = malloc(sizeof(char *)
+			* (ft_2darrlen((void **)arr) + ft_2darrlen((void **)insert)));
+	i = -1;
+	while (++i < *index)
+		new[i] = arr[i];
+	i--;
+	while (++i < *index + ft_2darrlen((void **)insert))
+		new[i] = insert[i - *index];
+	new[i] = NULL;
+	free(arr[*index]);
+	*index += ft_2darrlen((void **)insert) - 1;
+	free(insert);
+	free(arr);
+	return (new);
+}
 
 /**
  * @brief Similar to handle_cmdblocks,
@@ -44,11 +70,20 @@ int	handle_bracket_cmdblock(t_mini *mini, t_list *cmdblocks_list)
  */
 int	handle_cmdblock(t_mini *mini, t_cmdblock *cmdblock)
 {
+	int	i;
+
 	if (cmdblock->in_bracket)
 		return (handle_bracket_cmdblock(mini,
 				split_cmdblocks(cmdblock->input, 1)));
-	expand_input(mini, &cmdblock->input);
 	cmdblock->cmd_argv = tokenize_cmd(mini, cmdblock->input);
+	i = -1;
+	while (cmdblock->cmd_argv[++i] != NULL)
+	{
+		if (expand_input(mini, &cmdblock->cmd_argv[i]) != 0)
+			cmdblock->cmd_argv = insert_arr_to_2darr(
+					tokenize_cmd(mini, cmdblock->cmd_argv[i]),
+					cmdblock->cmd_argv, &i);
+	}
 	cmdblock->exit_status = executor(mini, cmdblock);
 	done_redir(mini, 0);
 	g_errno = cmdblock->exit_status;

@@ -6,7 +6,7 @@
 /*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/06 21:47:07 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/08 16:38:19 by wxuerui          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct s_pipes
 	int		saved_stdin;
 	int		temp_read_fd;
 	int		h_pipe[2];
+	int		hd_estatus;
 	int		is_redir_in;
 }	t_pipes;
 
@@ -184,12 +185,12 @@ t_list	*split_cmdblocks(char *input, int bracket);
 char	*skip_spliter(char *input, int spliter_type);
 int		get_spliter_type(char *input);
 void	ft_strexpand(char **s, char *insert, int start, int n);
-void	expand_input(t_mini *mini, char **pinput);
+int		expand_input(t_mini *mini, char **pinput);
 char	**tokenize_cmd(t_mini *mini, char *input);
 char	*get_next_token(char *input, int i, int quote);
 int		check_syntax(t_mini *mini, t_list *cmdblocks_list);
 char	*trim_input(char *input);
-void	wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
+int		wildcard(t_mini *mini, char **pinput, char **ptoken, int i);
 int		name_pattern_match(char *wildcard, char *name, int pattern_len);
 int		get_pattern_len(char *str);
 void	sort_names_list(t_list **names);
@@ -206,7 +207,7 @@ int		exec_redir(t_mini *mini, t_cmdblock *cmdblock);
 void	done_redir(t_mini *mini, int heredoc);
 int		redir_out(t_mini *mini, char *file, int type);
 int		redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
-int		heredoc(t_mini *mini, t_cmdblock *cmdblock);
+void	heredoc(t_mini *mini, t_cmdblock *cmdblock);
 //redir_utils
 int		ms_open(t_mini *mini, char *filename, int flags, int mode);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
