@@ -85,4 +85,4 @@ Before starting on the project, it is mandatory to have a basic understanding of
 
 ## Credits
 
-by [Xue Rui](https://github.com/wangxuerui2003) &  [Ryan]](https://github.com/Ry4nnnn).
+by [Xue Rui](https://github.com/wangxuerui2003) &  [Ryan](https://github.com/Ry4nnnn).
