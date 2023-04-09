@@ -15,8 +15,8 @@
 
 * [**📁 includes:**](includes/) contains the program's headers.
 * [**📁 libft:**](libft/) contains the source code of the `libft` library, which is used in the program.
-* [**📁 srcs:**](srcs/) contains the source code of the program.
-* [**Makefile**](Makefile) - contains instructions for compiling the program and testing it.
+* [**📁 src:**](srcs/) contains the source code of the program.
+* [**📄 Makefile**](Makefile) - contains instructions for compiling the program and testing it.
 
 ## 🚀 Installation
 
