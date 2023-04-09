@@ -42,7 +42,7 @@ Using ``make`` will create the ``minishell`` executable.
 ./minishell
 ```
 
-### To install `Readline` library latest version
+### To install Readline library latest version
 
 Click here to download: [readline-8.1](https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz)
 
