@@ -27,17 +27,15 @@ The program is written in C language for **Linux** distributions and thus needs 
 git clone https://github.com/Ry4nnnn/42_minishell.git
 ```
 
-2. `cd` into the root directory :
+2. `cd` into the root directory and run `make`:
 ```
 cd 42_minishell
 ```
-
-3. Compiling the Program :
 ```
-Using ``make`` will create the ``minishell`` executable.
+make
 ```
 
-4. Simply execute the executable with :
+3. Simply execute the executable with :
 ```
 ./minishell
 ```
@@ -76,6 +74,15 @@ Then run this : `./configure --prefix=$(pwd) && make && make install`
 - Commands work with absolute and relative paths.
 
 - Error Messages
+
+## Prerequisites
+Before starting on the project, it is mandatory to have a basic understanding of some concepts. You might or might not have learnt this in your past projects, but its always a good time to revisit them. These concepts include:
+- Linked-lists and Arrays
+- Signals in UNIX
+- Processes , specifically working with `fork()` function
+- I/O (Input and output streams) for piping and redirections
+- File descriptors for piping and redirections
+- Basic libft stuff like Makefiles and headers files etc..
 
 ## Credits
 
