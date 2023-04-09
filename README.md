@@ -29,10 +29,7 @@ git clone https://github.com/Ry4nnnn/42_minishell.git
 
 2. `cd` into the root directory and run `make`:
 ```
-cd 42_minishell
-```
-```
-make
+cd 42_minishell && make
 ```
 
 3. Simply execute the executable with :
