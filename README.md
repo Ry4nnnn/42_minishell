@@ -45,6 +45,8 @@ Then run this : `./configure --prefix=$(pwd) && make && make install`
 
 ## 🛠️ Features
 
+- A prompt that displays the username, current working directory and the branch name concurrently
+
 - Builtins: `cd` , `pwd` , `echo`, `export`, `unset`, `env`, `exit`
 
 - Redirections: `<`, `>`, `<<`, `>>`
