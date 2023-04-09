@@ -44,43 +44,33 @@ Using ``make`` will create the ``minishell`` executable.
 
 ## 🛠️ Features
 
-- Builtins: 
-	- `cd` 
-	- `pwd` 
-	- `echo` with `-n` flag
-	- `export`
-	- `unset`
-	- `env`
-	- `exit`
+- Builtins: `cd` , `pwd` , `echo`, `export`, `unset`, `env`, `exit`
 
-- Redirections :
-    - `<` Redirect input
-    - `>` Redirect output
-    -  `<<` Heredoc
-    - `>>` Redirect output with append
+- Redirections: `<`, `>`, `<<`, `>>`
+
+- Piping: `|`
 
 - Signals:
-	- `Ctrl-C`
-	- `Ctrl-D`
-	- `Ctrl-\`
+	- `Ctrl-C` - to interrupt the program and 
+	- `Ctrl-D` - to quit the program
+	- `Ctrl-\` - should do nothing
 
-Parser opens quotes `'` `"` like in bash and handles `\` even in `'` `"` different context.
+- Working history supported.
 
-Commands work with absolute and relative paths.
+- `'`, `"` quotes supported.
+
+- `&&`, `||` operator supported.
+
+- Exit status supported `$?`.
+
+- Environment variables are handled, like `$HOME`
+
+- Commands work with absolute and relative paths.
 
 ## Available options
 
 Minishell runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``), including arguments or options. ``'`` and ``"`` work the same as bash, except for multiline commands.
 
-You can separate commands with ``;``, as well as use redirections ``>`` ``>>`` ``<`` and pipes ``|``.
-
-Environment variables are handled, like ``$HOME``, including the return code ``$?``.
-
-Finally, you can use ``Ctrl-C`` to interrupt and ``Ctrl-\`` to quit a program, as well as ``Ctrl-D`` to throw an EOF, same as in bash.
-
-A few of the functions are "built-in", meaning we don't call the executable, we re-coded them directly. It's the case for ``echo``, ``pwd``, ``cd``, ``env``, ``export``, ``unset`` and ``exit``.
-
-### Credit
 
 This two-person project was done with [Ray](https://github.com/wangxuerui2003).
 
