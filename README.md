@@ -74,7 +74,7 @@ Then run this : `./configure --prefix=$(pwd) && make && make install`
 
 - Error Messages
 
-## Prerequisites
+## 📌 Prerequisites
 Before starting on the project, it is mandatory to have a basic understanding of some concepts. You might or might not have learnt this in your past projects, but its always a good time to revisit them. These concepts include:
 - Linked-lists and Arrays
 - Signals in UNIX
@@ -85,4 +85,4 @@ Before starting on the project, it is mandatory to have a basic understanding of
 
 ## Credits
 
-This two-person project was done with [Xue Rui](https://github.com/wangxuerui2003).
+by [Xue Rui](https://github.com/wangxuerui2003) &  [Ryan]](https://github.com/Ry4nnnn).
