@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wxuerui <wxuerui@student.42.fr>            +#+  +:+       +#+        */
+/*   By: welim <welim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 17:22:38 by welim             #+#    #+#             */
-/*   Updated: 2023/04/08 16:38:19 by wxuerui          ###   ########.fr       */
+/*   Updated: 2023/04/09 17:31:09 by welim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+//----------LIBRARIES----------//
 # include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
-
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
@@ -208,7 +208,6 @@ void	done_redir(t_mini *mini, int heredoc);
 int		redir_out(t_mini *mini, char *file, int type);
 int		redir_in(t_mini *mini, t_cmdblock *cmdblock, char *file, int type);
 void	heredoc(t_mini *mini, t_cmdblock *cmdblock);
-//redir_utils
 int		ms_open(t_mini *mini, char *filename, int flags, int mode);
 int		check_redir_type(t_mini *mini, t_cmdblock *cmdblock);
 int		redir_error(t_mini *mini, t_cmdblock *cmdblock);
@@ -223,7 +222,6 @@ int		handle_cmdblock(t_mini *mini, t_cmdblock *cmdblock);
 int		executor(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_commands(t_mini *mini, t_cmdblock *cmdblock);
 int		exec_program(t_mini *mini, t_cmdblock *cmdblock);
-//utils
 char	*env_to_str(void *arg);
 char	*get_exec_path(t_mini *mini, char **cmds);
 void	get_exec_argv(t_mini *mini, t_cmdblock *cmdblock);
