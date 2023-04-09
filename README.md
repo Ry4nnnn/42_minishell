@@ -84,5 +84,3 @@ Before starting on the project, it is mandatory to have a basic understanding of
 ## Credits
 
 This two-person project was done with [Xue Rui](https://github.com/wangxuerui2003).
-
-Thanks to [Xue Rui](https://github.com/wangxuerui2003)
