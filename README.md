@@ -42,6 +42,12 @@ Using ``make`` will create the ``minishell`` executable.
 ./minishell
 ```
 
+### To install `Readline` library latest version
+
+Click here to download: [readline-8.1](https://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz)
+
+Then run this : `./configure --prefix=$(pwd) && make && make install`
+
 ## 🛠️ Features
 
 - Builtins: `cd` , `pwd` , `echo`, `export`, `unset`, `env`, `exit`
