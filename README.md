@@ -51,9 +51,9 @@ Using ``make`` will create the ``minishell`` executable.
 - Piping: `|`
 
 - Signals:
-	- `Ctrl-C` - to interrupt the program and 
-	- `Ctrl-D` - to quit the program
-	- `Ctrl-\` - should do nothing
+	- `Ctrl-C` - interrupts the program
+	- `Ctrl-D` - quits the program
+	- `Ctrl-\` - does nothing
 
 - Working history supported.
 
@@ -67,10 +67,8 @@ Using ``make`` will create the ``minishell`` executable.
 
 - Commands work with absolute and relative paths.
 
-## Available options
-
-Minishell runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``), including arguments or options. ``'`` and ``"`` work the same as bash, except for multiline commands.
 
 
-This two-person project was done with [Ray](https://github.com/wangxuerui2003).
+## Credits
 
+This two-person project was done with [Xue Rui](https://github.com/wangxuerui2003).
