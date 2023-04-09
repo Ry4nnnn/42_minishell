@@ -43,7 +43,7 @@ Click here to download: [readline-8.1](https://ftp.gnu.org/gnu/readline/readline
 
 Then run this : `./configure --prefix=$(pwd) && make && make install`
 
-## 🛠️ Features
+## ⭐ Features
 
 - A prompt that displays the username, current working directory and the branch name concurrently
 
