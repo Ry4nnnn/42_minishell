@@ -51,9 +51,9 @@ Using ``make`` will create the ``minishell`` executable.
 - Piping: `|`
 
 - Signals:
-	- `Ctrl-C` - interrupts the program
-	- `Ctrl-D` - quits the program
-	- `Ctrl-\` - does nothing
+	`Ctrl-C` - interrupts the program
+	`Ctrl-D` - quits the program
+	`Ctrl-\` - does nothing
 
 - Working history supported.
 
@@ -61,13 +61,15 @@ Using ``make`` will create the ``minishell`` executable.
 
 - `&&`, `||` operator supported.
 
-- Exit status supported `$?`.
+- Wildcards `*` are supported.
+
+- Exit status `$?` supported.
 
 - Environment variables are handled, like `$HOME`
 
 - Commands work with absolute and relative paths.
 
-
+- Error Messages
 
 ## Credits
 
