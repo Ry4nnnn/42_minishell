@@ -6,7 +6,7 @@
   <img src="" />
 </p>
 
-## About
+## 🗣️ About
 42 project, recoding our own little bash. A program capable of parsing a prompt and launching executables with arguments, along with a few built-in functions.
 
 ## 📋 Final grade : 125/125
@@ -18,7 +18,7 @@
 * [**📁 srcs:**](srcs/) contains the source code of the program.
 * [**Makefile**](Makefile) - contains instructions for compiling the program and testing it.
 
-## Usage
+## 🚀 Installation
 
 ### Requirements
 
@@ -46,12 +46,27 @@ Using ``make`` will create the ``minishell`` executable.
 ./minishell
 ```
 
-## Features
-`pipes`, `semicolons`, `escape sequences`, `enviroment variables`, `$?`, `~`, redirections: `>` `>>` `<`
+## 🛠️ Features
 
-Builtins: `cd`, `pwd`, `echo`, `export`, `unset`, `env`, `exit`.
+- Builtins: 
+	- `cd` 
+	- `pwd` 
+	- `echo` with `-n` flag
+	- `export`
+	- `unset`
+	- `env`
+	- `exit`
 
-Signals: `Ctrl-C`, `Ctrl-\`, `Ctrl-D`.
+- Redirections :
+    - `<` Redirect input
+    - `>` Redirect output
+    -  `<<` Heredoc
+    - `>>` Redirect output with append
+
+- Signals:
+	- `Ctrl-C`
+	- `Ctrl-D`
+	- `Ctrl-\`
 
 Parser opens quotes `'` `"` like in bash and handles `\` even in `'` `"` different context.
 
