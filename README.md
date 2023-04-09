@@ -3,7 +3,7 @@
 </h1>
 
 ## 🗣️ About
-42 project, recoding our own little bash. A program capable of parsing a prompt and launching executables with arguments, along with a few built-in functions.
+42_minishell, This project is about creating a simple shell terminal. A program capable of parsing a prompt and launching executables with arguments, along with a few built-in functions.
 
 ## 📋 Final grade : 125/125
 
@@ -80,3 +80,5 @@ Then run this : `./configure --prefix=$(pwd) && make && make install`
 ## Credits
 
 This two-person project was done with [Xue Rui](https://github.com/wangxuerui2003).
+
+Thanks to [Xue Rui](https://github.com/wangxuerui2003)
