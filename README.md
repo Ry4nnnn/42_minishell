@@ -8,8 +8,16 @@
   <img src="" />
 </p>
 
-## Final grade : 125/125
+### Final grade : 125/125
 
+## 📑 Index
+
+`@root`
+
+* [**📁 includes:**](includes/) contains the program's headers.
+* [**📁 libft:**](libft/) contains the source code of the `libft` library, which is used in the program.
+* [**📁 srcs:**](srcs/) contains the source code of the program.
+* [**Makefile**](Makefile) - contains instructions for compiling the program and testing it.
 
 ## Usage
 
@@ -17,7 +25,7 @@
 
 The program is written in C language for **Linux** distributions and thus needs the **`clang` compiler** and some standard **C libraries** including `readline.h` to run.
 
-### instructions
+### Instructions
 
 1. Clone this repository :
 ```
@@ -39,7 +47,18 @@ Using ``make`` will create the ``minishell`` executable.
 ./minishell
 ```
 
-### Available options
+## Features
+`pipes`, `semicolons`, `escape sequences`, `enviroment variables`, `$?`, `~`, redirections: `>` `>>` `<`
+
+Builtins: `cd`, `pwd`, `echo`, `export`, `unset`, `env`, `exit`.
+
+Signals: `Ctrl-C`, `Ctrl-\`, `Ctrl-D`.
+
+Parser opens quotes `'` `"` like in bash and handles `\` even in `'` `"` different context.
+
+Commands work with absolute and relative paths.
+
+## Available options
 
 Minishell runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``), including arguments or options. ``'`` and ``"`` work the same as bash, except for multiline commands.
 
