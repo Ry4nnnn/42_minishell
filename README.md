@@ -8,11 +8,9 @@
   <img src="" />
 </p>
 
-### Final grade : 125/125
+## 📑 Final grade : 125/125
 
-## 📑 Index
-
-`@root`
+`@root` directory
 
 * [**📁 includes:**](includes/) contains the program's headers.
 * [**📁 libft:**](libft/) contains the source code of the `libft` library, which is used in the program.
