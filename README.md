@@ -5,7 +5,9 @@
 ## 🗣️ About
 42_minishell, This project is about creating a simple shell terminal in C. A program that is capable of parsing a prompt and launching executables with arguments, along with a few built-in functions.
 
-## 📋 Final grade : 125/125
+## 📋 Final grade :
+
+![](https://badge42.vercel.app/api/v2/cl31j44h0007809mep6of7oak/project/2914195)
 
 `@root` directory
 
